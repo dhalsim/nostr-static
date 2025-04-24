@@ -18,13 +18,9 @@ const articleTemplate = `<!DOCTYPE html>
         ` + CommonStyles + `
         .page-container {
             display: flex;
-            gap: 2em;
             align-items: flex-start;
             max-width: 1200px;
             margin: 0 auto;
-        }
-        .logo-container {
-
         }
         .main-content {
             flex: 1;

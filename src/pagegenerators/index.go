@@ -11,6 +11,7 @@ import (
 type IndexData struct {
 	Color    string
 	Logo     string
+	Title    string
 	Articles []struct {
 		ID        string
 		Title     string
@@ -26,7 +27,7 @@ const indexTemplate = `<!DOCTYPE html>
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nostr Articles</title>
+    <title>{{.Title}}</title>
     <style>
         ` + CommonStyles + `
     </style>
@@ -37,7 +38,7 @@ const indexTemplate = `<!DOCTYPE html>
             {{renderLogo .Logo ""}}
         </div>
         <div class="main-content">
-            <h1>Nostr Articles</h1>
+            <h1>{{.Title}}</h1>
             {{range .Articles}}
             <div class="article-card">
                 {{renderImage .Image .Title .ID}}
@@ -60,6 +61,7 @@ func GenerateIndexHTML(
 
 	indexData.Color = layout.Color
 	indexData.Logo = layout.Logo
+	indexData.Title = layout.Title
 	indexData.Articles = make([]struct {
 		ID        string
 		Title     string

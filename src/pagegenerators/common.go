@@ -114,7 +114,6 @@ const CommonStyles = `
     /* Common components */
     .logo {
         text-align: center;
-        margin-bottom: 2em;
     }
 
     .logo img {
@@ -170,7 +169,6 @@ const CommonStyles = `
     /* Page-specific styles */
     body.article .page-container {
         display: flex;
-        gap: 2em;
         align-items: flex-start;
         max-width: 1200px;
         margin: 0 auto;
@@ -227,7 +225,6 @@ const CommonStyles = `
     body.index .page-container,
     body.tags .page-container {
         display: flex;
-        gap: 2em;
         align-items: flex-start;
     }
 
@@ -307,7 +304,6 @@ const CommonStyles = `
         body.tags .logo-container {
             flex: none;
             position: static;
-            margin-bottom: 1em;
         }
 
         body.article .main-content,

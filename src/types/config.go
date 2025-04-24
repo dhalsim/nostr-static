@@ -3,6 +3,7 @@ package types
 type Layout struct {
 	Color string `yaml:"color"`
 	Logo  string `yaml:"logo"`
+	Title string `yaml:"title"`
 }
 
 type Config struct {

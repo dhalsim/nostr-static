@@ -1,6 +1,7 @@
 layout:
   color: dark  # Options: light, dark
   logo: logo.png  # Logo image file name
+  title: "Nostr Articles"  # Site title
 
 relays:
   - wss://relay.damus.io
