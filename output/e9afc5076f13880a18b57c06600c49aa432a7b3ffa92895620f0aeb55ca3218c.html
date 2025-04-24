@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>How to Import and Export Your Nostr Notes</title>
+    
+		<style>
+			body {
+				background-color: #1a1a1a;
+				color: #ffffff;
+			}
+			a {
+				color: #4a9eff;
+			}
+			.article-card {
+				background-color: #2d2d2d;
+				border: 1px solid #404040;
+			}
+			pre {
+				background-color: #2d2d2d !important;
+				border: 1px solid #404040;
+			}
+			.article-card .tag {
+				display: inline-block;
+				background-color: #1a1a1a;
+				border: 1px solid #404040;
+				color: #e0e0e0;
+				padding: 4px 8px;
+				border-radius: 4px;
+				margin-bottom: 8px;
+				font-size: 0.9em;
+			}
+			.article-card .tags {
+				display: flex;
+				flex-wrap: wrap;
+				gap: 8px;
+				margin-top: 1em;
+			}
+			.article-card .image-container {
+				margin: 0 auto 20px;
+				max-width: 600px;
+				text-align: center;
+			}
+			.article-card .image-container img {
+				max-width: 100%;
+				height: auto;
+				border-radius: 4px;
+			}
+			.article-card .summary {
+				color: #e0e0e0;
+			}
+		</style>
+		
+    <style>
+        
+    body {
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+        line-height: 1.6;
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 20px;
+    }
+    .logo {
+        text-align: center;
+        margin-bottom: 2em;
+    }
+    .logo img {
+        max-height: 100px;
+        width: auto;
+    }
+    .article-card {
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        padding: 20px;
+        margin-bottom: 20px;
+    }
+    .article-card h2 {
+        margin-top: 0;
+        text-align: center;
+    }
+
+        .page-container {
+            display: flex;
+            gap: 2em;
+            align-items: flex-start;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .logo-container {
+            flex: 0 0 200px;
+            position: sticky;
+            top: 20px;
+        }
+        .main-content {
+            flex: 1;
+            max-width: 800px;
+        }
+        img {
+            max-width: 100%;
+            height: auto;
+        }
+        pre {
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+        }
+        code {
+            font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+        }
+        .article-header {
+            margin-bottom: 2em;
+        }
+        .article-header h1 {
+            margin-bottom: 0.5em;
+        }
+        article {
+            word-wrap: break-word;
+            overflow-wrap: break-word;
+            hyphens: auto;
+        }
+        article p {
+            max-width: 100%;
+            overflow-wrap: break-word;
+            word-wrap: break-word;
+            word-break: break-word;
+        }
+    </style>
+</head>
+<body>
+    <div class="page-container">
+        <div class="logo-container">
+            
+		<div class="logo">
+			<a href="index.html">
+				<img src="logo.png" alt="Logo">
+			</a>
+		</div>
+		
+        </div>
+        <div class="main-content">
+            <article>
+                <div class="article-header">
+                    <h1>How to Import and Export Your Nostr Notes</h1>
+                    
+		<p class="summary">Learn how to import your Nostr notes from public relays and export them into your own relay using the nak CLI tool. This step-by-step guide covers installation, fetching notes, filtering by event types, and uploading to a self-hosted relay—ensuring your content is safe and under your control.</p>
+		
+                    
+		<div class="tags">
+			<span class="tag"><a href="tag/nostr.html">Nostr</a></span><span class="tag"><a href="tag/nak.html">nak</a></span><span class="tag"><a href="tag/relay.html">relay</a></span><span class="tag"><a href="tag/import.html">import</a></span><span class="tag"><a href="tag/export.html">export</a></span>
+		</div>
+		
+                </div>
+                <h1 id="how-to-import-and-export-your-nostr-notes">How to Import and Export Your Nostr Notes</h1>
+<p>This guide will help you import your notes from various Nostr relays and export them into your own relay. This is particularly useful when you want to ensure your content is backed up or when you're setting up your own relay.</p>
+<h2 id="prerequisite">Prerequisite</h2>
+<p>Your own Nostr relay (if you don't have one, check out <a href="https://njump.me/nevent1qqsqd24rtzchjvxh7a9ahe9xs54w04rtlcpgt499uux8kkzgpucuhmqppamhxue69uhkummnw3ezumt0d5q3vamnwvaz7tmjv4kxz7fwwpexjmtpdshxuet5qy28wumn8ghj7un9d3shjtnyv9kh2uewd9hsz9nhwden5te0wfjkccte9ehx7um5wghxyctwvsq35amnwvaz7tmd0ykhyetvv9ujumn0wd68y6t6v5hx6eg8w8a7q">Part 1: How to Run Your Own Nostr Relay</a>)</p>
+<h2 id="installing-nak">Installing nak</h2>
+<p><code>nak</code> is a command-line tool that helps you interact with Nostr relays. Here's how to install it:</p>
+<h3 id="for-windows-users">For Windows Users</h3>
+<ol>
+<li>Visit the <a href="https://github.com/fiatjaf/nak/releases">nak releases page</a></li>
+<li>Download the latest <code>nak-windows-amd64.exe</code></li>
+<li>Rename it to <code>nak.exe</code></li>
+<li>Move it to a directory in your PATH or use it from its current location</li>
+</ol>
+<h3 id="for-macos-users">For macOS Users</h3>
+<ol>
+<li>Visit the <a href="https://github.com/fiatjaf/nak/releases">nak releases page</a></li>
+<li>Download the latest <code>nak-darwin-amd64</code></li>
+<li>Open Terminal and run:
+<pre><code class="language-bash">chmod +x nak-darwin-amd64
+sudo mv nak-darwin-amd64 /usr/local/bin/nak
+</code></pre>
+</li>
+</ol>
+<h3 id="for-linux-users">For Linux Users</h3>
+<ol>
+<li>Visit the <a href="https://github.com/fiatjaf/nak/releases">nak releases page</a></li>
+<li>Download the latest <code>nak-linux-amd64</code></li>
+<li>Open Terminal and run:
+<pre><code class="language-bash">chmod +x nak-linux-amd64
+sudo mv nak-linux-amd64 /usr/local/bin/nak
+</code></pre>
+</li>
+</ol>
+<h2 id="getting-your-public-key-in-hex-format">Getting Your Public Key in Hex Format</h2>
+<p>Before downloading your notes, you need to convert your npub (public key) to its hex format. If you have your npub, run:</p>
+<pre><code class="language-bash">nak decode npub1YOUR_NPUB_HERE
+</code></pre>
+<p>This will output your public key in hex format, which you'll need for the next steps.</p>
+<h2 id="downloading-your-notes">Downloading Your Notes</h2>
+<p>To download your notes, you'll need your public key in hex format and a list of reliable relays. Here are some popular relays you can use:</p>
+<ul>
+<li>wss://eden.nostr.land/</li>
+<li>wss://nos.lol/</li>
+<li>wss://nostr.bitcoiner.social/</li>
+<li>wss://nostr.mom/</li>
+<li>wss://relay.primal.net/</li>
+<li>wss://relay.damus.io/</li>
+<li>wss://relay.nostr.band/</li>
+<li>wss://relay.snort.social/</li>
+</ul>
+<p><strong>Note:</strong> You should check your Nostr client's settings to find additional relays where your notes are published. Add these to the list above.</p>
+<h3 id="important-event-kinds">Important Event Kinds</h3>
+<p>Here are some important event kinds you might want to filter for:</p>
+<ul>
+<li><code>0</code>: User Metadata (profile information)</li>
+<li><code>1</code>: Short Text Notes</li>
+<li><code>3</code>: Follow List</li>
+<li><code>4</code>: Encrypted Direct Messages</li>
+</ul>
+<p>Get the full list from: <a href="https://nips.nostr.com/#event-kinds">https://nips.nostr.com/#event-kinds</a></p>
+<h3 id="downloading-with-event-kind-filters">Downloading with Event Kind Filters</h3>
+<p>To download your notes with specific event kinds, use the <code>-k</code> flag followed by the kind number, use multiple if you need to. For example, to download your profile, short notes, follow list, and direct messages:</p>
+<pre><code class="language-bash">nak req -a YOUR_HEX_PUBKEY -k 0 -k 1 -k 3 -k 4 wss://eden.nostr.land/ wss://nos.lol/ wss://nostr.bitcoiner.social/ wss://nostr.mom/ wss://relay.primal.net/ wss://relay.damus.io/ wss://relay.nostr.band/ wss://relay.snort.social/ &gt; events_filtered.json
+</code></pre>
+<p>Or to download all your content, just don't provide any <code>k</code> flag:</p>
+<pre><code class="language-bash">nak req -a YOUR_HEX_PUBKEY wss://eden.nostr.land/ wss://nos.lol/ wss://nostr.bitcoiner.social/ wss://nostr.mom/ wss://relay.primal.net/ wss://relay.damus.io/ wss://relay.nostr.band/ wss://relay.snort.social/ &gt; events.json
+</code></pre>
+<p>This will create a file containing all your notes in JSON Lines format.</p>
+<h2 id="uploading-your-notes-to-your-relay">Uploading Your Notes to Your Relay</h2>
+<p>Once you have your <code>events.json</code> or <code>events_filtered.json</code> file, you can upload it to your own relay. Replace <code>YOUR_RELAY</code> with your relay's WebSocket URL (e.g., <code>wss://my-relay.nostrize.me</code>).</p>
+<pre><code class="language-bash">nak event YOUR_RELAY &lt; events.json
+</code></pre>
+<p><strong>Important Notes:</strong></p>
+<ol>
+<li>Make sure your relay is running and accessible</li>
+<li>The upload process might take some time depending on how many notes you have</li>
+<li>You can verify the upload by querying your relay for your notes</li>
+</ol>
+<h2 id="verifying-the-upload">Verifying the Upload</h2>
+<p>To verify that your notes were successfully uploaded to your relay, run:</p>
+<pre><code class="language-bash">nak req -a YOUR_HEX_PUBKEY YOUR_RELAY
+</code></pre>
+<p>This should return the same notes that were in your <code>events.json</code> file.</p>
+<h2 id="troubleshooting">Troubleshooting</h2>
+<p>If you encounter any issues:</p>
+<ol>
+<li>Make sure your relay is running and accessible</li>
+<li>Check that you're using the correct public key</li>
+<li>Verify that the relays in your download list are working</li>
+<li>Ensure you have proper permissions to write to your relay</li>
+</ol>
+<h2 id="next-steps">Next Steps</h2>
+<ul>
+<li>Remember to regularly backup your notes to ensure you don't lose any content.</li>
+<li>If you want to keep your friends' notes as well, add npubs that you want to import into your relay's settings (for Citrine it is &quot;Accept events signed by&quot; list), and run the commands for their pubkeys.</li>
+</ul>
+
+            </article>
+        </div>
+    </div>
+</body>
+</html>
