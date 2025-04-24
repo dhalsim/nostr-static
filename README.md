@@ -45,16 +45,6 @@ article_ids:
   - e9afc5076f13880a18b57c06600c49aa432a7b3ffa92895620f0aeb55ca3218c
 ```
 
-## Getting Started
-
-1. Fork this repository
-2. Modify the `config.yaml` file with your desired configuration
-3. Add your Nostr article IDs to the `article_ids` section
-4. Place a `logo.png` file (or another file name, but need to update logo) into the project folder
-5. Build and run the command: `go build -o nostr-static ./src && ./nostr-static`
-5. Commit and push
-6. Deploy using GitHub Pages
-
 ## Deployment
 
 ### GitHub Pages Deployment
@@ -62,6 +52,24 @@ article_ids:
 1. Go to your repository's Settings
 2. Navigate to "Pages" in the menu
 3. Under "Build and deployment" > "Source", select "GitHub Actions"
+4. Enable Actions: https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/enabling-features-for-your-repository/managing-github-actions-settings-for-a-repository#allowing-select-actions-and-reusable-workflows-to-run
+
+## Getting Started
+
+1. Fork this repository
+2. Modify the `config.yaml` file with your desired configuration
+3. Add your Nostr article IDs to the `article_ids` section
+4. Place a `logo.png` file (or another file name, but need to update logo) into the project folder
+5. Build and run the command: `go build -o nostr-static ./src && ./nostr-static`
+6. Commit and push your changes:
+   ```bash
+   git add .
+   git commit -m "feat: add title configuration and MIT license"
+   git push origin main
+   ```
+7. It should deploy using GitHub Pages workflow automatically
+8. Your website should we available at https://YOUR_GITHUB_USERNAME.github.io/nostr-static/
+
 
 ### Custom Domain Setup
 
