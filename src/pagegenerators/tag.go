@@ -15,25 +15,11 @@ const tagTemplate = `<!DOCTYPE html>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tag: {{.Tag}}</title>
-    {{.ThemeCSS}}
     <style>
         ` + CommonStyles + `
-        .page-container {
-            display: flex;
-            gap: 2em;
-            align-items: flex-start;
-        }
-        .logo-container {
-            flex: 0 0 200px;
-            position: sticky;
-            top: 20px;
-        }
-        .main-content {
-            flex: 1;
-        }
     </style>
 </head>
-<body>
+<body class="{{.Color}} tags">
     <div class="page-container">
         <div class="logo-container">
             {{renderLogo .Logo "../"}}
@@ -42,7 +28,7 @@ const tagTemplate = `<!DOCTYPE html>
             <h1>Articles tagged with "{{.Tag}}"</h1>
             {{range .Articles}}
             <div class="article-card">
-                {{renderImage .Image .Title}}
+                {{renderImage .Image .Title .ImageLink}}
                 <h2><a href="../{{.ID}}.html">{{.Title}}</a></h2>
                 {{renderSummary .Summary}}
                 {{renderTags .Tags "../"}}
@@ -53,7 +39,11 @@ const tagTemplate = `<!DOCTYPE html>
 </body>
 </html>`
 
-func GenerateTagPages(events []types.Event, outputDir string, themeColor string, logo string) error {
+func GenerateTagPages(
+	events []types.Event,
+	outputDir string,
+	layout types.Layout,
+) error {
 	// Create a map to track tags and their associated events
 	tagMap := make(map[string][]types.Event)
 
@@ -77,15 +67,16 @@ func GenerateTagPages(events []types.Event, outputDir string, themeColor string,
 	// Generate a page for each tag
 	for tag, tagEvents := range tagMap {
 		data := TagData{
-			Tag:      tag,
-			ThemeCSS: GetThemeCSS(themeColor),
-			Logo:     logo,
+			Tag:   tag,
+			Color: layout.Color,
+			Logo:  layout.Logo,
 			Articles: make([]struct {
-				ID      string
-				Title   string
-				Summary string
-				Image   string
-				Tags    []string
+				ID        string
+				Title     string
+				Summary   string
+				Image     string
+				ImageLink string
+				Tags      []string
 			}, len(tagEvents)),
 		}
 
@@ -94,17 +85,19 @@ func GenerateTagPages(events []types.Event, outputDir string, themeColor string,
 			metadata := ExtractArticleMetadata(event.Tags)
 
 			data.Articles[i] = struct {
-				ID      string
-				Title   string
-				Summary string
-				Image   string
-				Tags    []string
+				ID        string
+				Title     string
+				Summary   string
+				Image     string
+				ImageLink string
+				Tags      []string
 			}{
-				ID:      event.ID,
-				Title:   metadata.Title,
-				Summary: metadata.Summary,
-				Image:   metadata.Image,
-				Tags:    metadata.Tags,
+				ID:        event.ID,
+				Title:     metadata.Title,
+				Summary:   metadata.Summary,
+				Image:     metadata.Image,
+				ImageLink: metadata.ImageLink,
+				Tags:      metadata.Tags,
 			}
 		}
 

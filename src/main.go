@@ -85,19 +85,19 @@ func main() {
 
 			// Generate HTML files for each event
 			for _, event := range events {
-				if err := pagegenerators.GenerateArticleHTML(event, outputDir, config.Layout.Color, config.Layout.Logo); err != nil {
+				if err := pagegenerators.GenerateArticleHTML(event, outputDir, config.Layout); err != nil {
 					log.Printf("Failed to generate HTML for event %s: %v", event.ID, err)
 					continue
 				}
 			}
 
 			// Generate tag pages
-			if err := pagegenerators.GenerateTagPages(events, outputDir, config.Layout.Color, config.Layout.Logo); err != nil {
+			if err := pagegenerators.GenerateTagPages(events, outputDir, config.Layout); err != nil {
 				return err
 			}
 
 			// Generate index.html
-			if err := pagegenerators.GenerateIndexHTML(events, outputDir, config.Layout.Color, config.Layout.Logo); err != nil {
+			if err := pagegenerators.GenerateIndexHTML(events, outputDir, config.Layout); err != nil {
 				return err
 			}
 

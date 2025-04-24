@@ -4,80 +4,245 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>How to Import and Export Your Nostr Notes</title>
-    
-		<style>
-			body {
-				background-color: #1a1a1a;
-				color: #ffffff;
-			}
-			a {
-				color: #4a9eff;
-			}
-			.article-card {
-				background-color: #2d2d2d;
-				border: 1px solid #404040;
-			}
-			pre {
-				background-color: #2d2d2d !important;
-				border: 1px solid #404040;
-			}
-			.article-card .tag {
-				display: inline-block;
-				background-color: #1a1a1a;
-				border: 1px solid #404040;
-				color: #e0e0e0;
-				padding: 4px 8px;
-				border-radius: 4px;
-				margin-bottom: 8px;
-				font-size: 0.9em;
-			}
-			.article-card .tags {
-				display: flex;
-				flex-wrap: wrap;
-				gap: 8px;
-				margin-top: 1em;
-			}
-			.article-card .image-container {
-				margin: 0 auto 20px;
-				max-width: 600px;
-				text-align: center;
-			}
-			.article-card .image-container img {
-				max-width: 100%;
-				height: auto;
-				border-radius: 4px;
-			}
-			.article-card .summary {
-				color: #e0e0e0;
-			}
-		</style>
-		
     <style>
         
+     
     body {
         font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
         line-height: 1.6;
         max-width: 800px;
         margin: 0 auto;
         padding: 20px;
+        font-size: 16px;
     }
+
+     
+    body.light {
+        background-color: #ffffff;
+        color: #333333;
+    }
+
+    body.dark {
+        background-color: #1a1a1a;
+        color: #ffffff;
+    }
+
+    body.light a {
+        color: #0066cc;
+    }
+
+    body.dark a {
+        color: #4a9eff;
+    }
+
+     
     .logo {
         text-align: center;
         margin-bottom: 2em;
     }
+
     .logo img {
         max-height: 100px;
         width: auto;
     }
+
     .article-card {
         border: 1px solid #ddd;
         border-radius: 8px;
         padding: 20px;
         margin-bottom: 20px;
     }
+
     .article-card h2 {
         margin-top: 0;
         text-align: center;
+    }
+
+    .tags {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin-top: 1em;
+    }
+
+    .tag {
+        display: inline-block;
+        padding: 4px 8px;
+        border-radius: 4px;
+        margin-bottom: 8px;
+        font-size: 0.9em;
+    }
+
+    .tag a {
+        text-decoration: none;
+        color: inherit;
+    }
+
+     
+    body.light .tag {
+        background-color: #f0f0f0;
+        border: 1px solid #dee2e6;
+        color: #666666;
+    }
+
+    body.dark .tag {
+        background-color: #1a1a1a;
+        border: 1px solid #404040;
+        color: #e0e0e0;
+    }
+
+     
+    body.article .page-container {
+        display: flex;
+        gap: 2em;
+        align-items: flex-start;
+        max-width: 1200px;
+        margin: 0 auto;
+    }
+
+    body.article .logo-container {
+        flex: 0 0 200px;
+        position: sticky;
+        top: 20px;
+    }
+
+    body.article .main-content {
+        flex: 1;
+        max-width: 800px;
+    }
+
+    body.article img {
+        max-width: 100%;
+        height: auto;
+    }
+
+    body.article pre {
+        background-color: #f5f5f5;
+        padding: 15px;
+        border-radius: 5px;
+        overflow-x: auto;
+    }
+
+    body.article code {
+        font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+    }
+
+    body.article .article-header {
+        margin-bottom: 2em;
+    }
+
+    body.article .article-header h1 {
+        margin-bottom: 0.5em;
+    }
+
+    body.article article {
+        word-wrap: break-word;
+        overflow-wrap: break-word;
+        hyphens: auto;
+    }
+
+    body.article article p {
+        max-width: 100%;
+        overflow-wrap: break-word;
+        word-wrap: break-word;
+        word-break: break-word;
+    }
+
+    body.index .page-container,
+    body.tags .page-container {
+        display: flex;
+        gap: 2em;
+        align-items: flex-start;
+    }
+
+    body.index .logo-container,
+    body.tags .logo-container {
+        flex: 0 0 200px;
+        position: sticky;
+        top: 20px;
+    }
+
+    body.index .main-content,
+    body.tags .main-content {
+        flex: 1;
+    }
+
+     
+    .image-container {
+        margin: 0 auto 20px;
+        text-align: center;
+    }
+
+    .image-container img {
+        max-width: 100%;
+        height: auto;
+        border-radius: 4px;
+    }
+
+     
+    body.index .image-container {
+        max-width: 300px;
+    }
+
+     
+    body.light .article-card {
+        background-color: #f8f9fa;
+        border: 1px solid #dee2e6;
+    }
+
+    body.dark .article-card {
+        background-color: #2d2d2d;
+        border: 1px solid #404040;
+    }
+
+    body.light pre {
+        background-color: #f5f5f5 !important;
+        border: 1px solid #e9ecef;
+    }
+
+    body.dark pre {
+        background-color: #2d2d2d !important;
+        border: 1px solid #404040;
+    }
+
+    body.light .article-card .summary {
+        color: #666666;
+    }
+
+    body.dark .article-card .summary {
+        color: #e0e0e0;
+    }
+
+     
+    @media (max-width: 768px) {
+        body {
+            font-size: 18px;
+            padding: 15px;
+        }
+
+        body.article .page-container,
+        body.index .page-container,
+        body.tags .page-container {
+            flex-direction: column;
+        }
+
+        body.article .logo-container,
+        body.index .logo-container,
+        body.tags .logo-container {
+            flex: none;
+            position: static;
+            margin-bottom: 1em;
+        }
+
+        body.article .main-content,
+        body.index .main-content,
+        body.tags .main-content {
+            width: 100%;
+        }
+
+        .article-card {
+            padding: 15px;
+        }
     }
 
         .page-container {
@@ -88,9 +253,7 @@
             margin: 0 auto;
         }
         .logo-container {
-            flex: 0 0 200px;
-            position: sticky;
-            top: 20px;
+
         }
         .main-content {
             flex: 1;
@@ -128,7 +291,7 @@
         }
     </style>
 </head>
-<body>
+<body class="dark article">
     <div class="page-container">
         <div class="logo-container">
             
@@ -151,9 +314,13 @@
 			<span class="tag"><a href="tag/nostr.html">Nostr</a></span><span class="tag"><a href="tag/nak.html">nak</a></span><span class="tag"><a href="tag/relay.html">relay</a></span><span class="tag"><a href="tag/import.html">import</a></span><span class="tag"><a href="tag/export.html">export</a></span>
 		</div>
 		
+                    
+			<div class="image-container">
+				<img src="https://image.nostr.build/09593373dc30cafd8174ed57a1cae310c517b17e664b2c59ab5a41d0c1aca3d8.jpg" alt="How to Import and Export Your Nostr Notes">
+			</div>
+			
                 </div>
-                <h1 id="how-to-import-and-export-your-nostr-notes">How to Import and Export Your Nostr Notes</h1>
-<p>This guide will help you import your notes from various Nostr relays and export them into your own relay. This is particularly useful when you want to ensure your content is backed up or when you're setting up your own relay.</p>
+                <p>This guide will help you import your notes from various Nostr relays and export them into your own relay. This is particularly useful when you want to ensure your content is backed up or when you're setting up your own relay.</p>
 <h2 id="prerequisite">Prerequisite</h2>
 <p>Your own Nostr relay (if you don't have one, check out <a href="https://njump.me/nevent1qqsqd24rtzchjvxh7a9ahe9xs54w04rtlcpgt499uux8kkzgpucuhmqppamhxue69uhkummnw3ezumt0d5q3vamnwvaz7tmjv4kxz7fwwpexjmtpdshxuet5qy28wumn8ghj7un9d3shjtnyv9kh2uewd9hsz9nhwden5te0wfjkccte9ehx7um5wghxyctwvsq35amnwvaz7tmd0ykhyetvv9ujumn0wd68y6t6v5hx6eg8w8a7q">Part 1: How to Run Your Own Nostr Relay</a>)</p>
 <h2 id="installing-nak">Installing nak</h2>

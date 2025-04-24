@@ -14,7 +14,6 @@ const articleTemplate = `<!DOCTYPE html>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{.Title}}</title>
-    {{.ThemeCSS}}
     <style>
         ` + CommonStyles + `
         .page-container {
@@ -25,9 +24,7 @@ const articleTemplate = `<!DOCTYPE html>
             margin: 0 auto;
         }
         .logo-container {
-            flex: 0 0 200px;
-            position: sticky;
-            top: 20px;
+
         }
         .main-content {
             flex: 1;
@@ -65,7 +62,7 @@ const articleTemplate = `<!DOCTYPE html>
         }
     </style>
 </head>
-<body>
+<body class="{{.Color}} article">
     <div class="page-container">
         <div class="logo-container">
             {{renderLogo .Logo ""}}
@@ -76,6 +73,7 @@ const articleTemplate = `<!DOCTYPE html>
                     <h1>{{.Title}}</h1>
                     {{renderSummary .Summary}}
                     {{renderTags .Tags ""}}
+                    {{renderImage .Image .Title ""}}
                 </div>
                 {{.Content}}
             </article>
@@ -84,41 +82,26 @@ const articleTemplate = `<!DOCTYPE html>
 </body>
 </html>`
 
-func GenerateArticleHTML(event types.Event, outputDir string, themeColor string, logo string) error {
-	htmlContent, err := convertMarkdownToHTML(event.Content)
+func GenerateArticleHTML(event types.Event, outputDir string, layout types.Layout) error {
+	htmlContent, err := convertMarkdownToHTML(event.Content, true)
 	if err != nil {
 		return err
 	}
 
-	// Extract title, summary, and tags from tags
-	var title, summary string
-	var tags []string
-	for _, tag := range event.Tags {
-		if len(tag) < 2 {
-			continue
-		}
-
-		switch tag[0] {
-		case "title":
-			title = tag[1]
-		case "summary":
-			summary = tag[1]
-		case "t":
-			tags = append(tags, tag[1])
-		}
-	}
-
-	if title == "" {
-		title = "Untitled Article"
+	metadata := ExtractArticleMetadata(event.Tags)
+	if metadata.Title == "" {
+		metadata.Title = "Untitled Article"
 	}
 
 	data := ArticleData{
-		Title:    title,
-		Content:  template.HTML(htmlContent),
-		ThemeCSS: GetThemeCSS(themeColor),
-		Summary:  summary,
-		Tags:     tags,
-		Logo:     logo,
+		Title:     metadata.Title,
+		Content:   template.HTML(htmlContent),
+		Color:     layout.Color,
+		Summary:   metadata.Summary,
+		Tags:      metadata.Tags,
+		Logo:      layout.Logo,
+		Image:     metadata.Image,
+		ImageLink: metadata.ImageLink,
 	}
 
 	tmpl, err := template.New("article").Funcs(ComponentFuncs).Parse(articleTemplate)

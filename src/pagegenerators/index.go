@@ -9,14 +9,15 @@ import (
 )
 
 type IndexData struct {
-	ThemeCSS template.HTML
+	Color    string
 	Logo     string
 	Articles []struct {
-		ID      string
-		Title   string
-		Summary string
-		Image   string
-		Tags    []string
+		ID        string
+		Title     string
+		Summary   string
+		Image     string
+		ImageLink string
+		Tags      []string
 	}
 }
 
@@ -26,25 +27,11 @@ const indexTemplate = `<!DOCTYPE html>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Nostr Articles</title>
-    {{.ThemeCSS}}
     <style>
         ` + CommonStyles + `
-        .page-container {
-            display: flex;
-            gap: 2em;
-            align-items: flex-start;
-        }
-        .logo-container {
-            flex: 0 0 200px;
-            position: sticky;
-            top: 20px;
-        }
-        .main-content {
-            flex: 1;
-        }
     </style>
 </head>
-<body>
+<body class="{{.Color}} index">
     <div class="page-container">
         <div class="logo-container">
             {{renderLogo .Logo ""}}
@@ -53,7 +40,7 @@ const indexTemplate = `<!DOCTYPE html>
             <h1>Nostr Articles</h1>
             {{range .Articles}}
             <div class="article-card">
-                {{renderImage .Image .Title}}
+                {{renderImage .Image .Title .ID}}
                 <h2><a href="{{.ID}}.html">{{.Title}}</a></h2>
                 {{renderSummary .Summary}}
                 {{renderTags .Tags ""}}
@@ -64,25 +51,32 @@ const indexTemplate = `<!DOCTYPE html>
 </body>
 </html>`
 
-func GenerateIndexHTML(events []types.Event, outputDir string, themeColor string, logo string) error {
+func GenerateIndexHTML(
+	events []types.Event,
+	outputDir string,
+	layout types.Layout,
+) error {
 	var indexData IndexData
-	indexData.ThemeCSS = GetThemeCSS(themeColor)
-	indexData.Logo = logo
+
+	indexData.Color = layout.Color
+	indexData.Logo = layout.Logo
 	indexData.Articles = make([]struct {
-		ID      string
-		Title   string
-		Summary string
-		Image   string
-		Tags    []string
+		ID        string
+		Title     string
+		Summary   string
+		Image     string
+		ImageLink string
+		Tags      []string
 	}, 0, len(events))
 
 	for _, event := range events {
 		article := struct {
-			ID      string
-			Title   string
-			Summary string
-			Image   string
-			Tags    []string
+			ID        string
+			Title     string
+			Summary   string
+			Image     string
+			ImageLink string
+			Tags      []string
 		}{
 			ID: event.ID,
 		}
@@ -124,7 +118,7 @@ func GenerateIndexHTML(events []types.Event, outputDir string, themeColor string
 	defer file.Close()
 
 	// Generate tag pages
-	if err := GenerateTagPages(events, outputDir, themeColor, logo); err != nil {
+	if err := GenerateTagPages(events, outputDir, layout); err != nil {
 		return err
 	}
 
