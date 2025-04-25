@@ -28,8 +28,8 @@ const tagTemplate = `<!DOCTYPE html>
             <h1>Articles tagged with "{{.Tag}}"</h1>
             {{range .Articles}}
             <div class="article-card">
-                {{renderImage .Image .Title .ImageLink}}
-                <h2><a href="../{{.ID}}.html">{{.Title}}</a></h2>
+                {{renderImage .Image .Title .Naddr "../"}}
+                <h2><a href="../{{.Naddr}}.html">{{.Title}}</a></h2>
                 {{renderSummary .Summary}}
                 {{renderTags .Tags "../"}}
             </div>
@@ -39,16 +39,34 @@ const tagTemplate = `<!DOCTYPE html>
 </body>
 </html>`
 
-func GenerateTagPages(
-	events []types.Event,
-	outputDir string,
-	layout types.Layout,
-) error {
+type TagData struct {
+	Tag      string
+	Color    string
+	Logo     string
+	Articles []TagArticleData
+}
+
+type TagArticleData struct {
+	Naddr   string
+	Title   string
+	Summary string
+	Image   string
+	Tags    []string
+}
+
+type GenerateTagPagesParams struct {
+	Events         []types.Event
+	OutputDir      string
+	Layout         types.Layout
+	EventIDToNaddr map[string]string
+}
+
+func GenerateTagPages(params GenerateTagPagesParams) error {
 	// Create a map to track tags and their associated events
 	tagMap := make(map[string][]types.Event)
 
 	// Populate the tag map
-	for _, event := range events {
+	for _, event := range params.Events {
 		// Extract tags from the event
 		for _, tagArray := range event.Tags {
 			if len(tagArray) > 1 && tagArray[0] == "t" {
@@ -59,7 +77,7 @@ func GenerateTagPages(
 	}
 
 	// Create tag directory if it doesn't exist
-	tagDir := filepath.Join(outputDir, "tag")
+	tagDir := filepath.Join(params.OutputDir, "tag")
 	if err := os.MkdirAll(tagDir, 0755); err != nil {
 		return err
 	}
@@ -67,37 +85,22 @@ func GenerateTagPages(
 	// Generate a page for each tag
 	for tag, tagEvents := range tagMap {
 		data := TagData{
-			Tag:   tag,
-			Color: layout.Color,
-			Logo:  layout.Logo,
-			Articles: make([]struct {
-				ID        string
-				Title     string
-				Summary   string
-				Image     string
-				ImageLink string
-				Tags      []string
-			}, len(tagEvents)),
+			Tag:      tag,
+			Color:    params.Layout.Color,
+			Logo:     params.Layout.Logo,
+			Articles: make([]TagArticleData, len(tagEvents)),
 		}
 
 		for i, event := range tagEvents {
 			// Extract metadata from tags
 			metadata := ExtractArticleMetadata(event.Tags)
 
-			data.Articles[i] = struct {
-				ID        string
-				Title     string
-				Summary   string
-				Image     string
-				ImageLink string
-				Tags      []string
-			}{
-				ID:        event.ID,
-				Title:     metadata.Title,
-				Summary:   metadata.Summary,
-				Image:     metadata.Image,
-				ImageLink: metadata.ImageLink,
-				Tags:      metadata.Tags,
+			data.Articles[i] = TagArticleData{
+				Naddr:   params.EventIDToNaddr[event.ID],
+				Title:   metadata.Title,
+				Summary: metadata.Summary,
+				Image:   metadata.Image,
+				Tags:    metadata.Tags,
 			}
 		}
 

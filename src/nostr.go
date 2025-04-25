@@ -2,75 +2,94 @@ package main
 
 import (
 	"context"
-	"encoding/json"
 	"log"
-	"os"
 	"sync"
 	"time"
 
 	"nostr-static/src/types"
 
 	"github.com/nbd-wtf/go-nostr"
+	"github.com/nbd-wtf/go-nostr/nip19"
 )
 
-func fetchEvents(relays []string, articleIDs []string) ([]types.Event, error) {
+func fetchEvents(relays []string, naddrs []string) ([]types.Event, map[string]string, error) {
 	var events []types.Event
 	var mu sync.Mutex
+	eventIDToNaddr := make(map[string]string)
 
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 
-	log.Printf("Starting to fetch events from %d relays for %d article IDs", len(relays), len(articleIDs))
-	log.Printf("Article IDs: %v", articleIDs)
+	log.Printf("Starting to fetch events from %d relays for %d naddrs", len(relays), len(naddrs))
+	log.Printf("Naddrs: %v", naddrs)
 
 	pool := nostr.NewSimplePool(ctx)
 
-	// Create filter for the article IDs
-	filter := nostr.Filter{
-		IDs: articleIDs,
-	}
+	// Process each naddr
+	for _, naddr := range naddrs {
+		log.Printf("Processing naddr: %s", naddr)
 
-	// Fetch events from all relays
-	eventChan := pool.FetchMany(ctx, relays, filter)
-
-	// Process events
-	for ev := range eventChan {
-		log.Printf("Received event with ID: %s", ev.ID)
-		tags := make([][]string, len(ev.Tags))
-		for i, tag := range ev.Tags {
-			tags[i] = []string(tag)
+		// Decode naddr to get pubkey and d tag
+		prefix, data, err := nip19.Decode(naddr)
+		if err != nil {
+			log.Printf("Error decoding naddr %s: %v", naddr, err)
+			continue
 		}
 
-		mu.Lock()
-		events = append(events, types.Event{
-			ID:        ev.ID,
-			PubKey:    ev.PubKey,
-			CreatedAt: int64(ev.CreatedAt),
-			Kind:      ev.Kind,
-			Tags:      tags,
-			Content:   ev.Content,
-			Sig:       ev.Sig,
+		if prefix != "naddr" {
+			log.Printf("Invalid naddr prefix for %s: %s", naddr, prefix)
+			continue
+		}
+
+		addr := data.(nostr.EntityPointer)
+
+		if addr.Kind != nostr.KindArticle {
+			log.Printf("Invalid kind for %s: %d", naddr, addr.Kind)
+			continue
+		}
+
+		// Create filter for replaceable event
+		filter := nostr.Filter{
+			Kinds:   []int{nostr.KindArticle},
+			Authors: []string{addr.PublicKey},
+			Tags: nostr.TagMap{
+				"d": []string{addr.Identifier},
+			},
+		}
+
+		log.Printf("Filter: %v", filter)
+
+		allRelays := append(relays, addr.Relays...)
+
+		log.Printf("All Relays: %v", allRelays)
+
+		// Fetch replaceable event from all relays
+		eventMap := pool.FetchManyReplaceable(ctx, allRelays, filter)
+
+		// Process events
+		eventMap.Range(func(key nostr.ReplaceableKey, ev *nostr.Event) bool {
+			log.Printf("Received event with ID: %s", ev.ID)
+			tags := make([][]string, len(ev.Tags))
+			for i, tag := range ev.Tags {
+				tags[i] = []string(tag)
+			}
+
+			mu.Lock()
+			events = append(events, types.Event{
+				ID:        ev.ID,
+				PubKey:    ev.PubKey,
+				CreatedAt: int64(ev.CreatedAt),
+				Kind:      ev.Kind,
+				Tags:      tags,
+				Content:   ev.Content,
+				Sig:       ev.Sig,
+			})
+			eventIDToNaddr[ev.ID] = naddr
+			mu.Unlock()
+			return true
 		})
-		mu.Unlock()
 	}
 
 	log.Printf("Finished fetching events. Total events received: %d", len(events))
-	return events, nil
-}
-
-func saveEvents(events []types.Event, outputPath string) error {
-	file, err := os.Create(outputPath)
-	if err != nil {
-		return err
-	}
-	defer file.Close()
-
-	encoder := json.NewEncoder(file)
-	for _, event := range events {
-		if err := encoder.Encode(event); err != nil {
-			return err
-		}
-	}
-
-	return nil
+	return events, eventIDToNaddr, nil
 }

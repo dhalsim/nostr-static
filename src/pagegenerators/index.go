@@ -8,18 +8,19 @@ import (
 	"nostr-static/src/types"
 )
 
+type IndexArticleData struct {
+	Title   string
+	Summary string
+	Image   string
+	Tags    []string
+	Naddr   string
+}
+
 type IndexData struct {
 	Color    string
 	Logo     string
 	Title    string
-	Articles []struct {
-		ID        string
-		Title     string
-		Summary   string
-		Image     string
-		ImageLink string
-		Tags      []string
-	}
+	Articles []IndexArticleData
 }
 
 const indexTemplate = `<!DOCTYPE html>
@@ -41,8 +42,8 @@ const indexTemplate = `<!DOCTYPE html>
             <h1>{{.Title}}</h1>
             {{range .Articles}}
             <div class="article-card">
-                {{renderImage .Image .Title .ID}}
-                <h2><a href="{{.ID}}.html">{{.Title}}</a></h2>
+                {{renderImage .Image .Title .Naddr ""}}
+                <h2><a href="{{.Naddr}}.html">{{.Title}}</a></h2>
                 {{renderSummary .Summary}}
                 {{renderTags .Tags ""}}
             </div>
@@ -52,35 +53,25 @@ const indexTemplate = `<!DOCTYPE html>
 </body>
 </html>`
 
-func GenerateIndexHTML(
-	events []types.Event,
-	outputDir string,
-	layout types.Layout,
-) error {
+type GenerateIndexParams struct {
+	Events         []types.Event
+	OutputDir      string
+	Layout         types.Layout
+	EventIDToNaddr map[string]string
+}
+
+func GenerateIndexHTML(params GenerateIndexParams) error {
 	var indexData IndexData
 
-	indexData.Color = layout.Color
-	indexData.Logo = layout.Logo
-	indexData.Title = layout.Title
-	indexData.Articles = make([]struct {
-		ID        string
-		Title     string
-		Summary   string
-		Image     string
-		ImageLink string
-		Tags      []string
-	}, 0, len(events))
+	indexData.Color = params.Layout.Color
+	indexData.Logo = params.Layout.Logo
+	indexData.Title = params.Layout.Title
 
-	for _, event := range events {
-		article := struct {
-			ID        string
-			Title     string
-			Summary   string
-			Image     string
-			ImageLink string
-			Tags      []string
-		}{
-			ID: event.ID,
+	indexData.Articles = make([]IndexArticleData, 0, len(params.Events))
+
+	for _, event := range params.Events {
+		article := IndexArticleData{
+			Naddr: params.EventIDToNaddr[event.ID],
 		}
 
 		for _, tag := range event.Tags {
@@ -112,17 +103,12 @@ func GenerateIndexHTML(
 		return err
 	}
 
-	outputPath := filepath.Join(outputDir, "index.html")
+	outputPath := filepath.Join(params.OutputDir, "index.html")
 	file, err := os.Create(outputPath)
 	if err != nil {
 		return err
 	}
 	defer file.Close()
-
-	// Generate tag pages
-	if err := GenerateTagPages(events, outputDir, layout); err != nil {
-		return err
-	}
 
 	return tmpl.Execute(file, indexData)
 }

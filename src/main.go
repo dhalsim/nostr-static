@@ -72,7 +72,7 @@ func main() {
 			}
 
 			// Fetch events from relays
-			events, err := fetchEvents(config.Relays, config.ArticleIDs)
+			events, eventIDToNaddr, err := fetchEvents(config.Relays, config.Articles)
 			if err != nil {
 				return err
 			}
@@ -83,21 +83,44 @@ func main() {
 				return err
 			}
 
+			// Save naddr mapping
+			naddrPath := filepath.Join(outputDir, "naddr.json")
+			if err := saveNaddrMapping(eventIDToNaddr, naddrPath); err != nil {
+				return err
+			}
+
 			// Generate HTML files for each event
 			for _, event := range events {
-				if err := pagegenerators.GenerateArticleHTML(event, outputDir, config.Layout); err != nil {
+				params := pagegenerators.GenerateArticleParams{
+					Event:          event,
+					OutputDir:      outputDir,
+					Layout:         config.Layout,
+					EventIDToNaddr: eventIDToNaddr,
+				}
+
+				if err := pagegenerators.GenerateArticleHTML(params); err != nil {
 					log.Printf("Failed to generate HTML for event %s: %v", event.ID, err)
 					continue
 				}
 			}
 
 			// Generate tag pages
-			if err := pagegenerators.GenerateTagPages(events, outputDir, config.Layout); err != nil {
+			if err := pagegenerators.GenerateTagPages(pagegenerators.GenerateTagPagesParams{
+				Events:         events,
+				OutputDir:      outputDir,
+				Layout:         config.Layout,
+				EventIDToNaddr: eventIDToNaddr,
+			}); err != nil {
 				return err
 			}
 
 			// Generate index.html
-			if err := pagegenerators.GenerateIndexHTML(events, outputDir, config.Layout); err != nil {
+			if err := pagegenerators.GenerateIndexHTML(pagegenerators.GenerateIndexParams{
+				Events:         events,
+				OutputDir:      outputDir,
+				Layout:         config.Layout,
+				EventIDToNaddr: eventIDToNaddr,
+			}); err != nil {
 				return err
 			}
 

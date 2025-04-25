@@ -7,7 +7,7 @@ type Layout struct {
 }
 
 type Config struct {
-	Relays     []string `yaml:"relays"`
-	ArticleIDs []string `yaml:"article_ids"`
-	Layout     Layout   `yaml:"layout"`
+	Relays   []string `yaml:"relays"`
+	Articles []string `yaml:"articles"`
+	Layout   Layout   `yaml:"layout"`
 }

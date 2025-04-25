@@ -1,6 +1,7 @@
 package pagegenerators
 
 import (
+	"fmt"
 	"html/template"
 	"os"
 	"path/filepath"
@@ -69,7 +70,7 @@ const articleTemplate = `<!DOCTYPE html>
                     <h1>{{.Title}}</h1>
                     {{renderSummary .Summary}}
                     {{renderTags .Tags ""}}
-                    {{renderImage .Image .Title ""}}
+                    {{renderImage .Image .Title "" ""}}
                 </div>
                 {{.Content}}
             </article>
@@ -78,7 +79,19 @@ const articleTemplate = `<!DOCTYPE html>
 </body>
 </html>`
 
-func GenerateArticleHTML(event types.Event, outputDir string, layout types.Layout) error {
+type GenerateArticleParams struct {
+	Event          types.Event
+	OutputDir      string
+	Layout         types.Layout
+	EventIDToNaddr map[string]string
+}
+
+func GenerateArticleHTML(params GenerateArticleParams) error {
+	event := params.Event
+	outputDir := params.OutputDir
+	layout := params.Layout
+	eventIDToNaddr := params.EventIDToNaddr
+
 	htmlContent, err := convertMarkdownToHTML(event.Content, true)
 	if err != nil {
 		return err
@@ -89,15 +102,21 @@ func GenerateArticleHTML(event types.Event, outputDir string, layout types.Layou
 		metadata.Title = "Untitled Article"
 	}
 
+	naddr := eventIDToNaddr[event.ID]
+
+	if naddr == "" {
+		return fmt.Errorf("naddr not found for event %s", event.ID)
+	}
+
 	data := ArticleData{
-		Title:     metadata.Title,
-		Content:   template.HTML(htmlContent),
-		Color:     layout.Color,
-		Summary:   metadata.Summary,
-		Tags:      metadata.Tags,
-		Logo:      layout.Logo,
-		Image:     metadata.Image,
-		ImageLink: metadata.ImageLink,
+		Title:   metadata.Title,
+		Content: template.HTML(htmlContent),
+		Color:   layout.Color,
+		Summary: metadata.Summary,
+		Tags:    metadata.Tags,
+		Logo:    layout.Logo,
+		Image:   metadata.Image,
+		Naddr:   naddr,
 	}
 
 	tmpl, err := template.New("article").Funcs(ComponentFuncs).Parse(articleTemplate)
@@ -105,7 +124,7 @@ func GenerateArticleHTML(event types.Event, outputDir string, layout types.Layou
 		return err
 	}
 
-	outputPath := filepath.Join(outputDir, event.ID+".html")
+	outputPath := filepath.Join(outputDir, naddr+".html")
 	file, err := os.Create(outputPath)
 	if err != nil {
 		return err

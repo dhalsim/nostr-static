@@ -30,7 +30,7 @@ var ComponentFuncs = template.FuncMap{
 		</div>
 		`)
 	},
-	"renderImage": func(image, alt, imageLink string) template.HTML {
+	"renderImage": func(image, alt, imageLink, baseFolder string) template.HTML {
 		if image == "" {
 			return ""
 		}
@@ -45,7 +45,7 @@ var ComponentFuncs = template.FuncMap{
 
 		return template.HTML(`
 			<div class="image-container">
-				<a href="` + imageLink + `.html">
+				<a href="` + baseFolder + imageLink + `.html">
 					<img src="` + image + `" alt="` + alt + `">
 				</a>
 			</div>
@@ -362,8 +362,6 @@ func ExtractArticleMetadata(tags [][]string) ArticleMetadata {
 			metadata.Summary = tag[1]
 		case "image":
 			metadata.Image = tag[1]
-		case "image_link":
-			metadata.ImageLink = tag[1]
 		case "t":
 			metadata.Tags = append(metadata.Tags, tag[1])
 		}

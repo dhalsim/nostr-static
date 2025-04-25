@@ -6,11 +6,11 @@ A static web site generator written in Go that creates HTML pages from long-form
 
 https://blog.nostrize.me
 
-## Version 0.1
+## Version 0.2
 
 ## Features
 
-- Downloads Nostr events by their IDs
+- Downloads Nostr events by their naddr1 addresses
 - Generates static HTML pages from long-form content
 - Supports multiple relays
 - Customizable layout and styling
@@ -18,7 +18,10 @@ https://blog.nostrize.me
 
 ## Todo
 
-- [ ] support naddr
+- [x] support naddr
+- [ ] add nostr link tag
+- [ ] atom, rss feeds
+- [ ] release binaries
 - [ ] profiles
 - [ ] comments
 - [ ] dynamic theme option
@@ -40,9 +43,9 @@ relays:
   - wss://nos.lol
   - wss://relay.primal.net
 
-article_ids:
-  - e053bd17c3e36ea81d69ae382aefedf0f53188fc4f95e67b21ce35a38dc9a1e2
-  - e9afc5076f13880a18b57c06600c49aa432a7b3ffa92895620f0aeb55ca3218c
+articles:
+  - naddr1qvzqqqr4gupzqmnyhq7p7e60kq997xvpds5hkeq5hanlq9vffczd6nr9062pqthgqq2j6ezsgu69j7n92cmxxmfsgyeyyvjtxfuk7lwjq6s
+  - naddr1qvzqqqr4gupzqmnyhq7p7e60kq997xvpds5hkeq5hanlq9vffczd6nr9062pqthgqq24wmjfwp6rv6t8v935ujfhv4yr2wzzdfz5gl5quve
 ```
 
 ## Deployment
