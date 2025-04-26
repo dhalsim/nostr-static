@@ -150,19 +150,6 @@ func main() {
 					))
 				},
 			},
-			{
-				Name:  "trigger",
-				Usage: "Trigger various actions",
-				Commands: []*cli.Command{
-					{
-						Name:  "action",
-						Usage: "Trigger a GitHub Actions workflow",
-						Action: func(ctx context.Context, cmd *cli.Command) error {
-							return commands.TriggerGitHubAction(cmd.String("action"))
-						},
-					},
-				},
-			},
 		},
 	}
 
