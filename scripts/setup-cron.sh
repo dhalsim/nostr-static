@@ -3,8 +3,12 @@
 # Get the absolute path of the project directory
 PROJECT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 
-# Create the cron job command
-CRON_CMD="cd $PROJECT_DIR && ./nostr-static --trigger-action=deploy"
+# Create the cron job command with git operations
+CRON_CMD="cd $PROJECT_DIR && 
+git add . && 
+git commit -m 'Update Nostr static site' && 
+git push origin main && 
+./nostr-static trigger deploy"
 
 # Add the cron job for daily run at 00:00
 (crontab -l 2>/dev/null; echo "0 0 * * * $CRON_CMD") | crontab -

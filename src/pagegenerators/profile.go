@@ -129,7 +129,7 @@ const profileTemplate = `<!DOCTYPE html>
 </body>
 </html>`
 
-type ProfileData struct {
+type profileData struct {
 	Color         string
 	Logo          string
 	Nprofile      string
@@ -143,6 +143,38 @@ type ProfileData struct {
 	Nip05Verified bool
 	Lud16         string
 	Articles      []ProfileArticleData
+}
+
+func NewProfileData(
+	color string,
+	logo string,
+	nprofile string,
+	pubkey string,
+	name string,
+	about string,
+	picture string,
+	website string,
+	displayName string,
+	nip05 string,
+	nip05Verified bool,
+	lud16 string,
+	articles []ProfileArticleData,
+) profileData {
+	return profileData{
+		Color:         color,
+		Logo:          logo,
+		Nprofile:      nprofile,
+		PubKey:        pubkey,
+		Name:          name,
+		About:         about,
+		Picture:       picture,
+		Website:       website,
+		DisplayName:   displayName,
+		Nip05:         nip05,
+		Nip05Verified: nip05Verified,
+		Lud16:         lud16,
+		Articles:      articles,
+	}
 }
 
 type ProfileArticleData struct {
@@ -224,36 +256,41 @@ func GenerateProfilePages(params generateProfilePagesParams) error {
 			}
 		}
 
-		data := ProfileData{
-			Color:         params.Layout.Color,
-			Logo:          params.Layout.Logo,
-			Nprofile:      params.PubkeyToNProfile[pubkey],
-			PubKey:        pubkey,
-			Name:          profileData.Name,
-			About:         profileData.About,
-			Picture:       profileData.Picture,
-			Website:       profileData.Website,
-			DisplayName:   profileData.DisplayName,
-			Nip05:         profileData.Nip05,
-			Nip05Verified: nip05Verified,
-			Lud16:         profileData.Lud16,
+		// Add articles for this profile
+		articleEvents, ok := authorArticles[pubkey]
+		if !ok {
+			return fmt.Errorf("no articles found for profile: %s", pubkey)
 		}
 
-		// Add articles for this profile
-		if articles, ok := authorArticles[pubkey]; ok {
-			data.Articles = make([]ProfileArticleData, len(articles))
-			for i, event := range articles {
-				metadata := ExtractArticleMetadata(event.Tags)
+		articles := make([]ProfileArticleData, len(articleEvents))
 
-				data.Articles[i] = ProfileArticleData{
-					Naddr:   params.EventIDToNaddr[event.ID],
-					Title:   metadata.Title,
-					Summary: metadata.Summary,
-					Image:   metadata.Image,
-					Tags:    metadata.Tags,
-				}
+		for i, event := range articleEvents {
+			metadata := ExtractArticleMetadata(event.Tags)
+
+			articles[i] = ProfileArticleData{
+				Naddr:   params.EventIDToNaddr[event.ID],
+				Title:   metadata.Title,
+				Summary: metadata.Summary,
+				Image:   metadata.Image,
+				Tags:    metadata.Tags,
 			}
 		}
+
+		data := NewProfileData(
+			params.Layout.Color,
+			params.Layout.Logo,
+			params.PubkeyToNProfile[pubkey],
+			pubkey,
+			profileData.Name,
+			profileData.About,
+			profileData.Picture,
+			profileData.Website,
+			profileData.DisplayName,
+			profileData.Nip05,
+			nip05Verified,
+			profileData.Lud16,
+			articles,
+		)
 
 		tmpl, err := template.New("profile").Funcs(ComponentFuncs).Parse(profileTemplate)
 		if err != nil {

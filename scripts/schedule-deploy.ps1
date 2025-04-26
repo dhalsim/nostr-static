@@ -4,5 +4,9 @@ $env:Path = [System.Environment]::GetEnvironmentVariable("Path","Machine") + ";"
 # Change to the project directory
 Set-Location $PSScriptRoot/..
 
-# Run the nostr-static command with deploy trigger
-./nostr-static --trigger-action=deploy 
+# Run the nostr-static command to trigger the deploy action
+./nostr-static generate
+git add .
+git commit -m "Update Nostr static site"
+git push origin main
+./nostr-static trigger deploy

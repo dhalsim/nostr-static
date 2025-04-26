@@ -12,7 +12,10 @@ import (
 	"github.com/nbd-wtf/go-nostr/nip19"
 )
 
-func fetchEvents(relays []string, naddrs []string) ([]types.Event, map[string]string, error) {
+func FetchEvents(
+	relays []string,
+	naddrs []string,
+) ([]types.Event, map[string]string, error) {
 	var events []types.Event
 	var mu sync.Mutex
 	eventIDToNaddr := make(map[string]string)
@@ -87,12 +90,12 @@ func fetchEvents(relays []string, naddrs []string) ([]types.Event, map[string]st
 	return events, eventIDToNaddr, nil
 }
 
-func fetchProfiles(
+func FetchProfiles(
 	relays []string,
 	pubkeys []string,
 ) (map[string]types.Event, error) {
 	// pubkey to kind 0 event map
-	profileMap := make(map[string]types.Event)
+	pubkeyToKind0 := make(map[string]types.Event)
 
 	var mu sync.Mutex
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
@@ -100,13 +103,13 @@ func fetchProfiles(
 
 	pool := nostr.NewSimplePool(ctx)
 
-	log.Printf("pubkeys: %v", pubkeys)
-
 	// Create a filter for kind 0 events
 	filter := nostr.Filter{
 		Kinds:   []int{0},
 		Authors: pubkeys,
 	}
+
+	log.Printf("Filter: %v", filter)
 
 	// Fetch profile events from all relays
 	eventMap := pool.FetchMany(ctx, relays, filter)
@@ -114,7 +117,7 @@ func fetchProfiles(
 	// Process events
 	for ev := range eventMap {
 		mu.Lock()
-		profileMap[ev.PubKey] = types.Event{
+		pubkeyToKind0[ev.PubKey] = types.Event{
 			ID:        ev.ID,
 			PubKey:    ev.PubKey,
 			CreatedAt: int64(ev.CreatedAt),
@@ -126,5 +129,5 @@ func fetchProfiles(
 		mu.Unlock()
 	}
 
-	return profileMap, nil
+	return pubkeyToKind0, nil
 }

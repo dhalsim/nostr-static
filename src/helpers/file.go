@@ -1,13 +1,14 @@
-package main
+package helpers
 
 import (
 	"encoding/json"
+	"io"
 	"os"
 
 	"nostr-static/src/types"
 )
 
-func saveNaddrMapping(eventIDToNaddr map[string]string, outputPath string) error {
+func SaveNaddrMapping(eventIDToNaddr map[string]string, outputPath string) error {
 	file, err := os.Create(outputPath)
 	if err != nil {
 		return err
@@ -19,7 +20,7 @@ func saveNaddrMapping(eventIDToNaddr map[string]string, outputPath string) error
 	return encoder.Encode(eventIDToNaddr)
 }
 
-func saveNprofileMapping(pubkeyToNprofile map[string]string, outputPath string) error {
+func SaveNprofileMapping(pubkeyToNprofile map[string]string, outputPath string) error {
 	file, err := os.Create(outputPath)
 	if err != nil {
 		return err
@@ -31,7 +32,7 @@ func saveNprofileMapping(pubkeyToNprofile map[string]string, outputPath string) 
 	return encoder.Encode(pubkeyToNprofile)
 }
 
-func saveEvents(events []types.Event, outputPath string) error {
+func SaveEvents(events []types.Event, outputPath string) error {
 	file, err := os.Create(outputPath)
 	if err != nil {
 		return err
@@ -48,7 +49,7 @@ func saveEvents(events []types.Event, outputPath string) error {
 	return nil
 }
 
-func saveProfiles(profiles map[string]types.Event, outputPath string) error {
+func SaveProfiles(profiles map[string]types.Event, outputPath string) error {
 	file, err := os.Create(outputPath)
 	if err != nil {
 		return err
@@ -58,4 +59,21 @@ func saveProfiles(profiles map[string]types.Event, outputPath string) error {
 	encoder := json.NewEncoder(file)
 	encoder.SetIndent("", "  ")
 	return encoder.Encode(profiles)
+}
+
+func CopyFile(src, dst string) error {
+	sourceFile, err := os.Open(src)
+	if err != nil {
+		return err
+	}
+	defer sourceFile.Close()
+
+	destFile, err := os.Create(dst)
+	if err != nil {
+		return err
+	}
+	defer destFile.Close()
+
+	_, err = io.Copy(destFile, sourceFile)
+	return err
 }
