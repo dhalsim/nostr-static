@@ -1,3 +1,4 @@
+// Version 0.5
 module nostr-static
 
 go 1.24.1

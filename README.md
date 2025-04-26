@@ -6,7 +6,7 @@ A static web site generator written in Go that creates HTML pages from long-form
 
 https://blog.nostrize.me
 
-## Version 0.4
+## Version 0.5
 
 ## Features
 
@@ -23,7 +23,69 @@ https://blog.nostrize.me
 - [x] comments, zapthreads
 - [ ] atom, rss feeds
 - [ ] dynamic theme option
-- [ ] release binaries
+
+## Prequisites
+
+### Terminal Knowledge
+- Basic understanding of command-line interface (CLI) operations
+- Familiarity with navigating directories using `cd` command
+- Understanding of basic file operations (copy, move, delete)
+
+### Git Installation
+
+#### Windows
+1. Download Git from [git-scm.com](https://git-scm.com/download/win)
+2. Run the installer and follow the installation wizard
+3. Verify installation by opening Command Prompt or PowerShell and running:
+   ```bash
+   git --version
+   ```
+
+#### macOS
+1. Install via Homebrew (recommended):
+   ```bash
+   brew install git
+   ```
+2. Or download from [git-scm.com](https://git-scm.com/download/mac)
+3. Verify installation:
+   ```bash
+   git --version
+   ```
+
+#### Linux (Ubuntu/Debian)
+```bash
+sudo apt update
+sudo apt install git
+git --version
+```
+
+### Go Installation
+
+#### Windows
+1. Download Go from [golang.org/dl](https://golang.org/dl/)
+2. Run the installer and follow the installation wizard
+3. Verify installation by opening Command Prompt or PowerShell:
+   ```bash
+   go version
+   ```
+
+#### macOS
+1. Install via Homebrew (recommended):
+   ```bash
+   brew install go
+   ```
+2. Or download from [golang.org/dl](https://golang.org/dl/)
+3. Verify installation:
+   ```bash
+   go version
+   ```
+
+#### Linux (Ubuntu/Debian)
+```bash
+sudo apt update
+sudo apt install golang-go
+go version
+```
 
 ## Configuration
 
