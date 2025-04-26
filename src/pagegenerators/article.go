@@ -81,6 +81,7 @@ const articleTemplate = `<!DOCTYPE html>
 							<zap-threads 
 							  anchor="{{.Naddr}}" 
 								relays="{{.Relays}}"
+								urls="naddr:njump.me/,npub:njump.me/,nprofile:njump.me/,nevent:njump.me/,note:njump.me/,tag:snort.social/t/"
 								disable="replyAnonymously" />
 						{{end}}
             {{renderFooter}}
