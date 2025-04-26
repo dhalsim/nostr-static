@@ -6,8 +6,14 @@ type Layout struct {
 	Title string `yaml:"title"`
 }
 
+type Features struct {
+	Comments bool `yaml:"comments"`
+}
+
 type Config struct {
 	Relays   []string `yaml:"relays"`
 	Articles []string `yaml:"articles"`
+	Profiles []string `yaml:"profiles"`
 	Layout   Layout   `yaml:"layout"`
+	Features Features `yaml:"features"`
 }

@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"fmt"
 	"io"
 	"log"
 	"os"
@@ -9,6 +10,8 @@ import (
 
 	"nostr-static/src/pagegenerators"
 
+	"github.com/nbd-wtf/go-nostr"
+	"github.com/nbd-wtf/go-nostr/nip19"
 	"github.com/urfave/cli/v3"
 )
 
@@ -46,10 +49,17 @@ func main() {
 				Usage:   "output directory for generated files",
 				Aliases: []string{"o"},
 			},
+			&cli.BoolFlag{
+				Name:    "clean",
+				Value:   true,
+				Usage:   "clean output directory before generating",
+				Aliases: []string{"C"},
+			},
 		},
 		Action: func(ctx context.Context, cmd *cli.Command) error {
 			configPath := cmd.String("config")
 			outputDir := cmd.String("output")
+			clean := cmd.Bool("clean")
 
 			// Load configuration
 			log.Println("loading config from: ", configPath)
@@ -57,6 +67,12 @@ func main() {
 			config, err := LoadConfig(configPath)
 			if err != nil {
 				return err
+			}
+
+			if clean {
+				if err := os.RemoveAll(outputDir); err != nil {
+					return err
+				}
 			}
 
 			// Create output directory if it doesn't exist
@@ -89,8 +105,26 @@ func main() {
 
 			log.Println("fetching profiles for all authors")
 
+			pubkeys := make([]string, 0)
+			pubkeyToNprofile := make(map[string]string)
+
+			for _, nprofile := range config.Profiles {
+				prefix, pubkey, err := nip19.Decode(nprofile)
+				if err != nil {
+					return err
+				}
+
+				if prefix != "nprofile" {
+					return fmt.Errorf("invalid nprofile prefix: %s", prefix)
+				}
+
+				profilePointer := pubkey.(nostr.ProfilePointer)
+				pubkeys = append(pubkeys, profilePointer.PublicKey)
+				pubkeyToNprofile[profilePointer.PublicKey] = nprofile
+			}
+
 			// Fetch profiles for all authors
-			profiles, pubkeyToNprofile, err := fetchProfiles(config.Relays, events)
+			profiles, err := fetchProfiles(config.Relays, pubkeys)
 			if err != nil {
 				return err
 			}
@@ -117,14 +151,15 @@ func main() {
 
 			// Article pages
 			for _, event := range events {
-				params := pagegenerators.GenerateArticleParams{
-					Event:     event,
-					OutputDir: outputDir,
-					Layout:    config.Layout,
-					Naddr:     eventIDToNaddr[event.ID],
-					Nprofile:  pubkeyToNprofile[event.PubKey],
-					Profile:   profiles[event.PubKey],
-				}
+				params := pagegenerators.NewGenerateArticleParams(
+					event,
+					outputDir,
+					config.Layout,
+					config.Features,
+					eventIDToNaddr[event.ID],
+					profiles[event.PubKey],
+					pubkeyToNprofile[event.PubKey],
+				)
 
 				if err := pagegenerators.GenerateArticleHTML(params); err != nil {
 					log.Printf("Failed to generate HTML for event %s: %v", event.ID, err)
@@ -135,42 +170,42 @@ func main() {
 			log.Println("generating tag pages")
 
 			// Tag pages
-			if err := pagegenerators.GenerateTagPages(pagegenerators.GenerateTagPagesParams{
-				Events:           events,
-				Profiles:         profiles,
-				OutputDir:        outputDir,
-				Layout:           config.Layout,
-				EventIDToNaddr:   eventIDToNaddr,
-				PubkeyToNProfile: pubkeyToNprofile,
-			}); err != nil {
+			if err := pagegenerators.GenerateTagPages(pagegenerators.NewGenerateTagPagesParams(
+				events,
+				profiles,
+				outputDir,
+				config.Layout,
+				eventIDToNaddr,
+				pubkeyToNprofile,
+			)); err != nil {
 				return err
 			}
 
 			log.Println("generating profile pages")
 
 			// Profile pages
-			if err := pagegenerators.GenerateProfilePages(pagegenerators.GenerateProfilePagesParams{
-				Profiles:         profiles,
-				Events:           events,
-				OutputDir:        outputDir,
-				Layout:           config.Layout,
-				EventIDToNaddr:   eventIDToNaddr,
-				PubkeyToNProfile: pubkeyToNprofile,
-			}); err != nil {
+			if err := pagegenerators.GenerateProfilePages(pagegenerators.NewGenerateProfilePagesParams(
+				profiles,
+				events,
+				outputDir,
+				config.Layout,
+				pubkeyToNprofile,
+				eventIDToNaddr,
+			)); err != nil {
 				return err
 			}
 
 			log.Println("generating index page")
 
 			// Index page
-			if err := pagegenerators.GenerateIndexHTML(pagegenerators.GenerateIndexParams{
-				Events:           events,
-				Profiles:         profiles,
-				OutputDir:        outputDir,
-				Layout:           config.Layout,
-				EventIDToNaddr:   eventIDToNaddr,
-				PubkeyToNProfile: pubkeyToNprofile,
-			}); err != nil {
+			if err := pagegenerators.GenerateIndexHTML(pagegenerators.NewGenerateIndexParams(
+				events,
+				profiles,
+				outputDir,
+				config.Layout,
+				eventIDToNaddr,
+				pubkeyToNprofile,
+			)); err != nil {
 				return err
 			}
 

@@ -60,7 +60,7 @@ const indexTemplate = `<!DOCTYPE html>
 </body>
 </html>`
 
-type GenerateIndexParams struct {
+type generateIndexParams struct {
 	Events           []types.Event
 	Profiles         map[string]types.Event
 	OutputDir        string
@@ -69,7 +69,25 @@ type GenerateIndexParams struct {
 	PubkeyToNProfile map[string]string
 }
 
-func GenerateIndexHTML(params GenerateIndexParams) error {
+func NewGenerateIndexParams(
+	events []types.Event,
+	profiles map[string]types.Event,
+	outputDir string,
+	layout types.Layout,
+	eventIDToNaddr map[string]string,
+	pubkeyToNProfile map[string]string,
+) generateIndexParams {
+	return generateIndexParams{
+		Events:           events,
+		Profiles:         profiles,
+		OutputDir:        outputDir,
+		Layout:           layout,
+		EventIDToNaddr:   eventIDToNaddr,
+		PubkeyToNProfile: pubkeyToNProfile,
+	}
+}
+
+func GenerateIndexHTML(params generateIndexParams) error {
 	var indexData IndexData
 
 	indexData.Color = params.Layout.Color

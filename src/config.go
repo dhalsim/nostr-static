@@ -24,5 +24,10 @@ func LoadConfig(path string) (*types.Config, error) {
 		config.Layout.Color = "light"
 	}
 
+	// Set default features if not specified
+	if config.Features.Comments {
+		config.Features.Comments = true
+	}
+
 	return &config, nil
 }

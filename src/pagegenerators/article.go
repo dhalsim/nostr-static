@@ -96,16 +96,37 @@ type ArticleData struct {
 	AuthorPicture  string
 }
 
-type GenerateArticleParams struct {
+type generateArticleParams struct {
 	Event     types.Event
 	OutputDir string
 	Layout    types.Layout
+	Features  types.Features
 	Naddr     string
 	Profile   types.Event
 	Nprofile  string
 }
 
-func GenerateArticleHTML(params GenerateArticleParams) error {
+func NewGenerateArticleParams(
+	event types.Event,
+	outputDir string,
+	layout types.Layout,
+	features types.Features,
+	naddr string,
+	profile types.Event,
+	nprofile string,
+) generateArticleParams {
+	return generateArticleParams{
+		Event:     event,
+		OutputDir: outputDir,
+		Layout:    layout,
+		Features:  features,
+		Naddr:     naddr,
+		Profile:   profile,
+		Nprofile:  nprofile,
+	}
+}
+
+func GenerateArticleHTML(params generateArticleParams) error {
 	event := params.Event
 	profile := params.Profile
 	nprofile := params.Nprofile

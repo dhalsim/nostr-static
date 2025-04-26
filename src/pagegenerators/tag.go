@@ -61,7 +61,7 @@ type TagArticleData struct {
 	Ago           string
 }
 
-type GenerateTagPagesParams struct {
+type generateTagPagesParams struct {
 	Events           []types.Event
 	Profiles         map[string]types.Event
 	OutputDir        string
@@ -70,7 +70,25 @@ type GenerateTagPagesParams struct {
 	PubkeyToNProfile map[string]string
 }
 
-func GenerateTagPages(params GenerateTagPagesParams) error {
+func NewGenerateTagPagesParams(
+	events []types.Event,
+	profiles map[string]types.Event,
+	outputDir string,
+	layout types.Layout,
+	eventIDToNaddr map[string]string,
+	pubkeyToNProfile map[string]string,
+) generateTagPagesParams {
+	return generateTagPagesParams{
+		Events:           events,
+		Profiles:         profiles,
+		OutputDir:        outputDir,
+		Layout:           layout,
+		EventIDToNaddr:   eventIDToNaddr,
+		PubkeyToNProfile: pubkeyToNProfile,
+	}
+}
+
+func GenerateTagPages(params generateTagPagesParams) error {
 	// Create a map to track tags and their associated events
 	tagMap := make(map[string][]types.Event)
 

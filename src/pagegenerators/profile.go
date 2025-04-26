@@ -153,7 +153,7 @@ type ProfileArticleData struct {
 	Tags    []string
 }
 
-type GenerateProfilePagesParams struct {
+type generateProfilePagesParams struct {
 	Profiles         map[string]types.Event
 	Events           []types.Event
 	OutputDir        string
@@ -162,7 +162,25 @@ type GenerateProfilePagesParams struct {
 	EventIDToNaddr   map[string]string
 }
 
-func GenerateProfilePages(params GenerateProfilePagesParams) error {
+func NewGenerateProfilePagesParams(
+	profiles map[string]types.Event,
+	events []types.Event,
+	outputDir string,
+	layout types.Layout,
+	pubkeyToNProfile map[string]string,
+	eventIDToNaddr map[string]string,
+) generateProfilePagesParams {
+	return generateProfilePagesParams{
+		Profiles:         profiles,
+		Events:           events,
+		OutputDir:        outputDir,
+		Layout:           layout,
+		PubkeyToNProfile: pubkeyToNProfile,
+		EventIDToNaddr:   eventIDToNaddr,
+	}
+}
+
+func GenerateProfilePages(params generateProfilePagesParams) error {
 	// Create profile directory if it doesn't exist
 	profileDir := filepath.Join(params.OutputDir, "profile")
 	if err := os.MkdirAll(profileDir, 0755); err != nil {

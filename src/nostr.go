@@ -87,48 +87,34 @@ func fetchEvents(relays []string, naddrs []string) ([]types.Event, map[string]st
 	return events, eventIDToNaddr, nil
 }
 
-func fetchProfiles(relays []string, events []types.Event) (map[string]types.Event, map[string]string, error) {
-	profiles := make(map[string]types.Event)
-	pubkeyToNprofile := make(map[string]string)
-	pubkeyToRelaysURLs := make(map[string][]string)
-	var mu sync.Mutex
+func fetchProfiles(
+	relays []string,
+	pubkeys []string,
+) (map[string]types.Event, error) {
+	// pubkey to kind 0 event map
+	profileMap := make(map[string]types.Event)
 
+	var mu sync.Mutex
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 
 	pool := nostr.NewSimplePool(ctx)
 
-	// Create a map of unique pubkeys
-	pubkeys := make(map[string]struct{})
-	for _, event := range events {
-		pubkeys[event.PubKey] = struct{}{}
-	}
-
-	log.Printf("Fetching profiles for %d unique pubkeys", len(pubkeys))
+	log.Printf("pubkeys: %v", pubkeys)
 
 	// Create a filter for kind 0 events
 	filter := nostr.Filter{
-		Kinds: []int{0},
+		Kinds:   []int{0},
+		Authors: pubkeys,
 	}
-
-	// Add all pubkeys to the filter
-	for pubkey := range pubkeys {
-		filter.Authors = append(filter.Authors, pubkey)
-	}
-
-	log.Printf("Fetching profiles from %d relays", len(relays))
 
 	// Fetch profile events from all relays
 	eventMap := pool.FetchMany(ctx, relays, filter)
 
 	// Process events
-	processedCount := 0
 	for ev := range eventMap {
-		processedCount++
-		log.Printf("Processing profile %d/%d for pubkey: %s", processedCount, len(pubkeys), ev.PubKey)
-
 		mu.Lock()
-		profiles[ev.PubKey] = types.Event{
+		profileMap[ev.PubKey] = types.Event{
 			ID:        ev.ID,
 			PubKey:    ev.PubKey,
 			CreatedAt: int64(ev.CreatedAt),
@@ -137,23 +123,8 @@ func fetchProfiles(relays []string, events []types.Event) (map[string]types.Even
 			Sig:       ev.Sig,
 		}
 
-		pubkeyToRelaysURLs[ev.PubKey] = append(pubkeyToRelaysURLs[ev.PubKey], ev.Relay.URL)
 		mu.Unlock()
 	}
 
-	log.Printf("Successfully processed %d profiles", processedCount)
-
-	// Generate nprofile for each pubkey
-	for pubkey, relays := range pubkeyToRelaysURLs {
-		log.Printf("Generating nprofile for pubkey: %s", pubkey)
-		nprofile, err := nip19.EncodeProfile(pubkey, relays)
-		if err != nil {
-			log.Printf("Error generating nprofile for pubkey %s: %v", pubkey, err)
-			return nil, nil, err
-		}
-		pubkeyToNprofile[pubkey] = nprofile
-	}
-
-	log.Printf("Successfully generated nprofiles for %d pubkeys", len(pubkeyToNprofile))
-	return profiles, pubkeyToNprofile, nil
+	return profileMap, nil
 }
