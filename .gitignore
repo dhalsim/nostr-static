@@ -3,3 +3,6 @@ nostr-static
 
 # Environment variables
 .env
+
+# Cron log
+cron.log
