@@ -19,6 +19,18 @@ func saveNaddrMapping(eventIDToNaddr map[string]string, outputPath string) error
 	return encoder.Encode(eventIDToNaddr)
 }
 
+func saveNprofileMapping(pubkeyToNprofile map[string]string, outputPath string) error {
+	file, err := os.Create(outputPath)
+	if err != nil {
+		return err
+	}
+	defer file.Close()
+
+	encoder := json.NewEncoder(file)
+	encoder.SetIndent("", "  ")
+	return encoder.Encode(pubkeyToNprofile)
+}
+
 func saveEvents(events []types.Event, outputPath string) error {
 	file, err := os.Create(outputPath)
 	if err != nil {
@@ -34,4 +46,16 @@ func saveEvents(events []types.Event, outputPath string) error {
 	}
 
 	return nil
+}
+
+func saveProfiles(profiles map[string]types.Event, outputPath string) error {
+	file, err := os.Create(outputPath)
+	if err != nil {
+		return err
+	}
+	defer file.Close()
+
+	encoder := json.NewEncoder(file)
+	encoder.SetIndent("", "  ")
+	return encoder.Encode(profiles)
 }

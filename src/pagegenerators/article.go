@@ -1,12 +1,10 @@
 package pagegenerators
 
 import (
-	"fmt"
 	"html/template"
+	"nostr-static/src/types"
 	"os"
 	"path/filepath"
-
-	"nostr-static/src/types"
 )
 
 const articleTemplate = `<!DOCTYPE html>
@@ -67,6 +65,8 @@ const articleTemplate = `<!DOCTYPE html>
         <div class="main-content">
             <article>
                 <div class="article-header">
+                    {{renderAuthor .AuthorName .AuthorNProfile .AuthorPicture ""}}
+                    {{renderAgo .Ago}}
                     <h1>{{.Title}}</h1>
                     {{renderSummary .Summary}}
                     {{renderTags .Tags ""}}
@@ -79,18 +79,37 @@ const articleTemplate = `<!DOCTYPE html>
 </body>
 </html>`
 
+type ArticleData struct {
+	Title          string
+	Ago            string
+	Content        template.HTML
+	Color          string
+	Summary        string
+	Tags           []string
+	Logo           string
+	Image          string
+	Naddr          string
+	AuthorName     string
+	AuthorNProfile string
+	AuthorPicture  string
+}
+
 type GenerateArticleParams struct {
-	Event          types.Event
-	OutputDir      string
-	Layout         types.Layout
-	EventIDToNaddr map[string]string
+	Event     types.Event
+	OutputDir string
+	Layout    types.Layout
+	Naddr     string
+	Profile   types.Event
+	Nprofile  string
 }
 
 func GenerateArticleHTML(params GenerateArticleParams) error {
 	event := params.Event
+	profile := params.Profile
+	nprofile := params.Nprofile
+	naddr := params.Naddr
 	outputDir := params.OutputDir
 	layout := params.Layout
-	eventIDToNaddr := params.EventIDToNaddr
 
 	htmlContent, err := convertMarkdownToHTML(event.Content, true)
 	if err != nil {
@@ -102,21 +121,31 @@ func GenerateArticleHTML(params GenerateArticleParams) error {
 		metadata.Title = "Untitled Article"
 	}
 
-	naddr := eventIDToNaddr[event.ID]
+	profileData := parseProfile(profile)
 
-	if naddr == "" {
-		return fmt.Errorf("naddr not found for event %s", event.ID)
+	authorName := "Unknown Author"
+	authorPicture := ""
+
+	if profileData.DisplayName != "" {
+		authorName = profileData.DisplayName
+	} else if profileData.Name != "" {
+		authorName = profileData.Name
 	}
+	authorPicture = profileData.Picture
 
 	data := ArticleData{
-		Title:   metadata.Title,
-		Content: template.HTML(htmlContent),
-		Color:   layout.Color,
-		Summary: metadata.Summary,
-		Tags:    metadata.Tags,
-		Logo:    layout.Logo,
-		Image:   metadata.Image,
-		Naddr:   naddr,
+		Title:          metadata.Title,
+		Ago:            diffString(ago(event)),
+		Content:        template.HTML(htmlContent),
+		Color:          layout.Color,
+		Summary:        metadata.Summary,
+		Tags:           metadata.Tags,
+		Logo:           layout.Logo,
+		Image:          metadata.Image,
+		Naddr:          naddr,
+		AuthorName:     authorName,
+		AuthorNProfile: nprofile,
+		AuthorPicture:  authorPicture,
 	}
 
 	tmpl, err := template.New("article").Funcs(ComponentFuncs).Parse(articleTemplate)

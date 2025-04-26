@@ -1,0 +1,11 @@
+{
+  "6e64b83c1f674fb00a5f19816c297b6414bf67f015894e04dd4c657e94102ee8": {
+    "id": "9e34df11b732e4b3b74f41182bd4de6f5a3cae3196b124000ee44c81ba5d1281",
+    "pubkey": "6e64b83c1f674fb00a5f19816c297b6414bf67f015894e04dd4c657e94102ee8",
+    "created_at": 1726136404,
+    "kind": 0,
+    "tags": null,
+    "content": "{\"website\":\"https://nostrize.me\",\"nip05\":\"dhalsim@dhalsim.github.io\",\"picture\":\"https://dhalsim.github.io/assets/dhalsim_logo_sq.png\",\"lud16\":\"dhalsim@blink.sv\",\"display_name\":\"dhalsim\",\"name\":\"dhalsim\"}",
+    "sig": "31457a4079ac555e99cedfed3b1dd2f9d6e4cdda0192f99fc6d88f6756b20d9e72c159bef1f680fed8605fda9e48f753195d61d507af249cfe7531e947e8957f"
+  }
+}

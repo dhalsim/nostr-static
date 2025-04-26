@@ -20,9 +20,6 @@ func fetchEvents(relays []string, naddrs []string) ([]types.Event, map[string]st
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 
-	log.Printf("Starting to fetch events from %d relays for %d naddrs", len(relays), len(naddrs))
-	log.Printf("Naddrs: %v", naddrs)
-
 	pool := nostr.NewSimplePool(ctx)
 
 	// Process each naddr
@@ -57,11 +54,7 @@ func fetchEvents(relays []string, naddrs []string) ([]types.Event, map[string]st
 			},
 		}
 
-		log.Printf("Filter: %v", filter)
-
 		allRelays := append(relays, addr.Relays...)
-
-		log.Printf("All Relays: %v", allRelays)
 
 		// Fetch replaceable event from all relays
 		eventMap := pool.FetchManyReplaceable(ctx, allRelays, filter)
@@ -92,4 +85,60 @@ func fetchEvents(relays []string, naddrs []string) ([]types.Event, map[string]st
 
 	log.Printf("Finished fetching events. Total events received: %d", len(events))
 	return events, eventIDToNaddr, nil
+}
+
+func fetchProfiles(relays []string, events []types.Event) (map[string]types.Event, map[string]string, error) {
+	profiles := make(map[string]types.Event)
+	pubkeyToNprofile := make(map[string]string)
+	pubkeyToRelaysURLs := make(map[string][]string)
+	var mu sync.Mutex
+
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	defer cancel()
+
+	pool := nostr.NewSimplePool(ctx)
+
+	// Create a map of unique pubkeys
+	pubkeys := make(map[string]struct{})
+	for _, event := range events {
+		pubkeys[event.PubKey] = struct{}{}
+	}
+
+	// Create a filter for kind 0 events
+	filter := nostr.Filter{
+		Kinds: []int{0},
+	}
+
+	// Add all pubkeys to the filter
+	for pubkey := range pubkeys {
+		filter.Authors = append(filter.Authors, pubkey)
+	}
+
+	// Fetch profile events from all relays
+	eventMap := pool.FetchMany(ctx, relays, filter)
+
+	// Process events
+	for ev := range eventMap {
+		mu.Lock()
+		profiles[ev.PubKey] = types.Event{
+			ID:        ev.ID,
+			PubKey:    ev.PubKey,
+			CreatedAt: int64(ev.CreatedAt),
+			Kind:      ev.Kind,
+			Content:   ev.Content,
+			Sig:       ev.Sig,
+		}
+
+		pubkeyToRelaysURLs[ev.PubKey] = append(pubkeyToRelaysURLs[ev.PubKey], ev.Relay.URL)
+	}
+
+	for pubkey, relays := range pubkeyToRelaysURLs {
+		nprofile, err := nip19.EncodeProfile(pubkey, relays)
+		if err != nil {
+			return nil, nil, err
+		}
+		pubkeyToNprofile[pubkey] = nprofile
+	}
+
+	return profiles, pubkeyToNprofile, nil
 }

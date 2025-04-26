@@ -19,12 +19,11 @@ https://blog.nostrize.me
 ## Todo
 
 - [x] support naddr
-- [ ] add nostr link tag
-- [ ] atom, rss feeds
-- [ ] release binaries
 - [ ] profiles
-- [ ] comments
+- [ ] comments, zapthreads
+- [ ] atom, rss feeds
 - [ ] dynamic theme option
+- [ ] release binaries
 
 ## Configuration
 

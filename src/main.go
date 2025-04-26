@@ -83,6 +83,24 @@ func main() {
 				return err
 			}
 
+			// Fetch profiles for all authors
+			profiles, pubkeyToNprofile, err := fetchProfiles(config.Relays, events)
+			if err != nil {
+				return err
+			}
+
+			// Save profiles to JSON file
+			profilesPath := filepath.Join(outputDir, "profiles.json")
+			if err := saveProfiles(profiles, profilesPath); err != nil {
+				return err
+			}
+
+			// Save nprofile mapping
+			nprofilePath := filepath.Join(outputDir, "nprofile.json")
+			if err := saveNprofileMapping(pubkeyToNprofile, nprofilePath); err != nil {
+				return err
+			}
+
 			// Save naddr mapping
 			naddrPath := filepath.Join(outputDir, "naddr.json")
 			if err := saveNaddrMapping(eventIDToNaddr, naddrPath); err != nil {
@@ -92,10 +110,12 @@ func main() {
 			// Generate HTML files for each event
 			for _, event := range events {
 				params := pagegenerators.GenerateArticleParams{
-					Event:          event,
-					OutputDir:      outputDir,
-					Layout:         config.Layout,
-					EventIDToNaddr: eventIDToNaddr,
+					Event:     event,
+					OutputDir: outputDir,
+					Layout:    config.Layout,
+					Naddr:     eventIDToNaddr[event.ID],
+					Nprofile:  pubkeyToNprofile[event.PubKey],
+					Profile:   profiles[event.PubKey],
 				}
 
 				if err := pagegenerators.GenerateArticleHTML(params); err != nil {
@@ -114,12 +134,25 @@ func main() {
 				return err
 			}
 
+			// Generate profile pages
+			if err := pagegenerators.GenerateProfilePages(pagegenerators.GenerateProfilePagesParams{
+				Profiles:         profiles,
+				Events:           events,
+				OutputDir:        outputDir,
+				Layout:           config.Layout,
+				EventIDToNaddr:   eventIDToNaddr,
+				PubkeyToNProfile: pubkeyToNprofile,
+			}); err != nil {
+				return err
+			}
+
 			// Generate index.html
 			if err := pagegenerators.GenerateIndexHTML(pagegenerators.GenerateIndexParams{
-				Events:         events,
-				OutputDir:      outputDir,
-				Layout:         config.Layout,
-				EventIDToNaddr: eventIDToNaddr,
+				Events:           events,
+				OutputDir:        outputDir,
+				Layout:           config.Layout,
+				EventIDToNaddr:   eventIDToNaddr,
+				PubkeyToNProfile: pubkeyToNprofile,
 			}); err != nil {
 				return err
 			}

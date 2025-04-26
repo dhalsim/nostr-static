@@ -13,6 +13,13 @@ import (
 
 // Component functions for templates
 var ComponentFuncs = template.FuncMap{
+	"displayNameOrName": func(displayName, name string) string {
+		if displayName != "" {
+			return displayName
+		}
+
+		return name
+	},
 	"renderLogo": func(logo string, baseFolder string) template.HTML {
 		if logo == "" {
 			return ""
@@ -29,6 +36,34 @@ var ComponentFuncs = template.FuncMap{
 			</a>
 		</div>
 		`)
+	},
+	"renderAuthor": func(name, nprofile, picture, baseFolder string) template.HTML {
+		if name == "" {
+			return ""
+		}
+
+		// Normalize the path by removing any leading/trailing slashes
+		baseFolder = strings.Trim(baseFolder, "/")
+		if baseFolder != "" {
+			baseFolder = baseFolder + "/"
+		}
+
+		var pictureHTML string
+		if picture != "" {
+			pictureHTML = `<img src="` + picture + `" alt="` + name + `" class="author-picture">`
+		}
+
+		return template.HTML(`
+		<div class="author">
+			<a href="` + baseFolder + `profile/` + nprofile + `.html" class="author-link">
+				` + pictureHTML + `
+				<span class="author-name">` + name + `</span>
+			</a>
+		</div>
+		`)
+	},
+	"renderAgo": func(ago string) template.HTML {
+		return template.HTML(`<span class="ago">` + ago + `</span>`)
 	},
 	"renderImage": func(image, alt, imageLink, baseFolder string) template.HTML {
 		if image == "" {
@@ -167,25 +202,25 @@ const CommonStyles = `
     }
 
     /* Page-specific styles */
-    body.article .page-container {
+    body.article .page-container, body.profile .page-container {
         display: flex;
         align-items: flex-start;
         max-width: 1200px;
         margin: 0 auto;
     }
 
-    body.article .logo-container {
+    body.article .logo-container, body.profile .logo-container {
         flex: 0 0 200px;
         position: sticky;
         top: 20px;
     }
 
-    body.article .main-content {
+    body.article .main-content, body.profile .main-content {
         flex: 1;
         max-width: 800px;
     }
 
-    body.article img {
+    body.article img, body.profile img {
         max-width: 100%;
         height: auto;
     }
@@ -284,6 +319,49 @@ const CommonStyles = `
 
     body.dark .article-card .summary {
         color: #e0e0e0;
+    }
+
+    /* Author styles */
+    .author {
+        display: flex;
+        align-items: center;
+        margin-bottom: 1em;
+    }
+
+    .author-link {
+        display: flex;
+        align-items: center;
+        text-decoration: none;
+        color: inherit;
+        gap: 10px;
+    }
+
+    .author-picture {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        object-fit: cover;
+    }
+
+    .author-name {
+        font-weight: 500;
+    }
+
+    /* Theme-specific author styles */
+    body.light .author-link {
+        color: #000000;
+    }
+
+    body.light .author-link:hover {
+        color: #0066cc;
+    }
+
+    body.dark .author-link {
+        color: #e0e0e0;
+    }
+
+    body.dark .author-link:hover {
+        color: #4a9eff;
     }
 
     /* Responsive styles */

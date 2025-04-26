@@ -54,10 +54,11 @@ const indexTemplate = `<!DOCTYPE html>
 </html>`
 
 type GenerateIndexParams struct {
-	Events         []types.Event
-	OutputDir      string
-	Layout         types.Layout
-	EventIDToNaddr map[string]string
+	Events           []types.Event
+	OutputDir        string
+	Layout           types.Layout
+	EventIDToNaddr   map[string]string
+	PubkeyToNProfile map[string]string
 }
 
 func GenerateIndexHTML(params GenerateIndexParams) error {

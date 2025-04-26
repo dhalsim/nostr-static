@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nostr Articles</title>
+    <title>Profile: dhalsim</title>
     <style>
         
      
@@ -284,60 +284,141 @@
         }
     }
 
+        .profile-picture {
+            width: 50px;
+            height: 50px;
+						border-radius: 50%;
+        }
+        .profile-links {
+            margin-top: 10px;
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+        .profile-links a {
+            color: inherit;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        .profile-links a:hover {
+            text-decoration: underline;
+        }
+        .verified-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+        }
+        .verified-badge.verified {
+            color: #22c55e;
+        }
+        .verified-badge.unverified {
+            color: #ef4444;
+        }
+
+				.profile-header {
+					display: flex;
+					flex-direction: column;
+					gap: 10px;
+				}
+
+				.profile-header-left {
+						display: flex;
+						align-content: space-around;
+						flex-wrap: wrap;
+						align-items: flex-end;
+				}
+
+				.profile-header-left h2 {
+					margin: 0;
+				}
     </style>
 </head>
-<body class="dark index">
+<body class="dark profile">
     <div class="page-container">
         <div class="logo-container">
             
 		<div class="logo">
-			<a href="index.html">
-				<img src="logo.png" alt="Logo">
+			<a href="../index.html">
+				<img src="../logo.png" alt="Logo">
 			</a>
 		</div>
 		
         </div>
         <div class="main-content">
-            <h1>Nostr Articles</h1>
-            
-            <div class="article-card">
+            <div class="profile-header">
+						    <div class="profile-header-left">
+									
+									<img src="https://dhalsim.github.io/assets/dhalsim_logo_sq.png" alt="dhalsim" class="profile-picture">
+									
+									<h2>dhalsim</h2>
+								</div>
                 
+                <div class="profile-links">
+                    
+                    <a href="https://nostrize.me" target="_blank" rel="noopener noreferrer">
+                        <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9ImN1cnJlbnRDb2xvciIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiIGNsYXNzPSJsdWNpZGUgbHVjaWRlLWxpbmsyLWljb24gbHVjaWRlLWxpbmstMiI+PHBhdGggZD0iTTkgMTdIN0E1IDUgMCAwIDEgNyA3aDIiLz48cGF0aCBkPSJNMTUgN2gyYTUgNSAwIDEgMSAwIDEwaC0yIi8+PGxpbmUgeDE9IjgiIHgyPSIxNiIgeTE9IjEyIiB5Mj0iMTIiLz48L3N2Zz4=" alt="Website" class="author-link" width="16" height="16">
+                        https://nostrize.me
+                    </a>
+                    
+                    
+                    <span class="verified-badge verified">
+                        
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+                        
+                        dhalsim@dhalsim.github.io
+                    </span>
+                    
+                    
+                    <a href="lightning:dhalsim@blink.sv">
+                        ⚡ dhalsim@blink.sv
+                    </a>
+                    
+                </div>
+            </div>
+            <div class="profile-articles">
+                <h2>Articles of dhalsim</h2>
+                
+                <div class="article-card">
+                    
 			<div class="image-container">
-				<a href="naddr1qvzqqqr4gupzqmnyhq7p7e60kq997xvpds5hkeq5hanlq9vffczd6nr9062pqthgqq2j6ezsgu69j7n92cmxxmfsgyeyyvjtxfuk7lwjq6s.html">
+				<a href="../naddr1qvzqqqr4gupzqmnyhq7p7e60kq997xvpds5hkeq5hanlq9vffczd6nr9062pqthgqq2j6ezsgu69j7n92cmxxmfsgyeyyvjtxfuk7lwjq6s.html">
 					<img src="https://image.nostr.build/f708db07b85c002b20b3159b48447d51cbcb0bae0f5717ce6dbc060580c8b35d.jpg" alt="How to Run Your Own Nostr Relay on Android with Cloudflare Domain">
 				</a>
 			</div>
 		
-                <h2><a href="naddr1qvzqqqr4gupzqmnyhq7p7e60kq997xvpds5hkeq5hanlq9vffczd6nr9062pqthgqq2j6ezsgu69j7n92cmxxmfsgyeyyvjtxfuk7lwjq6s.html">How to Run Your Own Nostr Relay on Android with Cloudflare Domain</a></h2>
-                
+                    <h3><a href="../naddr1qvzqqqr4gupzqmnyhq7p7e60kq997xvpds5hkeq5hanlq9vffczd6nr9062pqthgqq2j6ezsgu69j7n92cmxxmfsgyeyyvjtxfuk7lwjq6s.html">How to Run Your Own Nostr Relay on Android with Cloudflare Domain</a></h3>
+                    
 		<p class="summary">Step-by-step guide to running a personal Nostr relay on Android using Citrine and Cloudflare Tunnels. Learn how to set up secure WebSocket connections, manage relay lists, and maintain a reliable private relay with your custom domain.</p>
 		
-                
+                    
 		<div class="tags">
-			<span class="tag"><a href="tag/nostr.html">nostr</a></span><span class="tag"><a href="tag/relay.html">relay</a></span><span class="tag"><a href="tag/citrine.html">citrine</a></span><span class="tag"><a href="tag/cloudflare.html">cloudflare</a></span><span class="tag"><a href="tag/tunnel.html">tunnel</a></span><span class="tag"><a href="tag/outbox.html">outbox</a></span>
+			<span class="tag"><a href="../tag/nostr.html">nostr</a></span><span class="tag"><a href="../tag/relay.html">relay</a></span><span class="tag"><a href="../tag/citrine.html">citrine</a></span><span class="tag"><a href="../tag/cloudflare.html">cloudflare</a></span><span class="tag"><a href="../tag/tunnel.html">tunnel</a></span><span class="tag"><a href="../tag/outbox.html">outbox</a></span>
 		</div>
 		
-            </div>
-            
-            <div class="article-card">
+                </div>
                 
+                <div class="article-card">
+                    
 			<div class="image-container">
-				<a href="naddr1qvzqqqr4gupzqmnyhq7p7e60kq997xvpds5hkeq5hanlq9vffczd6nr9062pqthgqq24wmjfwp6rv6t8v935ujfhv4yr2wzzdfz5gl5quve.html">
+				<a href="../naddr1qvzqqqr4gupzqmnyhq7p7e60kq997xvpds5hkeq5hanlq9vffczd6nr9062pqthgqq24wmjfwp6rv6t8v935ujfhv4yr2wzzdfz5gl5quve.html">
 					<img src="https://image.nostr.build/09593373dc30cafd8174ed57a1cae310c517b17e664b2c59ab5a41d0c1aca3d8.jpg" alt="How to Import and Export Your Nostr Notes">
 				</a>
 			</div>
 		
-                <h2><a href="naddr1qvzqqqr4gupzqmnyhq7p7e60kq997xvpds5hkeq5hanlq9vffczd6nr9062pqthgqq24wmjfwp6rv6t8v935ujfhv4yr2wzzdfz5gl5quve.html">How to Import and Export Your Nostr Notes</a></h2>
-                
+                    <h3><a href="../naddr1qvzqqqr4gupzqmnyhq7p7e60kq997xvpds5hkeq5hanlq9vffczd6nr9062pqthgqq24wmjfwp6rv6t8v935ujfhv4yr2wzzdfz5gl5quve.html">How to Import and Export Your Nostr Notes</a></h3>
+                    
 		<p class="summary">Learn how to import your Nostr notes from public relays and export them into your own relay using the nak CLI tool. This step-by-step guide covers installation, fetching notes, filtering by event types, and uploading to a self-hosted relay—ensuring your content is safe and under your control.</p>
 		
-                
+                    
 		<div class="tags">
-			<span class="tag"><a href="tag/nostr.html">Nostr</a></span><span class="tag"><a href="tag/nak.html">nak</a></span><span class="tag"><a href="tag/relay.html">relay</a></span><span class="tag"><a href="tag/import.html">import</a></span><span class="tag"><a href="tag/export.html">export</a></span>
+			<span class="tag"><a href="../tag/nostr.html">Nostr</a></span><span class="tag"><a href="../tag/nak.html">nak</a></span><span class="tag"><a href="../tag/relay.html">relay</a></span><span class="tag"><a href="../tag/import.html">import</a></span><span class="tag"><a href="../tag/export.html">export</a></span>
 		</div>
 		
+                </div>
+                
             </div>
-            
         </div>
     </div>
 </body>

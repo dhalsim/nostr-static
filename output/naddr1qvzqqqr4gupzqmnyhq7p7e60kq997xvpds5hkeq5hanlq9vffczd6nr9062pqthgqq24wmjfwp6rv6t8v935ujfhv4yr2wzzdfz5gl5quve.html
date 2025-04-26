@@ -91,25 +91,25 @@
     }
 
      
-    body.article .page-container {
+    body.article .page-container, body.profile .page-container {
         display: flex;
         align-items: flex-start;
         max-width: 1200px;
         margin: 0 auto;
     }
 
-    body.article .logo-container {
+    body.article .logo-container, body.profile .logo-container {
         flex: 0 0 200px;
         position: sticky;
         top: 20px;
     }
 
-    body.article .main-content {
+    body.article .main-content, body.profile .main-content {
         flex: 1;
         max-width: 800px;
     }
 
-    body.article img {
+    body.article img, body.profile img {
         max-width: 100%;
         height: auto;
     }
@@ -211,6 +211,49 @@
     }
 
      
+    .author {
+        display: flex;
+        align-items: center;
+        margin-bottom: 1em;
+    }
+
+    .author-link {
+        display: flex;
+        align-items: center;
+        text-decoration: none;
+        color: inherit;
+        gap: 10px;
+    }
+
+    .author-picture {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        object-fit: cover;
+    }
+
+    .author-name {
+        font-weight: 500;
+    }
+
+     
+    body.light .author-link {
+        color: #000000;
+    }
+
+    body.light .author-link:hover {
+        color: #0066cc;
+    }
+
+    body.dark .author-link {
+        color: #e0e0e0;
+    }
+
+    body.dark .author-link:hover {
+        color: #4a9eff;
+    }
+
+     
     @media (max-width: 768px) {
         body {
             font-size: 18px;
@@ -297,6 +340,15 @@
         <div class="main-content">
             <article>
                 <div class="article-header">
+                    
+		<div class="author">
+			<a href="profile/nprofile1qqsxue9c8s0kwnaspf03nqtv99akg99lvlcptz2wqnw5cet7jsgza6qpp4mhxue69uhkummn9ekx7mq8k7c9l.html" class="author-link">
+				<img src="https://dhalsim.github.io/assets/dhalsim_logo_sq.png" alt="dhalsim" class="author-picture">
+				<span class="author-name">dhalsim</span>
+			</a>
+		</div>
+		
+                    <span class="ago">2 days ago</span>
                     <h1>How to Import and Export Your Nostr Notes</h1>
                     
 		<p class="summary">Learn how to import your Nostr notes from public relays and export them into your own relay using the nak CLI tool. This step-by-step guide covers installation, fetching notes, filtering by event types, and uploading to a self-hosted relay—ensuring your content is safe and under your control.</p>
