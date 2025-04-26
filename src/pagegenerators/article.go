@@ -75,6 +75,7 @@ const articleTemplate = `<!DOCTYPE html>
                 </div>
                 {{.Content}}
             </article>
+            {{renderFooter}}
         </div>
     </div>
 </body>

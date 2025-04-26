@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tag: nak</title>
+    <title>Profile: fiatjaf</title>
     <style>
         
      
@@ -332,7 +332,55 @@
         color: #4a9eff;
     }
 
-				
+        .profile-picture {
+            width: 50px;
+            height: 50px;
+						border-radius: 50%;
+        }
+        .profile-links {
+            margin-top: 10px;
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+        .profile-links a {
+            color: inherit;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        .profile-links a:hover {
+            text-decoration: underline;
+        }
+        .verified-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+        }
+        .verified-badge.verified {
+            color: #22c55e;
+        }
+        .verified-badge.unverified {
+            color: #ef4444;
+        }
+
+				.profile-header {
+					display: flex;
+					flex-direction: column;
+					gap: 10px;
+				}
+
+				.profile-header-left {
+						display: flex;
+						align-content: space-around;
+						flex-wrap: wrap;
+						align-items: flex-end;
+				}
+
+				.profile-header-left h2 {
+					margin: 0;
+				}
     @media (max-width: 768px) {
         body {
             font-size: 18px;
@@ -414,7 +462,7 @@
 
     </style>
 </head>
-<body class="dark tags">
+<body class="dark profile">
     <div class="page-container">
         <div class="logo-container">
             
@@ -426,36 +474,53 @@
 		
         </div>
         <div class="main-content">
-            <h1>Articles tagged with "nak"</h1>
-            
-            <div class="article-card">
+            <div class="profile-header">
+						    <div class="profile-header-left">
+									
+									<img src="https://fiatjaf.com/static/favicon.jpg" alt="fiatjaf" class="profile-picture">
+									
+									<h2>fiatjaf</h2>
+								</div>
                 
-		<div class="compact-profile">
-			<a href="../profile/nprofile1qqsxue9c8s0kwnaspf03nqtv99akg99lvlcptz2wqnw5cet7jsgza6qpp4mhxue69uhkummn9ekx7mq8k7c9l.html" class="compact-profile-link">
-				<img src="https://dhalsim.github.io/assets/dhalsim_logo_sq.png" alt="dhalsim" class="compact-profile-picture">
-				<span class="compact-profile-name">dhalsim</span>
-				<span class="compact-profile-ago">2 days ago</span>
-			</a>
-		</div>
-		
+                <p class="profile-about">~</p>
                 
-			<div class="image-container">
-				<a href="../naddr1qvzqqqr4gupzqmnyhq7p7e60kq997xvpds5hkeq5hanlq9vffczd6nr9062pqthgqq24wmjfwp6rv6t8v935ujfhv4yr2wzzdfz5gl5quve.html">
-					<img src="https://image.nostr.build/09593373dc30cafd8174ed57a1cae310c517b17e664b2c59ab5a41d0c1aca3d8.jpg" alt="How to Import and Export Your Nostr Notes">
-				</a>
-			</div>
-		
-                <h2><a href="../naddr1qvzqqqr4gupzqmnyhq7p7e60kq997xvpds5hkeq5hanlq9vffczd6nr9062pqthgqq24wmjfwp6rv6t8v935ujfhv4yr2wzzdfz5gl5quve.html">How to Import and Export Your Nostr Notes</a></h2>
-                
-		<p class="summary">Learn how to import your Nostr notes from public relays and export them into your own relay using the nak CLI tool. This step-by-step guide covers installation, fetching notes, filtering by event types, and uploading to a self-hosted relay—ensuring your content is safe and under your control.</p>
-		
-                
-		<div class="tags">
-			<span class="tag"><a href="../tag/nostr.html">Nostr</a></span><span class="tag"><a href="../tag/nak.html">nak</a></span><span class="tag"><a href="../tag/relay.html">relay</a></span><span class="tag"><a href="../tag/import.html">import</a></span><span class="tag"><a href="../tag/export.html">export</a></span>
-		</div>
-		
+                <div class="profile-links">
+                    
+                    <a href="https://nostr.technology" target="_blank" rel="noopener noreferrer">
+                        <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9ImN1cnJlbnRDb2xvciIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiIGNsYXNzPSJsdWNpZGUgbHVjaWRlLWxpbmsyLWljb24gbHVjaWRlLWxpbmstMiI+PHBhdGggZD0iTTkgMTdIN0E1IDUgMCAwIDEgNyA3aDIiLz48cGF0aCBkPSJNMTUgN2gyYTUgNSAwIDEgMSAwIDEwaC0yIi8+PGxpbmUgeDE9IjgiIHgyPSIxNiIgeTE9IjEyIiB5Mj0iMTIiLz48L3N2Zz4=" alt="Website" class="author-website" width="16" height="16">
+                        https://nostr.technology
+                    </a>
+                    
+                    
+                    <span class="verified-badge verified">
+                        
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+                        
+                        _@fiatjaf.com
+                    </span>
+                    
+                    
+                    <a href="lightning:fiatjaf@zbd.gg">
+                        ⚡ fiatjaf@zbd.gg
+                    </a>
+                    
+                </div>
             </div>
-            
+            <div class="profile-articles">
+                <h2>Articles of fiatjaf</h2>
+                
+                <div class="article-card">
+                    
+                    <h3><a href="../naddr1qvzqqqr4gupzqwlsccluhy6xxsr6l9a9uhhxf75g85g8a709tprjcn4e42h053vaqqyrzwrxvc6ngvfkxty9t8.html">Redistributing Git with Nostr</a></h3>
+                    
+                    
+		<div class="tags">
+			<span class="tag"><a href="../tag/nostr.html">nostr</a></span>
+		</div>
+		
+                </div>
+                
+            </div>
             
 		<div class="footer">
 			Built with <a target="_blank" href="https://github.com/dhalsim/nostr-static">nostr-static</a>

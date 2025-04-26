@@ -21,6 +21,13 @@ func displayNameOrName(displayName, name string) string {
 // Component functions for templates
 var ComponentFuncs = template.FuncMap{
 	"displayNameOrName": displayNameOrName,
+	"renderFooter": func() template.HTML {
+		return template.HTML(`
+		<div class="footer">
+			Built with <a target="_blank" href="https://github.com/dhalsim/nostr-static">nostr-static</a>
+		</div>
+		`)
+	},
 	"renderCompactProfile": func(name, nprofile, picture, ago, baseFolder string) template.HTML {
 		if name == "" {
 			return ""
@@ -375,19 +382,20 @@ const CommonStyles = `
     }
 
     /* Theme-specific author styles */
-    body.light .author-link {
+    body.light .author-website {
         color: #000000;
     }
 
-    body.light .author-link:hover {
+    body.light .author-website:hover {
         color: #0066cc;
     }
 
-    body.dark .author-link {
+    body.dark .author-website {
         color: #e0e0e0;
+        filter: invert(1);
     }
 
-    body.dark .author-link:hover {
+    body.dark .author-website:hover {
         color: #4a9eff;
     }
 
@@ -439,6 +447,33 @@ const CommonStyles = `
     }
 
     body.dark .compact-profile-link:hover {
+        color: #4a9eff;
+    }
+
+    /* Footer styles */
+    .footer {
+        margin-top: 2em;
+        padding-top: 1em;
+        border-top: 1px solid #eee;
+        text-align: center;
+        font-size: 0.9em;
+        color: #666;
+    }
+
+    body.dark .footer {
+        border-top-color: #333;
+        color: #999;
+    }
+
+    .footer a {
+        text-decoration: none;
+    }
+
+    body.light .footer a {
+        color: #0066cc;
+    }
+
+    body.dark .footer a {
         color: #4a9eff;
     }
 `

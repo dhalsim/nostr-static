@@ -52,6 +52,8 @@ func main() {
 			outputDir := cmd.String("output")
 
 			// Load configuration
+			log.Println("loading config from: ", configPath)
+
 			config, err := LoadConfig(configPath)
 			if err != nil {
 				return err
@@ -71,6 +73,8 @@ func main() {
 				}
 			}
 
+			log.Println("fetching events from relays: ", config.Relays)
+
 			// Fetch events from relays
 			events, eventIDToNaddr, err := fetchEvents(config.Relays, config.Articles)
 			if err != nil {
@@ -82,6 +86,8 @@ func main() {
 			if err := saveEvents(events, eventsPath); err != nil {
 				return err
 			}
+
+			log.Println("fetching profiles for all authors")
 
 			// Fetch profiles for all authors
 			profiles, pubkeyToNprofile, err := fetchProfiles(config.Relays, events)
@@ -107,6 +113,8 @@ func main() {
 				return err
 			}
 
+			log.Println("generating article pages")
+
 			// Article pages
 			for _, event := range events {
 				params := pagegenerators.GenerateArticleParams{
@@ -124,6 +132,8 @@ func main() {
 				}
 			}
 
+			log.Println("generating tag pages")
+
 			// Tag pages
 			if err := pagegenerators.GenerateTagPages(pagegenerators.GenerateTagPagesParams{
 				Events:           events,
@@ -136,6 +146,8 @@ func main() {
 				return err
 			}
 
+			log.Println("generating profile pages")
+
 			// Profile pages
 			if err := pagegenerators.GenerateProfilePages(pagegenerators.GenerateProfilePagesParams{
 				Profiles:         profiles,
@@ -147,6 +159,8 @@ func main() {
 			}); err != nil {
 				return err
 			}
+
+			log.Println("generating index page")
 
 			// Index page
 			if err := pagegenerators.GenerateIndexHTML(pagegenerators.GenerateIndexParams{

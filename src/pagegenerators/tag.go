@@ -36,6 +36,7 @@ const tagTemplate = `<!DOCTYPE html>
                 {{renderTags .Tags "../"}}
             </div>
             {{end}}
+            {{renderFooter}}
         </div>
     </div>
 </body>

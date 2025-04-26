@@ -237,19 +237,20 @@
     }
 
      
-    body.light .author-link {
+    body.light .author-website {
         color: #000000;
     }
 
-    body.light .author-link:hover {
+    body.light .author-website:hover {
         color: #0066cc;
     }
 
-    body.dark .author-link {
+    body.dark .author-website {
         color: #e0e0e0;
+        filter: invert(1);
     }
 
-    body.dark .author-link:hover {
+    body.dark .author-website:hover {
         color: #4a9eff;
     }
 
@@ -301,6 +302,33 @@
     }
 
     body.dark .compact-profile-link:hover {
+        color: #4a9eff;
+    }
+
+     
+    .footer {
+        margin-top: 2em;
+        padding-top: 1em;
+        border-top: 1px solid #eee;
+        text-align: center;
+        font-size: 0.9em;
+        color: #666;
+    }
+
+    body.dark .footer {
+        border-top-color: #333;
+        color: #999;
+    }
+
+    .footer a {
+        text-decoration: none;
+    }
+
+    body.light .footer a {
+        color: #0066cc;
+    }
+
+    body.dark .footer a {
         color: #4a9eff;
     }
 
@@ -456,6 +484,31 @@
 		
             </div>
             
+            <div class="article-card">
+                
+		<div class="compact-profile">
+			<a href="../profile/nprofile1qqsrhuxx8l9ex335q7he0f09aej04zpazpl0ne2cgukyawd24mayt8gpp4mhxue69uhkummn9ekx7mqprhgw8.html" class="compact-profile-link">
+				<img src="https://fiatjaf.com/static/favicon.jpg" alt="fiatjaf" class="compact-profile-picture">
+				<span class="compact-profile-name">fiatjaf</span>
+				<span class="compact-profile-ago">14 hours ago</span>
+			</a>
+		</div>
+		
+                
+                <h2><a href="../naddr1qvzqqqr4gupzqwlsccluhy6xxsr6l9a9uhhxf75g85g8a709tprjcn4e42h053vaqqyrzwrxvc6ngvfkxty9t8.html">Redistributing Git with Nostr</a></h2>
+                
+                
+		<div class="tags">
+			<span class="tag"><a href="../tag/nostr.html">nostr</a></span>
+		</div>
+		
+            </div>
+            
+            
+		<div class="footer">
+			Built with <a target="_blank" href="https://github.com/dhalsim/nostr-static">nostr-static</a>
+		</div>
+		
         </div>
     </div>
 </body>

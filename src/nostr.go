@@ -104,6 +104,8 @@ func fetchProfiles(relays []string, events []types.Event) (map[string]types.Even
 		pubkeys[event.PubKey] = struct{}{}
 	}
 
+	log.Printf("Fetching profiles for %d unique pubkeys", len(pubkeys))
+
 	// Create a filter for kind 0 events
 	filter := nostr.Filter{
 		Kinds: []int{0},
@@ -114,11 +116,17 @@ func fetchProfiles(relays []string, events []types.Event) (map[string]types.Even
 		filter.Authors = append(filter.Authors, pubkey)
 	}
 
+	log.Printf("Fetching profiles from %d relays", len(relays))
+
 	// Fetch profile events from all relays
 	eventMap := pool.FetchMany(ctx, relays, filter)
 
 	// Process events
+	processedCount := 0
 	for ev := range eventMap {
+		processedCount++
+		log.Printf("Processing profile %d/%d for pubkey: %s", processedCount, len(pubkeys), ev.PubKey)
+
 		mu.Lock()
 		profiles[ev.PubKey] = types.Event{
 			ID:        ev.ID,
@@ -130,15 +138,22 @@ func fetchProfiles(relays []string, events []types.Event) (map[string]types.Even
 		}
 
 		pubkeyToRelaysURLs[ev.PubKey] = append(pubkeyToRelaysURLs[ev.PubKey], ev.Relay.URL)
+		mu.Unlock()
 	}
 
+	log.Printf("Successfully processed %d profiles", processedCount)
+
+	// Generate nprofile for each pubkey
 	for pubkey, relays := range pubkeyToRelaysURLs {
+		log.Printf("Generating nprofile for pubkey: %s", pubkey)
 		nprofile, err := nip19.EncodeProfile(pubkey, relays)
 		if err != nil {
+			log.Printf("Error generating nprofile for pubkey %s: %v", pubkey, err)
 			return nil, nil, err
 		}
 		pubkeyToNprofile[pubkey] = nprofile
 	}
 
+	log.Printf("Successfully generated nprofiles for %d pubkeys", len(pubkeyToNprofile))
 	return profiles, pubkeyToNprofile, nil
 }
