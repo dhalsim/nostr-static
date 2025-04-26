@@ -9,11 +9,15 @@ import (
 )
 
 type IndexArticleData struct {
-	Title   string
-	Summary string
-	Image   string
-	Tags    []string
-	Naddr   string
+	Title         string
+	Summary       string
+	Image         string
+	Tags          []string
+	Naddr         string
+	AuthorName    string
+	AuthorPicture string
+	Nprofile      string
+	Ago           string
 }
 
 type IndexData struct {
@@ -31,6 +35,7 @@ const indexTemplate = `<!DOCTYPE html>
     <title>{{.Title}}</title>
     <style>
         ` + CommonStyles + `
+				` + ResponsiveStyles + `
     </style>
 </head>
 <body class="{{.Color}} index">
@@ -42,6 +47,7 @@ const indexTemplate = `<!DOCTYPE html>
             <h1>{{.Title}}</h1>
             {{range .Articles}}
             <div class="article-card">
+                {{renderCompactProfile .AuthorName .Nprofile .AuthorPicture .Ago ""}}
                 {{renderImage .Image .Title .Naddr ""}}
                 <h2><a href="{{.Naddr}}.html">{{.Title}}</a></h2>
                 {{renderSummary .Summary}}
@@ -55,6 +61,7 @@ const indexTemplate = `<!DOCTYPE html>
 
 type GenerateIndexParams struct {
 	Events           []types.Event
+	Profiles         map[string]types.Event
 	OutputDir        string
 	Layout           types.Layout
 	EventIDToNaddr   map[string]string
@@ -71,8 +78,18 @@ func GenerateIndexHTML(params GenerateIndexParams) error {
 	indexData.Articles = make([]IndexArticleData, 0, len(params.Events))
 
 	for _, event := range params.Events {
+		parsedProfile := parseProfile(params.Profiles[event.PubKey])
+		authorName := displayNameOrName(
+			parsedProfile.DisplayName,
+			parsedProfile.Name,
+		)
+
 		article := IndexArticleData{
-			Naddr: params.EventIDToNaddr[event.ID],
+			Naddr:         params.EventIDToNaddr[event.ID],
+			AuthorName:    authorName,
+			AuthorPicture: parsedProfile.Picture,
+			Nprofile:      params.PubkeyToNProfile[event.PubKey],
+			Ago:           diffString(ago(event)),
 		}
 
 		for _, tag := range event.Tags {

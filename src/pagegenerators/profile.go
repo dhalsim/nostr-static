@@ -68,7 +68,7 @@ const profileTemplate = `<!DOCTYPE html>
 
 				.profile-header-left h2 {
 					margin: 0;
-				}
+				}` + ResponsiveStyles + `
     </style>
 </head>
 <body class="{{.Color}} profile">

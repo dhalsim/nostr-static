@@ -6,7 +6,7 @@ A static web site generator written in Go that creates HTML pages from long-form
 
 https://blog.nostrize.me
 
-## Version 0.2
+## Version 0.3
 
 ## Features
 

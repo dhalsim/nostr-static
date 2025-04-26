@@ -254,6 +254,57 @@
     }
 
      
+    .compact-profile {
+        margin-bottom: 1em;
+    }
+
+    .compact-profile-link {
+        display: flex;
+        align-items: center;
+        text-decoration: none;
+        color: inherit;
+        gap: 8px;
+    }
+
+    .compact-profile-picture {
+        width: 15px;
+        height: 15px;
+        border-radius: 50%;
+        object-fit: cover;
+    }
+
+    .compact-profile-name {
+        font-size: 0.9em;
+        font-weight: 500;
+    }
+
+    .compact-profile-ago {
+        font-size: 0.8em;
+        color: #666;
+    }
+
+    body.dark .compact-profile-ago {
+        color: #999;
+    }
+
+     
+    body.light .compact-profile-link {
+        color: #000000;
+    }
+
+    body.light .compact-profile-link:hover {
+        color: #0066cc;
+    }
+
+    body.dark .compact-profile-link {
+        color: #e0e0e0;
+    }
+
+    body.dark .compact-profile-link:hover {
+        color: #4a9eff;
+    }
+
+				
     @media (max-width: 768px) {
         body {
             font-size: 18px;
@@ -262,25 +313,74 @@
 
         body.article .page-container,
         body.index .page-container,
-        body.tags .page-container {
+        body.tags .page-container,
+        body.profile .page-container {
             flex-direction: column;
         }
 
         body.article .logo-container,
         body.index .logo-container,
-        body.tags .logo-container {
+        body.tags .logo-container,
+        body.profile .logo-container {
             flex: none;
             position: static;
         }
 
         body.article .main-content,
         body.index .main-content,
-        body.tags .main-content {
+        body.tags .main-content,
+        body.profile .main-content {
             width: 100%;
         }
 
         .article-card {
             padding: 15px;
+        }
+
+        .logo img {
+            max-height: 50px;
+            width: auto;
+        }
+
+        .logo-container {
+            text-align: center;
+            padding: 10px 0;
+        }
+
+        .article-header {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .author {
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            margin-bottom: 15px;
+        }
+
+        .author-link {
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .profile-header {
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            gap: 15px;
+        }
+
+        .profile-header-left {
+            align-items: center;
+        }
+
+        .profile-links {
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
         }
     }
 
@@ -301,6 +401,15 @@
             <h1>Articles tagged with "citrine"</h1>
             
             <div class="article-card">
+                
+		<div class="compact-profile">
+			<a href="../profile/nprofile1qqsxue9c8s0kwnaspf03nqtv99akg99lvlcptz2wqnw5cet7jsgza6qpp4mhxue69uhkummn9ekx7mq8k7c9l.html" class="compact-profile-link">
+				<img src="https://dhalsim.github.io/assets/dhalsim_logo_sq.png" alt="dhalsim" class="compact-profile-picture">
+				<span class="compact-profile-name">dhalsim</span>
+				<span class="compact-profile-ago">2 days ago</span>
+			</a>
+		</div>
+		
                 
 			<div class="image-container">
 				<a href="../naddr1qvzqqqr4gupzqmnyhq7p7e60kq997xvpds5hkeq5hanlq9vffczd6nr9062pqthgqq2j6ezsgu69j7n92cmxxmfsgyeyyvjtxfuk7lwjq6s.html">

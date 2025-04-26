@@ -17,6 +17,7 @@ const tagTemplate = `<!DOCTYPE html>
     <title>Tag: {{.Tag}}</title>
     <style>
         ` + CommonStyles + `
+				` + ResponsiveStyles + `
     </style>
 </head>
 <body class="{{.Color}} tags">
@@ -28,6 +29,7 @@ const tagTemplate = `<!DOCTYPE html>
             <h1>Articles tagged with "{{.Tag}}"</h1>
             {{range .Articles}}
             <div class="article-card">
+                {{renderCompactProfile .AuthorName .Nprofile .AuthorPicture .Ago "../"}}
                 {{renderImage .Image .Title .Naddr "../"}}
                 <h2><a href="../{{.Naddr}}.html">{{.Title}}</a></h2>
                 {{renderSummary .Summary}}
@@ -47,18 +49,24 @@ type TagData struct {
 }
 
 type TagArticleData struct {
-	Naddr   string
-	Title   string
-	Summary string
-	Image   string
-	Tags    []string
+	Naddr         string
+	Title         string
+	Summary       string
+	Image         string
+	Tags          []string
+	AuthorName    string
+	Nprofile      string
+	AuthorPicture string
+	Ago           string
 }
 
 type GenerateTagPagesParams struct {
-	Events         []types.Event
-	OutputDir      string
-	Layout         types.Layout
-	EventIDToNaddr map[string]string
+	Events           []types.Event
+	Profiles         map[string]types.Event
+	OutputDir        string
+	Layout           types.Layout
+	EventIDToNaddr   map[string]string
+	PubkeyToNProfile map[string]string
 }
 
 func GenerateTagPages(params GenerateTagPagesParams) error {
@@ -95,12 +103,21 @@ func GenerateTagPages(params GenerateTagPagesParams) error {
 			// Extract metadata from tags
 			metadata := ExtractArticleMetadata(event.Tags)
 
+			parsedProfile := parseProfile(params.Profiles[event.PubKey])
+
 			data.Articles[i] = TagArticleData{
 				Naddr:   params.EventIDToNaddr[event.ID],
 				Title:   metadata.Title,
 				Summary: metadata.Summary,
 				Image:   metadata.Image,
 				Tags:    metadata.Tags,
+				AuthorName: displayNameOrName(
+					parsedProfile.DisplayName,
+					parsedProfile.Name,
+				),
+				AuthorPicture: parsedProfile.Picture,
+				Ago:           diffString(ago(event)),
+				Nprofile:      params.PubkeyToNProfile[event.PubKey],
 			}
 		}
 

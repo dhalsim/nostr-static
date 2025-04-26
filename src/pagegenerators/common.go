@@ -11,14 +11,41 @@ import (
 	"github.com/yuin/goldmark/renderer/html"
 )
 
+func displayNameOrName(displayName, name string) string {
+	if displayName != "" {
+		return displayName
+	}
+	return name
+}
+
 // Component functions for templates
 var ComponentFuncs = template.FuncMap{
-	"displayNameOrName": func(displayName, name string) string {
-		if displayName != "" {
-			return displayName
+	"displayNameOrName": displayNameOrName,
+	"renderCompactProfile": func(name, nprofile, picture, ago, baseFolder string) template.HTML {
+		if name == "" {
+			return ""
 		}
 
-		return name
+		// Normalize the path by removing any leading/trailing slashes
+		baseFolder = strings.Trim(baseFolder, "/")
+		if baseFolder != "" {
+			baseFolder = baseFolder + "/"
+		}
+
+		var pictureHTML string
+		if picture != "" {
+			pictureHTML = `<img src="` + picture + `" alt="` + name + `" class="compact-profile-picture">`
+		}
+
+		return template.HTML(`
+		<div class="compact-profile">
+			<a href="` + baseFolder + `profile/` + nprofile + `.html" class="compact-profile-link">
+				` + pictureHTML + `
+				<span class="compact-profile-name">` + name + `</span>
+				<span class="compact-profile-ago">` + ago + `</span>
+			</a>
+		</div>
+		`)
 	},
 	"renderLogo": func(logo string, baseFolder string) template.HTML {
 		if logo == "" {
@@ -364,7 +391,59 @@ const CommonStyles = `
         color: #4a9eff;
     }
 
-    /* Responsive styles */
+    /* Compact profile styles */
+    .compact-profile {
+        margin-bottom: 1em;
+    }
+
+    .compact-profile-link {
+        display: flex;
+        align-items: center;
+        text-decoration: none;
+        color: inherit;
+        gap: 8px;
+    }
+
+    .compact-profile-picture {
+        width: 15px;
+        height: 15px;
+        border-radius: 50%;
+        object-fit: cover;
+    }
+
+    .compact-profile-name {
+        font-size: 0.9em;
+        font-weight: 500;
+    }
+
+    .compact-profile-ago {
+        font-size: 0.8em;
+        color: #666;
+    }
+
+    body.dark .compact-profile-ago {
+        color: #999;
+    }
+
+    /* Theme-specific compact profile styles */
+    body.light .compact-profile-link {
+        color: #000000;
+    }
+
+    body.light .compact-profile-link:hover {
+        color: #0066cc;
+    }
+
+    body.dark .compact-profile-link {
+        color: #e0e0e0;
+    }
+
+    body.dark .compact-profile-link:hover {
+        color: #4a9eff;
+    }
+`
+
+const ResponsiveStyles = `
     @media (max-width: 768px) {
         body {
             font-size: 18px;
@@ -373,25 +452,74 @@ const CommonStyles = `
 
         body.article .page-container,
         body.index .page-container,
-        body.tags .page-container {
+        body.tags .page-container,
+        body.profile .page-container {
             flex-direction: column;
         }
 
         body.article .logo-container,
         body.index .logo-container,
-        body.tags .logo-container {
+        body.tags .logo-container,
+        body.profile .logo-container {
             flex: none;
             position: static;
         }
 
         body.article .main-content,
         body.index .main-content,
-        body.tags .main-content {
+        body.tags .main-content,
+        body.profile .main-content {
             width: 100%;
         }
 
         .article-card {
             padding: 15px;
+        }
+
+        .logo img {
+            max-height: 50px;
+            width: auto;
+        }
+
+        .logo-container {
+            text-align: center;
+            padding: 10px 0;
+        }
+
+        .article-header {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .author {
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            margin-bottom: 15px;
+        }
+
+        .author-link {
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .profile-header {
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            gap: 15px;
+        }
+
+        .profile-header-left {
+            align-items: center;
+        }
+
+        .profile-links {
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
         }
     }
 `

@@ -107,7 +107,7 @@ func main() {
 				return err
 			}
 
-			// Generate HTML files for each event
+			// Article pages
 			for _, event := range events {
 				params := pagegenerators.GenerateArticleParams{
 					Event:     event,
@@ -124,17 +124,19 @@ func main() {
 				}
 			}
 
-			// Generate tag pages
+			// Tag pages
 			if err := pagegenerators.GenerateTagPages(pagegenerators.GenerateTagPagesParams{
-				Events:         events,
-				OutputDir:      outputDir,
-				Layout:         config.Layout,
-				EventIDToNaddr: eventIDToNaddr,
+				Events:           events,
+				Profiles:         profiles,
+				OutputDir:        outputDir,
+				Layout:           config.Layout,
+				EventIDToNaddr:   eventIDToNaddr,
+				PubkeyToNProfile: pubkeyToNprofile,
 			}); err != nil {
 				return err
 			}
 
-			// Generate profile pages
+			// Profile pages
 			if err := pagegenerators.GenerateProfilePages(pagegenerators.GenerateProfilePagesParams{
 				Profiles:         profiles,
 				Events:           events,
@@ -146,9 +148,10 @@ func main() {
 				return err
 			}
 
-			// Generate index.html
+			// Index page
 			if err := pagegenerators.GenerateIndexHTML(pagegenerators.GenerateIndexParams{
 				Events:           events,
+				Profiles:         profiles,
 				OutputDir:        outputDir,
 				Layout:           config.Layout,
 				EventIDToNaddr:   eventIDToNaddr,

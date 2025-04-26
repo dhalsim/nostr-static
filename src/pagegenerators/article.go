@@ -55,6 +55,7 @@ const articleTemplate = `<!DOCTYPE html>
             word-wrap: break-word;
             word-break: break-word;
         }
+				` + ResponsiveStyles + `
     </style>
 </head>
 <body class="{{.Color}} article">
