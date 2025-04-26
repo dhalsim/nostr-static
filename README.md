@@ -19,7 +19,7 @@ https://blog.nostrize.me
 ## Todo
 
 - [x] support naddr
-- [ ] profiles
+- [x] profiles
 - [ ] comments, zapthreads
 - [ ] atom, rss feeds
 - [ ] dynamic theme option
