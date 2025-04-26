@@ -4,7 +4,11 @@ $env:Path = [System.Environment]::GetEnvironmentVariable("Path","Machine") + ";"
 # Change to the project directory
 Set-Location $PSScriptRoot/..
 
+# Set up logging
+$LOG_FILE = Join-Path $PSScriptRoot/.. "cron.log"
+
 # Run the nostr-static command to trigger the deploy action
+Add-Content -Path $LOG_FILE -Value "$(Get-Date): Starting deployment"
 ./nostr-static generate
 
 # Check if there are any changes
@@ -13,7 +17,7 @@ if ($changes) {
     git add .
     git commit -m "Update Nostr static site"
     git push origin main
-    Write-Host "Changes detected and pushed successfully."
+    Add-Content -Path $LOG_FILE -Value "$(Get-Date): Changes detected and pushed successfully"
 } else {
-    Write-Host "No changes detected, skipping commit and push."
+    Add-Content -Path $LOG_FILE -Value "$(Get-Date): No changes detected, skipping commit and push"
 }

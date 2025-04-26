@@ -14,7 +14,7 @@ https://blog.nostrize.me
 - Generates static HTML pages from long-form content
 - Supports multiple relays
 - Customizable layout and styling
-- Easy deployment to GitHub Pages
+- Easy deployment to any static hosting service
 
 ## Todo
 
@@ -53,27 +53,13 @@ profiles:
   - nprofile1qqsxue9c8s0kwnaspf03nqtv99akg99lvlcptz2wqnw5cet7jsgza6qpp4mhxue69uhkummn9ekx7mq8k7c9l
 ```
 
-## Deployment
-
-### GitHub Pages Deployment
-
-1. Go to your repository's Settings
-2. Navigate to "Pages" in the menu
-3. Under "Build and deployment" > "Source", select "GitHub Actions"
-4. Enable Actions by following the [GitHub Actions settings guide](https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/enabling-features-for-your-repository/managing-github-actions-settings-for-a-repository#allowing-select-actions-and-reusable-workflows-to-run)
-5. Go to the "Actions" tab in the top menu. If you see the message "Workflows aren't being run on this forked repository", click the "I understand my workflows, go ahead and enable them" button
-
 ## Scheduled Deployment
+
+Since this is a static site generator, content is not dynamic. When an article is updated on Nostr, the changes won't be reflected automatically on your site. To keep your site up-to-date, you can automate the update process using your system's task scheduler or cron jobs. The scripts below will periodically check for updates and deploy them to your site.
 
 ### Windows Setup
 
-1. Create a `.env` file in the project root with your GitHub credentials:
-   ```
-   GITHUB_TOKEN=your_github_personal_access_token
-   GITHUB_REPOSITORY=your_username/nostr-static
-   ```
-
-2. Set up Windows Task Scheduler:
+1. Set up Windows Task Scheduler:
    - Open Task Scheduler
    - Create a new Basic Task
    - Set the trigger (e.g., daily at a specific time)
@@ -82,50 +68,39 @@ profiles:
    - Arguments: `-ExecutionPolicy Bypass -File "path\to\scripts\schedule-deploy.ps1"`
    - Complete the wizard
 
-The script will run `nostr-static` with the `--trigger-action=deploy` parameter, which will trigger the GitHub Actions workflow to deploy your site.
+The script will run `nostr-static generate` and commit any changes to your repository.
+
+**Tip:** You can monitor the `cron.log` file to view job execution logs and track updates.
 
 ### Unix/Linux Setup
 
-1. Create a `.env` file in the project root with your GitHub credentials:
-   ```
-   GITHUB_TOKEN=your_github_personal_access_token
-   GITHUB_REPOSITORY=your_username/nostr-static
-   ```
-
-2. Run the setup script:
+1. Run the setup script:
    ```bash
    ./scripts/setup-cron.sh
    ```
 
 This will set up a daily cron job that runs at midnight. To run hourly instead, edit the script and uncomment the hourly line.
 
-The script will run `nostr-static` with the `--trigger-action=deploy` parameter, which will trigger the GitHub Actions workflow to deploy your site.
+The script will run `nostr-static generate` and commit any changes to your repository.
+
+**Tips:** 
+- Use `crontab -l` to view your scheduled jobs
+- Use `crontab -r` to remove all scheduled jobs
+- Check `cron.log` for detailed execution logs
 
 ## Getting Started
 
 1. Fork this repository
 2. Modify the `config.yaml` file with your desired configuration
-3. Add your Nostr article IDs to the `article_ids` section
+3. Add Nostr naddr to the `articles` list that you want to serve
 4. Place a `logo.png` file (or another file name, but don't forget to update logo in the `config.yaml` file) into the project folder
-5. Build and run the command: `go build -o nostr-static ./src && ./nostr-static`
+5. Build and run the command: `go build -o nostr-static ./src && ./nostr-static generate`
 6. Commit and push your changes:
    ```bash
    git add .
    git commit -m "Added my events, changed logo, title, and light theme"
    git push origin main
    ```
-7. The GitHub Pages workflow will deploy your site automatically
-8. Your website will be available at `https://YOUR_GITHUB_USERNAME.github.io/nostr-static/`
-
-### Custom Domain Setup
-
-To use a custom domain:
-
-1. Add a CNAME record in your domain (root or subdomain)
-   - Set the value to `YOUR_GITHUB_USERNAME.github.io`
-2. In your repository's Pages Settings:
-   - Set the Custom Domain field to your domain
-   - Wait for DNS propagation (can take up to 24 hours)
 
 ## Building from Source
 
@@ -137,7 +112,7 @@ git clone https://github.com/yourusername/nostr-static.git
 go build -o nostr-static ./src
 
 # Run the generator
-./nostr-static
+./nostr-static generate
 ```
 
 ## License
