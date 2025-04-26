@@ -1,0 +1,689 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>How to Create a Blog Out of Nostr Long-Form Articles</title>
+    <style>
+        
+     
+    body {
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+        line-height: 1.6;
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 20px;
+        font-size: 16px;
+    }
+
+     
+    body.light {
+        background-color: #ffffff;
+        color: #333333;
+    }
+
+    body.dark {
+        background-color: #1a1a1a;
+        color: #ffffff;
+    }
+
+    body.light a {
+        color: #0066cc;
+    }
+
+    body.dark a {
+        color: #4a9eff;
+    }
+
+     
+    .logo {
+        text-align: center;
+    }
+
+    .logo img {
+        max-height: 100px;
+        width: auto;
+    }
+
+    .article-card {
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        padding: 20px;
+        margin-bottom: 20px;
+    }
+
+    .article-card h2 {
+        margin-top: 0;
+        text-align: center;
+    }
+
+    .tags {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin-top: 1em;
+    }
+
+    .tag {
+        display: inline-block;
+        padding: 4px 8px;
+        border-radius: 4px;
+        margin-bottom: 8px;
+        font-size: 0.9em;
+    }
+
+    .tag a {
+        text-decoration: none;
+        color: inherit;
+    }
+
+     
+    body.light .tag {
+        background-color: #f0f0f0;
+        border: 1px solid #dee2e6;
+        color: #666666;
+    }
+
+    body.dark .tag {
+        background-color: #1a1a1a;
+        border: 1px solid #404040;
+        color: #e0e0e0;
+    }
+
+     
+    body.article .page-container, body.profile .page-container {
+        display: flex;
+        align-items: flex-start;
+        max-width: 1200px;
+        margin: 0 auto;
+    }
+
+    body.article .logo-container, body.profile .logo-container {
+        flex: 0 0 200px;
+        position: sticky;
+        top: 20px;
+    }
+
+    body.article .main-content, body.profile .main-content {
+        flex: 1;
+        max-width: 800px;
+    }
+
+    body.article img, body.profile img {
+        max-width: 100%;
+        height: auto;
+    }
+
+    body.article pre {
+        background-color: #f5f5f5;
+        padding: 15px;
+        border-radius: 5px;
+        overflow-x: auto;
+    }
+
+    body.article code {
+        font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+    }
+
+    body.article .article-header {
+        margin-bottom: 2em;
+    }
+
+    body.article .article-header h1 {
+        margin-bottom: 0.5em;
+    }
+
+    body.article article {
+        word-wrap: break-word;
+        overflow-wrap: break-word;
+        hyphens: auto;
+    }
+
+    body.article article p {
+        max-width: 100%;
+        overflow-wrap: break-word;
+        word-wrap: break-word;
+        word-break: break-word;
+    }
+
+    body.index .page-container,
+    body.tags .page-container {
+        display: flex;
+        align-items: flex-start;
+    }
+
+    body.index .logo-container,
+    body.tags .logo-container {
+        flex: 0 0 200px;
+        position: sticky;
+        top: 20px;
+    }
+
+    body.index .main-content,
+    body.tags .main-content {
+        flex: 1;
+    }
+
+     
+    .image-container {
+        margin: 0 auto 20px;
+        text-align: center;
+    }
+
+    .image-container img {
+        max-width: 100%;
+        height: auto;
+        border-radius: 4px;
+    }
+
+     
+    body.index .image-container {
+        max-width: 300px;
+    }
+
+     
+    body.light .article-card {
+        background-color: #f8f9fa;
+        border: 1px solid #dee2e6;
+    }
+
+    body.dark .article-card {
+        background-color: #2d2d2d;
+        border: 1px solid #404040;
+    }
+
+    body.light pre {
+        background-color: #f5f5f5 !important;
+        border: 1px solid #e9ecef;
+    }
+
+    body.dark pre {
+        background-color: #2d2d2d !important;
+        border: 1px solid #404040;
+    }
+
+    body.light .article-card .summary {
+        color: #666666;
+    }
+
+    body.dark .article-card .summary {
+        color: #e0e0e0;
+    }
+
+     
+    .author {
+        display: flex;
+        align-items: center;
+        margin-bottom: 1em;
+    }
+
+    .author-link {
+        display: flex;
+        align-items: center;
+        text-decoration: none;
+        color: inherit;
+        gap: 10px;
+    }
+
+    .author-picture {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        object-fit: cover;
+    }
+
+    .author-name {
+        font-weight: 500;
+    }
+
+     
+    body.light .author-website {
+        color: #000000;
+    }
+
+    body.light .author-website:hover {
+        color: #0066cc;
+    }
+
+    body.dark .author-website {
+        color: #e0e0e0;
+        filter: invert(1);
+    }
+
+    body.dark .author-website:hover {
+        color: #4a9eff;
+    }
+
+     
+    .compact-profile {
+        margin-bottom: 1em;
+    }
+
+    .compact-profile-link {
+        display: flex;
+        align-items: center;
+        text-decoration: none;
+        color: inherit;
+        gap: 8px;
+    }
+
+    .compact-profile-picture {
+        width: 15px;
+        height: 15px;
+        border-radius: 50%;
+        object-fit: cover;
+    }
+
+    .compact-profile-name {
+        font-size: 0.9em;
+        font-weight: 500;
+    }
+
+    .compact-profile-ago {
+        font-size: 0.8em;
+        color: #666;
+    }
+
+    body.dark .compact-profile-ago {
+        color: #999;
+    }
+
+     
+    body.light .compact-profile-link {
+        color: #000000;
+    }
+
+    body.light .compact-profile-link:hover {
+        color: #0066cc;
+    }
+
+    body.dark .compact-profile-link {
+        color: #e0e0e0;
+    }
+
+    body.dark .compact-profile-link:hover {
+        color: #4a9eff;
+    }
+
+     
+    .footer {
+        margin-top: 2em;
+        padding-top: 1em;
+        border-top: 1px solid #eee;
+        text-align: center;
+        font-size: 0.9em;
+        color: #666;
+    }
+
+    body.dark .footer {
+        border-top-color: #333;
+        color: #999;
+    }
+
+    .footer a {
+        text-decoration: none;
+    }
+
+    body.light .footer a {
+        color: #0066cc;
+    }
+
+    body.dark .footer a {
+        color: #4a9eff;
+    }
+
+        .page-container {
+            display: flex;
+            align-items: flex-start;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .main-content {
+            flex: 1;
+            max-width: 800px;
+        }
+        img {
+            max-width: 100%;
+            height: auto;
+        }
+        pre {
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+        }
+        code {
+            font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+        }
+        .article-header {
+            margin-bottom: 2em;
+        }
+        .article-header h1 {
+            margin-bottom: 0.5em;
+        }
+        article {
+            word-wrap: break-word;
+            overflow-wrap: break-word;
+            hyphens: auto;
+        }
+        article p {
+            max-width: 100%;
+            overflow-wrap: break-word;
+            word-wrap: break-word;
+            word-break: break-word;
+        }
+				
+    @media (max-width: 768px) {
+        body {
+            font-size: 18px;
+            padding: 15px;
+        }
+
+        body.article .page-container,
+        body.index .page-container,
+        body.tags .page-container,
+        body.profile .page-container {
+            flex-direction: column;
+        }
+
+        body.article .logo-container,
+        body.index .logo-container,
+        body.tags .logo-container,
+        body.profile .logo-container {
+            flex: none;
+            position: static;
+        }
+
+        body.article .main-content,
+        body.index .main-content,
+        body.tags .main-content,
+        body.profile .main-content {
+            width: 100%;
+        }
+
+        .article-card {
+            padding: 15px;
+        }
+
+        .logo img {
+            max-height: 50px;
+            width: auto;
+        }
+
+        .logo-container {
+            text-align: center;
+            padding: 10px 0;
+        }
+
+        .article-header {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .author {
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            margin-bottom: 15px;
+        }
+
+        .author-link {
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .profile-header {
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            gap: 15px;
+        }
+
+        .profile-header-left {
+            align-items: center;
+        }
+
+        .profile-links {
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+        }
+    }
+
+    </style>
+</head>
+<body class="dark article">
+    <div class="page-container">
+        <div class="logo-container">
+            
+		<div class="logo">
+			<a href="index.html">
+				<img src="logo.png" alt="Logo">
+			</a>
+		</div>
+		
+        </div>
+        <div class="main-content">
+            <article>
+                <div class="article-header">
+                    
+		<div class="author">
+			<a href="profile/nprofile1qqsxue9c8s0kwnaspf03nqtv99akg99lvlcptz2wqnw5cet7jsgza6qpp4mhxue69uhkummn9ekx7mq8k7c9l.html" class="author-link">
+				<img src="https://dhalsim.github.io/assets/dhalsim_logo_sq.png" alt="dhalsim" class="author-picture">
+				<span class="author-name">dhalsim</span>
+			</a>
+		</div>
+		
+                    <span class="ago">3 minutes ago</span>
+                    <h1>How to Create a Blog Out of Nostr Long-Form Articles</h1>
+                    
+		<p class="summary">nostr-static is a static site generator (SSG) tool that transforms Nostr long-form content into a beautiful, static blog (which works really fast). It fetches articles from the Nostr network and generates HTML pages that can be hosted anywhere. This tool bridges the gap between Nostr's decentralized content and traditional web hosting, making it easy to create and maintain a blog powered by Nostr content.</p>
+		
+                    
+		<div class="tags">
+			<span class="tag"><a href="tag/blogging.html">blogging</a></span><span class="tag"><a href="tag/nostr.html">nostr</a></span>
+		</div>
+		
+                    
+			<div class="image-container">
+				<img src="https://image.nostr.build/28ee6fa221c51f359c510d348ba98d82f566162ffb66eb5c9246eb5c0012748f.jpg" alt="How to Create a Blog Out of Nostr Long-Form Articles">
+			</div>
+			
+                </div>
+                <ul>
+<li><strong>Demo:</strong> <a href="https://blog.nostrize.me">https://blog.nostrize.me</a></li>
+<li><strong>Source code:</strong> <a href="https://github.com/dhalsim/nostr-static">nostr-static</a></li>
+</ul>
+<h3 id="prerequisites">Prerequisites</h3>
+<p>Before using nostr-static, you'll need:</p>
+<ol>
+<li>
+<p><strong>Nostr Articles</strong>: You can either:</p>
+<ul>
+<li>Create new articles using platforms like <a href="https://yakihonne.com">yakihonne.com</a> or <a href="https://habla.news">habla.news</a></li>
+<li>Find existing articles on Nostr</li>
+<li>Copy the naddr string from the article (usually can be found in the address bar)</li>
+</ul>
+</li>
+<li>
+<p><strong>Author Profiles</strong>: For each article's author:</p>
+<ul>
+<li>Copy their public key (pubkey)</li>
+<li>Visit <a href="https://njump.me">njump.me/npub1xxxxx</a> (replace with the actual pubkey)</li>
+<li>Copy the nprofile string from the page</li>
+</ul>
+</li>
+</ol>
+<p>These identifiers (naddr for articles and nprofile for authors) are essential for the tool to fetch and display your content correctly.</p>
+<h2 id="features">Features</h2>
+<h3 id="core-functionality">Core Functionality</h3>
+<ul>
+<li><strong>Index Page</strong>: A homepage featuring your blog's title, logo, article summaries, and tags</li>
+<li><strong>Article Pages</strong>: Individual pages for each article, including:
+<ul>
+<li>Title and logo</li>
+<li>Article summary</li>
+<li>Full content</li>
+<li>Tags</li>
+<li>Comments (via ZapThreads integration)</li>
+</ul>
+</li>
+</ul>
+<h3 id="social-features">Social Features</h3>
+<ul>
+<li><strong>Comments</strong>: Integrated with <a href="https://github.com/franzaps/zapthreads">ZapThreads</a> for decentralized commenting</li>
+<li><strong>Nostr Connect</strong>: Seamless integration with <a href="https://git.njump.me/wnj">window.nostr.js (wnj)</a>, supporting NIP-46 bunker connect</li>
+</ul>
+<h3 id="content-organization">Content Organization</h3>
+<ul>
+<li><strong>Tag Pages</strong>: Browse articles filtered by specific tags</li>
+<li><strong>Profile Pages</strong>: View articles from specific authors</li>
+<li><strong>Manual Curation</strong>: Select and order articles by adding their naddr strings (see <a href="https://nips.nostr.com/19">NIP-19</a>)</li>
+</ul>
+<h3 id="customization-options">Customization Options</h3>
+<ul>
+<li><strong>Themes</strong>: Choose between dark and light mode</li>
+<li><strong>Branding</strong>:
+<ul>
+<li>Custom logo</li>
+<li>Custom blog title</li>
+</ul>
+</li>
+<li><strong>Network</strong>: Specify your preferred Nostr relays</li>
+</ul>
+<h3 id="technical-requirements">Technical Requirements</h3>
+<ul>
+<li><strong>Profile Format</strong>: Authors must be added in nprofile format (see <a href="https://nips.nostr.com/19">NIP-19</a>) for consistency</li>
+<li><strong>Automatic Updates</strong>: Built-in scripts for:
+<ul>
+<li>Windows Task Scheduler</li>
+<li>Unix/Linux cron jobs</li>
+</ul>
+</li>
+</ul>
+<h2 id="getting-started">Getting Started</h2>
+<ol>
+<li>
+<p><strong>Fork and Clone</strong>:</p>
+<ul>
+<li>Fork <a href="https://github.com/dhalsim/nostr-static">this repository</a> to your GitHub account</li>
+<li>Clone it to your local machine or use <a href="https://docs.github.com/en/codespaces/quickstart">GitHub Codespaces</a> for a cloud-based development environment</li>
+<li>Watch this <a href="https://youtu.be/_W9B7qc9lVc">quick tutorial</a> to learn more about GitHub Codespaces</li>
+</ul>
+</li>
+<li>
+<p><strong>Configuration</strong>: Set up your <code>config.yaml</code> file with:</p>
+<ul>
+<li>Blog title and logo</li>
+<li>Theme preference</li>
+<li>Relay list</li>
+<li>Article naddr strings</li>
+<li>Author nprofile strings</li>
+</ul>
+</li>
+<li>
+<p><strong>Content Selection</strong>: Add your desired articles by including their naddr strings in the configuration</p>
+</li>
+<li>
+<p><strong>Author Selection</strong>: You have to add the nprofile strings of the articles. This is needed for URL consistancy.</p>
+</li>
+<li>
+<p><strong>Build &amp; Run</strong>: Follow the instruction in the README at <a href="https://github.com/dhalsim/nostr-static">https://github.com/dhalsim/nostr-static</a></p>
+</li>
+<li>
+<p><strong>Deployment</strong>: Choose your preferred static hosting service and deploy the generated HTML files</p>
+</li>
+<li>
+<p><strong>Updates</strong>: Set up automatic updates using the provided scripts for your operating system (For github pages)</p>
+</li>
+</ol>
+<h2 id="deployment-options">Deployment Options</h2>
+<h3 id="github-pages-recommended">GitHub Pages (Recommended)</h3>
+<p>GitHub Pages provides free hosting for static websites. Here's how to set it up:</p>
+<ol>
+<li>
+<p><strong>Enable GitHub Pages</strong>:</p>
+<ul>
+<li>Go to your repository's Settings</li>
+<li>Navigate to &quot;Pages&quot; in the menu</li>
+<li>Under &quot;Build and deployment&quot; &gt; &quot;Source&quot;, select &quot;GitHub Actions&quot;</li>
+<li>Enable Actions by following the <a href="https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/enabling-features-for-your-repository/managing-github-actions-settings-for-a-repository#allowing-select-actions-and-reusable-workflows-to-run">GitHub Actions settings guide</a></li>
+<li>Go to the &quot;Actions&quot; tab in the top menu. If you see the message &quot;Workflows aren't being run on this forked repository&quot;, click the &quot;I understand my workflows, go ahead and enable them&quot; button</li>
+</ul>
+</li>
+<li>
+<p><strong>Custom Domain Setup</strong>:</p>
+<ul>
+<li>Purchase a domain from your preferred domain registrar</li>
+<li>Create a CNAME record in your domain's DNS settings:
+<ul>
+<li>Type: CNAME</li>
+<li>Name: @ or www or a subdomain you prefer (depending on your preference)</li>
+<li>Value: YOUR_GITHUB_USERNAME.github.io</li>
+</ul>
+</li>
+<li>In your repository's GitHub Pages settings:
+<ul>
+<li>Enter your custom domain in the &quot;Custom domain&quot; field</li>
+<li>Check &quot;Enforce HTTPS&quot; for secure connections</li>
+</ul>
+</li>
+<li>Wait for DNS propagation (can take up to 24 hours)</li>
+<li>Your site will be available at your custom domain</li>
+</ul>
+</li>
+</ol>
+<h3 id="other-hosting-options">Other Hosting Options</h3>
+<p>You can also deploy your static site to any hosting service that supports static websites, such as:</p>
+<ul>
+<li>Netlify</li>
+<li>Vercel</li>
+<li>Cloudflare Pages</li>
+<li>Amazon S3</li>
+<li>Any traditional web hosting service</li>
+</ul>
+<h2 id="why-nostr-static">Why nostr-static?</h2>
+<p>nostr-static offers a unique solution for bloggers who want to leverage Nostr's decentralized content while maintaining a traditional web presence. It combines the best of both worlds:</p>
+<ul>
+<li><strong>Decentralized Content</strong>: Your articles live on the Nostr network</li>
+<li><strong>Traditional Web Presence</strong>: A familiar blog interface for your readers</li>
+<li><strong>Easy Maintenance</strong>: Simple configuration and automatic updates</li>
+<li><strong>Flexible Hosting</strong>: Deploy anywhere that supports static websites</li>
+<li><strong>Social interactions</strong>: Leverage nostr for comments</li>
+</ul>
+<h2 id="conclusion">Conclusion</h2>
+<p>nostr-static makes it easy to create a professional blog from your Nostr long-form content. Whether you're a seasoned Nostr user or new to the ecosystem, this tool provides a straightforward way to share your content with both the Nostr community and traditional web users.</p>
+<p>Start your Nostr-powered blog today by visiting the <a href="https://blog.nostrize.me">demo</a> and exploring the possibilities!</p>
+
+            </article>
+
+						
+							<zap-threads 
+							  anchor="naddr1qvzqqqr4gupzqmnyhq7p7e60kq997xvpds5hkeq5hanlq9vffczd6nr9062pqthgqq25x6r2d90hzaj529f9gur2x9h4yt2gfy69qm05rzu" 
+								relays="wss://relay.damus.io,wss://nostr.wine,wss://relay.nostr.band,wss://nos.lol,wss://relay.primal.net"
+								urls="naddr:njump.me/,npub:njump.me/,nprofile:njump.me/,nevent:njump.me/,note:njump.me/,tag:snort.social/t/"
+								disable="replyAnonymously" />
+						
+            
+		<div class="footer">
+			Built with <a target="_blank" href="https://github.com/dhalsim/nostr-static">nostr-static</a>
+		</div>
+		
+        </div>
+    </div>
+		
+			<script>
+				window.wnjParams = {
+					position: 'bottom',
+					startHidden: true,
+					compactMode: true,
+					disableOverflowFix: true,
+				}
+			</script>
+			<script src="https://cdn.jsdelivr.net/npm/window.nostr.js/dist/window.nostr.min.js"></script>
+			<script type="text/javascript" src="https://unpkg.com/zapthreads/dist/zapthreads.iife.js"></script>
+		
+</body>
+</html>
