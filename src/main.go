@@ -17,8 +17,9 @@ import (
 
 func main() {
 	app := &cli.Command{
-		Name:  "nostr-static",
-		Usage: "Generate static HTML pages from Nostr articles",
+		Name:           "nostr-static",
+		Usage:          "Generate static HTML pages from Nostr articles",
+		DefaultCommand: "generate",
 		Commands: []*cli.Command{
 			{
 				Name:  "generate",

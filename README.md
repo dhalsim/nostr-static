@@ -81,7 +81,7 @@ The script will run `nostr-static generate` and commit any changes to your repos
 
 This will set up a daily cron job that runs at midnight. To run hourly instead, edit the script and uncomment the hourly line.
 
-The script will run `nostr-static generate` and commit any changes to your repository.
+The script will run `nostr-static` and commit any changes to your repository.
 
 **Tips:** 
 - Use `crontab -l` to view your scheduled jobs
@@ -94,7 +94,7 @@ The script will run `nostr-static generate` and commit any changes to your repos
 2. Modify the `config.yaml` file with your desired configuration
 3. Add Nostr naddr to the `articles` list that you want to serve
 4. Place a `logo.png` file (or another file name, but don't forget to update logo in the `config.yaml` file) into the project folder
-5. Build and run the command: `go build -o nostr-static ./src && ./nostr-static generate`
+5. Build and run the command: `go build -o nostr-static ./src && ./nostr-static`
 6. Commit and push your changes:
    ```bash
    git add .
@@ -112,7 +112,7 @@ git clone https://github.com/yourusername/nostr-static.git
 go build -o nostr-static ./src
 
 # Run the generator
-./nostr-static generate
+./nostr-static
 ```
 
 ## License

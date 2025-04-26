@@ -9,7 +9,7 @@ $LOG_FILE = Join-Path $PSScriptRoot/.. "cron.log"
 
 # Run the nostr-static command to trigger the deploy action
 Add-Content -Path $LOG_FILE -Value "$(Get-Date): Starting deployment"
-./nostr-static generate
+./nostr-static
 
 # Check if there are any changes
 $changes = git status --porcelain
