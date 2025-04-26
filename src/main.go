@@ -159,6 +159,7 @@ func main() {
 					eventIDToNaddr[event.ID],
 					profiles[event.PubKey],
 					pubkeyToNprofile[event.PubKey],
+					config.Relays,
 				)
 
 				if err := pagegenerators.GenerateArticleHTML(params); err != nil {

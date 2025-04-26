@@ -1,2 +1,5 @@
 # Binary output
 nostr-static
+
+# Environment variables
+.env

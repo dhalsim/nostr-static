@@ -2,7 +2,13 @@ name: Deploy to GitHub Pages
 
 on:
   push:
-    branches: [main] # Change to your default branch
+    branches: [main]
+  workflow_dispatch:
+    inputs:
+      trigger_action:
+        description: 'Trigger deployment'
+        required: true
+        default: 'deploy'
 
 permissions:
   contents: read

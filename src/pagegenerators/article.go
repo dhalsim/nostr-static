@@ -5,6 +5,7 @@ import (
 	"nostr-static/src/types"
 	"os"
 	"path/filepath"
+	"strings"
 )
 
 const articleTemplate = `<!DOCTYPE html>
@@ -77,7 +78,10 @@ const articleTemplate = `<!DOCTYPE html>
             </article>
 
 						{{if .Comments}}
-							<zap-threads anchor="{{.Naddr}}" />
+							<zap-threads 
+							  anchor="{{.Naddr}}" 
+								relays="{{.Relays}}"
+								disable="replyAnonymously" />
 						{{end}}
             {{renderFooter}}
         </div>
@@ -111,6 +115,7 @@ type articleData struct {
 	AuthorNProfile string
 	AuthorPicture  string
 	Comments       bool
+	Relays         string // comma separated list of relays
 }
 
 func NewArticleData(
@@ -127,6 +132,7 @@ func NewArticleData(
 	authorNProfile string,
 	authorPicture string,
 	comments bool,
+	relays []string,
 ) articleData {
 	return articleData{
 		Title:          title,
@@ -142,6 +148,7 @@ func NewArticleData(
 		AuthorNProfile: authorNProfile,
 		AuthorPicture:  authorPicture,
 		Comments:       comments,
+		Relays:         strings.Join(relays, ","),
 	}
 }
 
@@ -153,6 +160,7 @@ type generateArticleParams struct {
 	Naddr     string
 	Profile   types.Event
 	Nprofile  string
+	Relays    []string
 }
 
 func NewGenerateArticleParams(
@@ -163,6 +171,7 @@ func NewGenerateArticleParams(
 	naddr string,
 	profile types.Event,
 	nprofile string,
+	relays []string,
 ) generateArticleParams {
 	return generateArticleParams{
 		Event:     event,
@@ -172,6 +181,7 @@ func NewGenerateArticleParams(
 		Naddr:     naddr,
 		Profile:   profile,
 		Nprofile:  nprofile,
+		Relays:    relays,
 	}
 }
 
@@ -183,6 +193,7 @@ func GenerateArticleHTML(params generateArticleParams) error {
 	outputDir := params.OutputDir
 	layout := params.Layout
 	features := params.Features
+	relays := params.Relays
 
 	htmlContent, err := convertMarkdownToHTML(event.Content, true)
 	if err != nil {
@@ -220,6 +231,7 @@ func GenerateArticleHTML(params generateArticleParams) error {
 		nprofile,
 		authorPicture,
 		features.Comments,
+		relays,
 	)
 
 	tmpl, err := template.New("article").Funcs(ComponentFuncs).Parse(articleTemplate)

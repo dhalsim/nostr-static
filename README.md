@@ -63,6 +63,44 @@ profiles:
 4. Enable Actions by following the [GitHub Actions settings guide](https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/enabling-features-for-your-repository/managing-github-actions-settings-for-a-repository#allowing-select-actions-and-reusable-workflows-to-run)
 5. Go to the "Actions" tab in the top menu. If you see the message "Workflows aren't being run on this forked repository", click the "I understand my workflows, go ahead and enable them" button
 
+## Scheduled Deployment
+
+### Windows Setup
+
+1. Create a `.env` file in the project root with your GitHub credentials:
+   ```
+   GITHUB_TOKEN=your_github_personal_access_token
+   GITHUB_REPOSITORY=your_username/nostr-static
+   ```
+
+2. Set up Windows Task Scheduler:
+   - Open Task Scheduler
+   - Create a new Basic Task
+   - Set the trigger (e.g., daily at a specific time)
+   - Action: Start a program
+   - Program/script: `powershell.exe`
+   - Arguments: `-ExecutionPolicy Bypass -File "path\to\scripts\schedule-deploy.ps1"`
+   - Complete the wizard
+
+The script will run `nostr-static` with the `--trigger-action=deploy` parameter, which will trigger the GitHub Actions workflow to deploy your site.
+
+### Unix/Linux Setup
+
+1. Create a `.env` file in the project root with your GitHub credentials:
+   ```
+   GITHUB_TOKEN=your_github_personal_access_token
+   GITHUB_REPOSITORY=your_username/nostr-static
+   ```
+
+2. Run the setup script:
+   ```bash
+   ./scripts/setup-cron.sh
+   ```
+
+This will set up a daily cron job that runs at midnight. To run hourly instead, edit the script and uncomment the hourly line.
+
+The script will run `nostr-static` with the `--trigger-action=deploy` parameter, which will trigger the GitHub Actions workflow to deploy your site.
+
 ## Getting Started
 
 1. Fork this repository
