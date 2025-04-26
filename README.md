@@ -6,7 +6,7 @@ A static web site generator written in Go that creates HTML pages from long-form
 
 https://blog.nostrize.me
 
-## Version 0.3
+## Version 0.4
 
 ## Features
 
@@ -20,7 +20,7 @@ https://blog.nostrize.me
 
 - [x] support naddr
 - [x] profiles
-- [ ] comments, zapthreads
+- [x] comments, zapthreads
 - [ ] atom, rss feeds
 - [ ] dynamic theme option
 - [ ] release binaries
@@ -42,9 +42,15 @@ relays:
   - wss://nos.lol
   - wss://relay.primal.net
 
+features:
+  - comments: true
+
 articles:
   - naddr1qvzqqqr4gupzqmnyhq7p7e60kq997xvpds5hkeq5hanlq9vffczd6nr9062pqthgqq2j6ezsgu69j7n92cmxxmfsgyeyyvjtxfuk7lwjq6s
   - naddr1qvzqqqr4gupzqmnyhq7p7e60kq997xvpds5hkeq5hanlq9vffczd6nr9062pqthgqq24wmjfwp6rv6t8v935ujfhv4yr2wzzdfz5gl5quve
+
+profiles:
+  - nprofile1qqsxue9c8s0kwnaspf03nqtv99akg99lvlcptz2wqnw5cet7jsgza6qpp4mhxue69uhkummn9ekx7mq8k7c9l
 ```
 
 ## Deployment

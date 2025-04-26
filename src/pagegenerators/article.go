@@ -75,13 +75,29 @@ const articleTemplate = `<!DOCTYPE html>
                 </div>
                 {{.Content}}
             </article>
+
+						{{if .Comments}}
+							<zap-threads anchor="{{.Naddr}}" />
+						{{end}}
             {{renderFooter}}
         </div>
     </div>
+		{{if .Comments}}
+			<script>
+				window.wnjParams = {
+					position: 'bottom',
+					startHidden: true,
+					compactMode: true,
+					disableOverflowFix: true,
+				}
+			</script>
+			<script src="https://cdn.jsdelivr.net/npm/window.nostr.js/dist/window.nostr.min.js"></script>
+			<script type="text/javascript" src="https://unpkg.com/zapthreads/dist/zapthreads.iife.js"></script>
+		{{end}}
 </body>
 </html>`
 
-type ArticleData struct {
+type articleData struct {
 	Title          string
 	Ago            string
 	Content        template.HTML
@@ -94,6 +110,39 @@ type ArticleData struct {
 	AuthorName     string
 	AuthorNProfile string
 	AuthorPicture  string
+	Comments       bool
+}
+
+func NewArticleData(
+	title string,
+	ago string,
+	content template.HTML,
+	color string,
+	summary string,
+	tags []string,
+	logo string,
+	image string,
+	naddr string,
+	authorName string,
+	authorNProfile string,
+	authorPicture string,
+	comments bool,
+) articleData {
+	return articleData{
+		Title:          title,
+		Ago:            ago,
+		Content:        content,
+		Color:          color,
+		Summary:        summary,
+		Tags:           tags,
+		Logo:           logo,
+		Image:          image,
+		Naddr:          naddr,
+		AuthorName:     authorName,
+		AuthorNProfile: authorNProfile,
+		AuthorPicture:  authorPicture,
+		Comments:       comments,
+	}
 }
 
 type generateArticleParams struct {
@@ -133,6 +182,7 @@ func GenerateArticleHTML(params generateArticleParams) error {
 	naddr := params.Naddr
 	outputDir := params.OutputDir
 	layout := params.Layout
+	features := params.Features
 
 	htmlContent, err := convertMarkdownToHTML(event.Content, true)
 	if err != nil {
@@ -156,20 +206,21 @@ func GenerateArticleHTML(params generateArticleParams) error {
 	}
 	authorPicture = profileData.Picture
 
-	data := ArticleData{
-		Title:          metadata.Title,
-		Ago:            diffString(ago(event)),
-		Content:        template.HTML(htmlContent),
-		Color:          layout.Color,
-		Summary:        metadata.Summary,
-		Tags:           metadata.Tags,
-		Logo:           layout.Logo,
-		Image:          metadata.Image,
-		Naddr:          naddr,
-		AuthorName:     authorName,
-		AuthorNProfile: nprofile,
-		AuthorPicture:  authorPicture,
-	}
+	data := NewArticleData(
+		metadata.Title,
+		diffString(ago(event)),
+		template.HTML(htmlContent),
+		layout.Color,
+		metadata.Summary,
+		metadata.Tags,
+		layout.Logo,
+		metadata.Image,
+		naddr,
+		authorName,
+		nprofile,
+		authorPicture,
+		features.Comments,
+	)
 
 	tmpl, err := template.New("article").Funcs(ComponentFuncs).Parse(articleTemplate)
 	if err != nil {
