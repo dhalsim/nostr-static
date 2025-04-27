@@ -40,3 +40,20 @@ func diffString(diff time.Duration) string {
 
 	return fmt.Sprintf("%d seconds ago", seconds)
 }
+
+func ternary[T any](cond bool, a, b T) T {
+	if cond {
+		return a
+	}
+	return b
+}
+
+func apply[T any, R any](input []T, mapper func(T) R) []R {
+	output := make([]R, len(input))
+
+	for i, v := range input {
+		output[i] = mapper(v)
+	}
+
+	return output
+}

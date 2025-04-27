@@ -81,20 +81,21 @@ func RenderImageHTML(image, alt, imageLink, baseFolder string) string {
 	`
 }
 
-func RenderLogo(data articleData) template.HTML {
-	if data.Logo == "" {
+func RenderLogo(logo, baseFolder string) template.HTML {
+	if logo == "" {
 		return ""
 	}
 
-	baseFolder := strings.Trim(data.BaseFolder, "/")
+	baseFolder = strings.Trim(baseFolder, "/")
 
 	if baseFolder != "" {
 		baseFolder = baseFolder + "/"
 	}
+
 	return template.HTML(`
         <div class="logo">
             <a href="` + baseFolder + `index.html">
-                <img src="` + baseFolder + data.Logo + `" alt="Logo">
+                <img src="` + baseFolder + logo + `" alt="Logo">
             </a>
         </div>
     `)
