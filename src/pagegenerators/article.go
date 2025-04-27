@@ -5,7 +5,6 @@ import (
 	"nostr-static/src/types"
 	"os"
 	"path/filepath"
-	"strconv"
 	"strings"
 )
 
@@ -65,82 +64,13 @@ func NewArticleData(
 func renderArticleHeader(data articleData) template.HTML {
 	return template.HTML(`
 		<div class="article-header">
-			` + renderCompactProfileHTML(data) + `
+			` + RenderCompactProfileHTML(data) + `
 			<h1>` + data.Title + `</h1>
-			` + renderSummaryHTML(data.Summary) + `
-			` + renderTagsHTML(data.Tags, "") + `
-			` + renderImageHTML(data.Image, data.Title, "", "") + `
+			` + RenderSummaryHTML(data.Summary) + `
+			` + RenderTagsHTML(data.Tags, "") + `
+			` + RenderImageHTML(data.Image, data.Title, "", "") + `
 		</div>
 	`)
-}
-
-func renderCompactProfileHTML(data articleData) string {
-	if data.AuthorName == "" {
-		return ""
-	}
-
-	pictureHTML := ""
-	if data.AuthorPicture != "" {
-		pictureHTML = `<img src="` + data.AuthorPicture + `" alt="` + data.AuthorName + `" class="compact-profile-picture">`
-	}
-
-	return `
-		<div class="compact-profile">
-			<a href="profile/` + data.AuthorNProfile + `.html" class="compact-profile-link">
-				` + pictureHTML + `
-				<span class="compact-profile-name">` + data.AuthorName + `</span>
-			</a>
-			<a href="` + data.Naddr + `.html" class="compact-profile-ago">
-				<span class="time-ago" data-timestamp="` + strconv.FormatInt(data.CreatedAt, 10) + `"></span>
-			</a>
-		</div>
-	`
-}
-
-func renderSummaryHTML(summary string) string {
-	if summary == "" {
-		return ""
-	}
-	return `<p class="summary">` + summary + `</p>`
-}
-
-func renderTagsHTML(tags []string, baseFolder string) string {
-	if len(tags) == 0 {
-		return ""
-	}
-
-	var html string
-	for _, tag := range tags {
-		baseFolder = strings.Trim(baseFolder, "/")
-		if baseFolder != "" {
-			baseFolder = baseFolder + "/"
-		}
-		html += `<span class="tag"><a href="` + baseFolder + `tag/` + strings.ToLower(tag) + `.html">` + tag + `</a></span>`
-	}
-
-	return `<div class="tags">` + html + `</div>`
-}
-
-func renderImageHTML(image, alt, imageLink, baseFolder string) string {
-	if image == "" {
-		return ""
-	}
-
-	if imageLink == "" {
-		return `
-			<div class="image-container">
-				<img src="` + image + `" alt="` + alt + `">
-			</div>
-		`
-	}
-
-	return `
-		<div class="image-container">
-			<a href="` + baseFolder + imageLink + `.html">
-				<img src="` + image + `" alt="` + alt + `">
-			</a>
-		</div>
-	`
 }
 
 func renderCommentsHTML(data articleData) string {
@@ -224,13 +154,17 @@ const articleTemplate = `<!DOCTYPE html>
             word-wrap: break-word;
             word-break: break-word;
         }
+
+        .tags {
+            margin-bottom: 1em;
+        }
 				` + ResponsiveStyles + `
     </style>
 </head>
 <body class="{{.Color}} article">
     <div class="page-container">
         <div class="logo-container">
-            {{renderLogo .Logo ""}}
+            {{RenderLogo .Logo .BaseFolder}}
         </div>
         <div class="main-content">
             <article>
@@ -238,26 +172,28 @@ const articleTemplate = `<!DOCTYPE html>
                 {{.Content}}
             </article>
             {{renderComments .}}
-            {{renderFooter}}
         </div>
     </div>
+    {{renderFooter}}
     {{renderCommentsScript .}}
     <script src="/output/static/js/time-ago.js"></script>
 </body>
 </html>`
 
 type generateArticleParams struct {
-	Event     types.Event
-	OutputDir string
-	Layout    types.Layout
-	Features  types.Features
-	Naddr     string
-	Profile   types.Event
-	Nprofile  string
-	Relays    []string
+	BaseFolder string
+	Event      types.Event
+	OutputDir  string
+	Layout     types.Layout
+	Features   types.Features
+	Naddr      string
+	Profile    types.Event
+	Nprofile   string
+	Relays     []string
 }
 
 func NewGenerateArticleParams(
+	baseFolder string,
 	event types.Event,
 	outputDir string,
 	layout types.Layout,
@@ -268,14 +204,15 @@ func NewGenerateArticleParams(
 	relays []string,
 ) generateArticleParams {
 	return generateArticleParams{
-		Event:     event,
-		OutputDir: outputDir,
-		Layout:    layout,
-		Features:  features,
-		Naddr:     naddr,
-		Profile:   profile,
-		Nprofile:  nprofile,
-		Relays:    relays,
+		BaseFolder: baseFolder,
+		Event:      event,
+		OutputDir:  outputDir,
+		Layout:     layout,
+		Features:   features,
+		Naddr:      naddr,
+		Profile:    profile,
+		Nprofile:   nprofile,
+		Relays:     relays,
 	}
 }
 

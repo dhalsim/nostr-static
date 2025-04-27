@@ -60,7 +60,7 @@
     .tags {
         display: flex;
         flex-wrap: wrap;
-        gap: 8px;
+        gap: 0 8px;
         margin-top: 1em;
     }
 
@@ -270,7 +270,7 @@
     }
 
     .compact-profile-ago {
-        margin-bottom: 2px;
+        margin-bottom: 1px;
         font-size: 0.8em;
     }
 
@@ -370,6 +370,10 @@
             word-wrap: break-word;
             word-break: break-word;
         }
+
+        .tags {
+            margin-bottom: 1em;
+        }
 				
     @media (max-width: 768px) {
         body {
@@ -416,8 +420,8 @@
         .article-header {
             display: flex;
             flex-direction: column;
-            align-items: center;
-            gap: 15px;
+            align-items: baseline;
+            margin-top: 15px;
         }
 
         .author {
@@ -519,13 +523,13 @@
 			urls="naddr:njump.me/,npub:njump.me/,nprofile:njump.me/,nevent:njump.me/,note:njump.me/,tag:snort.social/t/"
 			disable="replyAnonymously" />
 	
-            
+        </div>
+    </div>
+    
 				<div class="footer">
 					Built with <a target="_blank" href="https://github.com/dhalsim/nostr-static">nostr-static</a>
 				</div>
 			
-        </div>
-    </div>
     
 		<script>
 			window.wnjParams = {

@@ -12,6 +12,88 @@ import (
 	"github.com/yuin/goldmark/renderer/html"
 )
 
+func RenderCompactProfileHTML(data articleData) string {
+	if data.AuthorName == "" {
+		return ""
+	}
+
+	pictureHTML := ""
+	if data.AuthorPicture != "" {
+		pictureHTML = `<img src="` + data.AuthorPicture + `" alt="` + data.AuthorName + `" class="compact-profile-picture">`
+	}
+
+	return `
+		<div class="compact-profile">
+			<a href="profile/` + data.AuthorNProfile + `.html" class="compact-profile-link">
+				` + pictureHTML + `
+				<span class="compact-profile-name">` + data.AuthorName + `</span>
+			</a>
+			<a href="` + data.Naddr + `.html" class="compact-profile-ago">
+				<span class="time-ago" data-timestamp="` + strconv.FormatInt(data.CreatedAt, 10) + `"></span>
+			</a>
+		</div>
+	`
+}
+
+func RenderSummaryHTML(summary string) string {
+	if summary == "" {
+		return ""
+	}
+	return `<p class="summary">` + summary + `</p>`
+}
+
+func RenderTagsHTML(tags []string, baseFolder string) string {
+	if len(tags) == 0 {
+		return ""
+	}
+
+	var html string
+	for _, tag := range tags {
+		baseFolder = strings.Trim(baseFolder, "/")
+		if baseFolder != "" {
+			baseFolder = baseFolder + "/"
+		}
+		html += `<span class="tag"><a href="` + baseFolder + `tag/` + strings.ToLower(tag) + `.html">` + tag + `</a></span>`
+	}
+
+	return `<div class="tags">` + html + `</div>`
+}
+
+func RenderImageHTML(image, alt, imageLink, baseFolder string) string {
+	if image == "" {
+		return ""
+	}
+
+	if imageLink == "" {
+		return `
+			<div class="image-container">
+				<img src="` + image + `" alt="` + alt + `">
+			</div>
+		`
+	}
+
+	return `
+		<div class="image-container">
+			<a href="` + baseFolder + imageLink + `.html">
+				<img src="` + image + `" alt="` + alt + `">
+			</a>
+		</div>
+	`
+}
+
+func RenderLogo(logo string, baseFolder string) template.HTML {
+	if logo == "" {
+		return ""
+	}
+	return template.HTML(`
+		<div class="logo">
+			<a href="` + baseFolder + `index.html">
+				<img src="` + baseFolder + logo + `" alt="Logo">
+			</a>
+		</div>
+	`)
+}
+
 func displayNameOrName(displayName, name string) string {
 	if displayName != "" {
 		return displayName
@@ -215,7 +297,7 @@ const CommonStyles = `
     .tags {
         display: flex;
         flex-wrap: wrap;
-        gap: 8px;
+        gap: 0 8px;
         margin-top: 1em;
     }
 
@@ -425,7 +507,7 @@ const CommonStyles = `
     }
 
     .compact-profile-ago {
-        margin-bottom: 2px;
+        margin-bottom: 1px;
         font-size: 0.8em;
     }
 
@@ -532,8 +614,8 @@ const ResponsiveStyles = `
         .article-header {
             display: flex;
             flex-direction: column;
-            align-items: center;
-            gap: 15px;
+            align-items: baseline;
+            margin-top: 15px;
         }
 
         .author {

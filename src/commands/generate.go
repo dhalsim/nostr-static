@@ -62,6 +62,7 @@ func Generate(params generateCommandParams) error {
 	// Article pages
 	for _, event := range events {
 		params := pagegenerators.NewGenerateArticleParams(
+			"",
 			event,
 			outputDir,
 			config.Layout,
