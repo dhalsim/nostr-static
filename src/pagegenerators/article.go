@@ -10,6 +10,7 @@ import (
 
 // articleData represents all data needed for article templates
 type articleData struct {
+	BaseFolder     string
 	Title          string
 	CreatedAt      int64
 	Content        template.HTML
@@ -27,6 +28,7 @@ type articleData struct {
 }
 
 func NewArticleData(
+	baseFolder string,
 	title string,
 	createdAt int64,
 	content template.HTML,
@@ -43,6 +45,7 @@ func NewArticleData(
 	relays string,
 ) articleData {
 	return articleData{
+		BaseFolder:     baseFolder,
 		Title:          title,
 		CreatedAt:      createdAt,
 		Content:        content,
@@ -164,7 +167,7 @@ const articleTemplate = `<!DOCTYPE html>
 <body class="{{.Color}} article">
     <div class="page-container">
         <div class="logo-container">
-            {{RenderLogo .Logo .BaseFolder}}
+            {{RenderLogo .}}
         </div>
         <div class="main-content">
             <article>
@@ -174,7 +177,7 @@ const articleTemplate = `<!DOCTYPE html>
             {{renderComments .}}
         </div>
     </div>
-    {{renderFooter}}
+    {{RenderFooter}}
     {{renderCommentsScript .}}
     <script src="/output/static/js/time-ago.js"></script>
 </body>
@@ -217,6 +220,7 @@ func NewGenerateArticleParams(
 }
 
 func GenerateArticleHTML(params generateArticleParams) error {
+	baseFolder := params.BaseFolder
 	event := params.Event
 	profile := params.Profile
 	nprofile := params.Nprofile
@@ -249,6 +253,7 @@ func GenerateArticleHTML(params generateArticleParams) error {
 	authorPicture = profileData.Picture
 
 	data := NewArticleData(
+		baseFolder,
 		metadata.Title,
 		event.CreatedAt,
 		template.HTML(htmlContent),
@@ -275,29 +280,6 @@ func GenerateArticleHTML(params generateArticleParams) error {
 		},
 		"renderCommentsScript": func(data articleData) template.HTML {
 			return template.HTML(renderCommentsScript(data))
-		},
-		"renderLogo": func(logo string, baseFolder string) template.HTML {
-			if logo == "" {
-				return ""
-			}
-			baseFolder = strings.Trim(baseFolder, "/")
-			if baseFolder != "" {
-				baseFolder = baseFolder + "/"
-			}
-			return template.HTML(`
-				<div class="logo">
-					<a href="` + baseFolder + `index.html">
-						<img src="` + baseFolder + logo + `" alt="Logo">
-					</a>
-				</div>
-			`)
-		},
-		"renderFooter": func() template.HTML {
-			return template.HTML(`
-				<div class="footer">
-					Built with <a target="_blank" href="https://github.com/dhalsim/nostr-static">nostr-static</a>
-				</div>
-			`)
 		},
 	}
 

@@ -81,16 +81,36 @@ func RenderImageHTML(image, alt, imageLink, baseFolder string) string {
 	`
 }
 
-func RenderLogo(logo string, baseFolder string) template.HTML {
-	if logo == "" {
+func RenderLogo(data articleData) template.HTML {
+	if data.Logo == "" {
 		return ""
 	}
+
+	baseFolder := strings.Trim(data.BaseFolder, "/")
+
+	if baseFolder != "" {
+		baseFolder = baseFolder + "/"
+	}
 	return template.HTML(`
-		<div class="logo">
-			<a href="` + baseFolder + `index.html">
-				<img src="` + baseFolder + logo + `" alt="Logo">
-			</a>
+        <div class="logo">
+            <a href="` + baseFolder + `index.html">
+                <img src="` + baseFolder + data.Logo + `" alt="Logo">
+            </a>
+        </div>
+    `)
+}
+
+func RenderFooter() template.HTML {
+	return template.HTML(`
+		<div class="footer">
+			Built with <a target="_blank" href="https://github.com/dhalsim/nostr-static">nostr-static</a>
 		</div>
+	`)
+}
+
+func RenderTimeAgoScript() template.HTML {
+	return template.HTML(`
+		<script src="/output/static/js/time-ago.js"></script>
 	`)
 }
 
