@@ -256,7 +256,9 @@
 
      
     .compact-profile {
-        margin-bottom: 1em;
+        display: flex;
+        align-items: center;
+        gap: 8px;
     }
 
     .compact-profile-link {
@@ -265,6 +267,11 @@
         text-decoration: none;
         color: inherit;
         gap: 8px;
+    }
+
+    .compact-profile-ago {
+        margin-bottom: 2px;
+        font-size: 0.8em;
     }
 
     .compact-profile-picture {
@@ -277,15 +284,6 @@
     .compact-profile-name {
         font-size: 0.9em;
         font-weight: 500;
-    }
-
-    .compact-profile-ago {
-        font-size: 0.8em;
-        color: #666;
-    }
-
-    body.dark .compact-profile-ago {
-        color: #999;
     }
 
      
@@ -429,13 +427,15 @@
             <h1>Articles tagged with "blogging"</h1>
             
             <div class="article-card">
-                
+								
 		<div class="compact-profile">
 			<a href="../profile/nprofile1qqsxue9c8s0kwnaspf03nqtv99akg99lvlcptz2wqnw5cet7jsgza6qpp4mhxue69uhkummn9ekx7mq8k7c9l.html" class="compact-profile-link">
 				<img src="https://dhalsim.github.io/assets/dhalsim_logo_sq.png" alt="dhalsim" class="compact-profile-picture">
 				<span class="compact-profile-name">dhalsim</span>
-				<span class="compact-profile-ago">15 hours ago</span>
-			</a>
+            </a>
+            <a href="../naddr1qvzqqqr4gupzqmnyhq7p7e60kq997xvpds5hkeq5hanlq9vffczd6nr9062pqthgqq25x6r2d90hzaj529f9gur2x9h4yt2gfy69qm05rzu.html" class="compact-profile-ago">
+              <span class="time-ago" data-timestamp="1745710396"></span>
+            </a>
 		</div>
 		
                 
@@ -463,5 +463,6 @@
 		
         </div>
     </div>
+    <script src="/output/static/js/time-ago.js"></script>
 </body>
 </html>

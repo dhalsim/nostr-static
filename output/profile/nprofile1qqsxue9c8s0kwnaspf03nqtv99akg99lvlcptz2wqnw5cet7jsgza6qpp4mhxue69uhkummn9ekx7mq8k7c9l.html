@@ -256,7 +256,9 @@
 
      
     .compact-profile {
-        margin-bottom: 1em;
+        display: flex;
+        align-items: center;
+        gap: 8px;
     }
 
     .compact-profile-link {
@@ -265,6 +267,11 @@
         text-decoration: none;
         color: inherit;
         gap: 8px;
+    }
+
+    .compact-profile-ago {
+        margin-bottom: 2px;
+        font-size: 0.8em;
     }
 
     .compact-profile-picture {
@@ -277,15 +284,6 @@
     .compact-profile-name {
         font-size: 0.9em;
         font-weight: 500;
-    }
-
-    .compact-profile-ago {
-        font-size: 0.8em;
-        color: #666;
-    }
-
-    body.dark .compact-profile-ago {
-        color: #999;
     }
 
      
@@ -572,5 +570,6 @@
 		
         </div>
     </div>
+    <script src="/output/static/js/time-ago.js"></script>
 </body>
 </html>

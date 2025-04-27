@@ -126,6 +126,7 @@ const profileTemplate = `<!DOCTYPE html>
             {{renderFooter}}
         </div>
     </div>
+    <script src="/output/static/js/time-ago.js"></script>
 </body>
 </html>`
 
@@ -178,11 +179,12 @@ func NewProfileData(
 }
 
 type ProfileArticleData struct {
-	Naddr   string
-	Title   string
-	Summary string
-	Image   string
-	Tags    []string
+	Naddr     string
+	Title     string
+	Summary   string
+	Image     string
+	Tags      []string
+	CreatedAt int64
 }
 
 type generateProfilePagesParams struct {
@@ -268,11 +270,12 @@ func GenerateProfilePages(params generateProfilePagesParams) error {
 			metadata := ExtractArticleMetadata(event.Tags)
 
 			articles[i] = ProfileArticleData{
-				Naddr:   params.EventIDToNaddr[event.ID],
-				Title:   metadata.Title,
-				Summary: metadata.Summary,
-				Image:   metadata.Image,
-				Tags:    metadata.Tags,
+				Naddr:     params.EventIDToNaddr[event.ID],
+				Title:     metadata.Title,
+				Summary:   metadata.Summary,
+				Image:     metadata.Image,
+				Tags:      metadata.Tags,
+				CreatedAt: event.CreatedAt,
 			}
 		}
 

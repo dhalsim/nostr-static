@@ -3,6 +3,7 @@ package pagegenerators
 import (
 	"bytes"
 	"html/template"
+	"strconv"
 	"strings"
 
 	"github.com/yuin/goldmark"
@@ -28,7 +29,14 @@ var ComponentFuncs = template.FuncMap{
 		</div>
 		`)
 	},
-	"renderCompactProfile": func(name, nprofile, picture, ago, baseFolder string) template.HTML {
+	"renderCompactProfile": func(
+		name string,
+		nprofile string,
+		naddr string,
+		picture string,
+		createdAt int64,
+		baseFolder string,
+	) template.HTML {
 		if name == "" {
 			return ""
 		}
@@ -49,8 +57,10 @@ var ComponentFuncs = template.FuncMap{
 			<a href="` + baseFolder + `profile/` + nprofile + `.html" class="compact-profile-link">
 				` + pictureHTML + `
 				<span class="compact-profile-name">` + name + `</span>
-				<span class="compact-profile-ago">` + ago + `</span>
-			</a>
+            </a>
+            <a href="` + baseFolder + naddr + `.html" class="compact-profile-ago">
+              <span class="time-ago" data-timestamp="` + strconv.FormatInt(createdAt, 10) + `"></span>
+            </a>
 		</div>
 		`)
 	},
@@ -401,7 +411,9 @@ const CommonStyles = `
 
     /* Compact profile styles */
     .compact-profile {
-        margin-bottom: 1em;
+        display: flex;
+        align-items: center;
+        gap: 8px;
     }
 
     .compact-profile-link {
@@ -410,6 +422,11 @@ const CommonStyles = `
         text-decoration: none;
         color: inherit;
         gap: 8px;
+    }
+
+    .compact-profile-ago {
+        margin-bottom: 2px;
+        font-size: 0.8em;
     }
 
     .compact-profile-picture {
@@ -422,15 +439,6 @@ const CommonStyles = `
     .compact-profile-name {
         font-size: 0.9em;
         font-weight: 500;
-    }
-
-    .compact-profile-ago {
-        font-size: 0.8em;
-        color: #666;
-    }
-
-    body.dark .compact-profile-ago {
-        color: #999;
     }
 
     /* Theme-specific compact profile styles */

@@ -29,7 +29,14 @@ const tagTemplate = `<!DOCTYPE html>
             <h1>Articles tagged with "{{.Tag}}"</h1>
             {{range .Articles}}
             <div class="article-card">
-                {{renderCompactProfile .AuthorName .Nprofile .AuthorPicture .Ago "../"}}
+								{{renderCompactProfile 
+								  .AuthorName 
+									.Nprofile 
+									.Naddr
+									.AuthorPicture 
+									.CreatedAt 
+									"../"
+								}}
                 {{renderImage .Image .Title .Naddr "../"}}
                 <h2><a href="../{{.Naddr}}.html">{{.Title}}</a></h2>
                 {{renderSummary .Summary}}
@@ -39,6 +46,7 @@ const tagTemplate = `<!DOCTYPE html>
             {{renderFooter}}
         </div>
     </div>
+    <script src="/output/static/js/time-ago.js"></script>
 </body>
 </html>`
 
@@ -58,7 +66,7 @@ type TagArticleData struct {
 	AuthorName    string
 	Nprofile      string
 	AuthorPicture string
-	Ago           string
+	CreatedAt     int64
 }
 
 type generateTagPagesParams struct {
@@ -135,7 +143,7 @@ func GenerateTagPages(params generateTagPagesParams) error {
 					parsedProfile.Name,
 				),
 				AuthorPicture: parsedProfile.Picture,
-				Ago:           diffString(ago(event)),
+				CreatedAt:     event.CreatedAt,
 				Nprofile:      params.PubkeyToNProfile[event.PubKey],
 			}
 		}

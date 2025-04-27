@@ -17,7 +17,7 @@ type IndexArticleData struct {
 	AuthorName    string
 	AuthorPicture string
 	Nprofile      string
-	Ago           string
+	CreatedAt     int64
 }
 
 type IndexData struct {
@@ -47,7 +47,14 @@ const indexTemplate = `<!DOCTYPE html>
             <h1>{{.Title}}</h1>
             {{range .Articles}}
             <div class="article-card">
-                {{renderCompactProfile .AuthorName .Nprofile .AuthorPicture .Ago ""}}
+                {{renderCompactProfile 
+								  .AuthorName 
+									.Nprofile 
+									.Naddr
+									.AuthorPicture 
+									.CreatedAt 
+									""
+								}}
                 {{renderImage .Image .Title .Naddr ""}}
                 <h2><a href="{{.Naddr}}.html">{{.Title}}</a></h2>
                 {{renderSummary .Summary}}
@@ -57,6 +64,7 @@ const indexTemplate = `<!DOCTYPE html>
             {{renderFooter}}
         </div>
     </div>
+    <script src="/output/static/js/time-ago.js"></script>
 </body>
 </html>`
 
@@ -108,7 +116,7 @@ func GenerateIndexHTML(params generateIndexParams) error {
 			AuthorName:    authorName,
 			AuthorPicture: parsedProfile.Picture,
 			Nprofile:      params.PubkeyToNProfile[event.PubKey],
-			Ago:           diffString(ago(event)),
+			CreatedAt:     event.CreatedAt,
 		}
 
 		for _, tag := range event.Tags {

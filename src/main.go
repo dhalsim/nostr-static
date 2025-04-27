@@ -86,6 +86,12 @@ func main() {
 						return err
 					}
 
+					// Copy static folder to output directory
+					log.Println("copying static files to output directory")
+					if err := helpers.CopyDir("src/static", filepath.Join(outputDir, "static")); err != nil {
+						return fmt.Errorf("failed to copy static files: %w", err)
+					}
+
 					// Save events to JSON file
 					if saveFiles {
 						eventsPath := filepath.Join(outputDir, "events.json")

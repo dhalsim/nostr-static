@@ -256,7 +256,9 @@
 
      
     .compact-profile {
-        margin-bottom: 1em;
+        display: flex;
+        align-items: center;
+        gap: 8px;
     }
 
     .compact-profile-link {
@@ -265,6 +267,11 @@
         text-decoration: none;
         color: inherit;
         gap: 8px;
+    }
+
+    .compact-profile-ago {
+        margin-bottom: 2px;
+        font-size: 0.8em;
     }
 
     .compact-profile-picture {
@@ -277,15 +284,6 @@
     .compact-profile-name {
         font-size: 0.9em;
         font-weight: 500;
-    }
-
-    .compact-profile-ago {
-        font-size: 0.8em;
-        color: #666;
-    }
-
-    body.dark .compact-profile-ago {
-        color: #999;
     }
 
      
@@ -458,34 +456,34 @@
     <div class="page-container">
         <div class="logo-container">
             
-		<div class="logo">
-			<a href="index.html">
-				<img src="logo.png" alt="Logo">
-			</a>
-		</div>
-		
+				<div class="logo">
+					<a href="index.html">
+						<img src="logo.png" alt="Logo">
+					</a>
+				</div>
+			
         </div>
         <div class="main-content">
             <article>
-                <div class="article-header">
-                    
-		<div class="author">
-			<a href="profile/nprofile1qqsrhuxx8l9ex335q7he0f09aej04zpazpl0ne2cgukyawd24mayt8gpp4mhxue69uhkummn9ekx7mqprhgw8.html" class="author-link">
-				<img src="https://fiatjaf.com/static/favicon.jpg" alt="fiatjaf" class="author-picture">
-				<span class="author-name">fiatjaf</span>
+                
+		<div class="article-header">
+			
+		<div class="compact-profile">
+			<a href="profile/nprofile1qqsrhuxx8l9ex335q7he0f09aej04zpazpl0ne2cgukyawd24mayt8gpp4mhxue69uhkummn9ekx7mqprhgw8.html" class="compact-profile-link">
+				<img src="https://fiatjaf.com/static/favicon.jpg" alt="fiatjaf" class="compact-profile-picture">
+				<span class="compact-profile-name">fiatjaf</span>
+			</a>
+			<a href="naddr1qvzqqqr4gupzqwlsccluhy6xxsr6l9a9uhhxf75g85g8a709tprjcn4e42h053vaqqyrzwrxvc6ngvfkxty9t8.html" class="compact-profile-ago">
+				<span class="time-ago" data-timestamp="1745609208"></span>
 			</a>
 		</div>
-		
-                    <span class="ago">1 days ago</span>
-                    <h1>Redistributing Git with Nostr</h1>
-                    
-                    
-		<div class="tags">
-			<span class="tag"><a href="tag/nostr.html">nostr</a></span>
+	
+			<h1>Redistributing Git with Nostr</h1>
+			
+			<div class="tags"><span class="tag"><a href="tag/nostr.html">nostr</a></span></div>
+			
 		</div>
-		
-                    
-                </div>
+	
                 <h1 id="redistributing-git-with-nostr">Redistributing Git with Nostr</h1>
 <p>Every time someone tries to &quot;decentralize&quot; Git -- like many projects tried in the past to do it with BitTorrent, IPFS, ScuttleButt or custom p2p protocols -- there is always a lurking comment: &quot;but Git is already distributed!&quot;, and then the discussion proceeds to mention some facts about how Git supports multiple remotes and its magic syncing and merging abilities and so on.</p>
 <p>Turns out all that is true, Git is indeed all that powerful, and yet GitHub is the big central hub that hosts basically all Git repositories in the giant world of open-source. There are some crazy people that host their stuff elsewhere, but these projects end up not being found by many people, and even when they do they suffer from lack of contributions.</p>
@@ -514,32 +512,32 @@
 <p>It may be the case that all the current services only support the big Git hosting platforms because they rely on their proprietary APIs, most notably the webhooks dispatched when a repository is updated, to trigger the jobs. It doesn't have to be said that Nostr can also solve that problem very easily.</p>
 
             </article>
-
-						
-							<zap-threads 
-							  anchor="naddr1qvzqqqr4gupzqwlsccluhy6xxsr6l9a9uhhxf75g85g8a709tprjcn4e42h053vaqqyrzwrxvc6ngvfkxty9t8" 
-								relays="wss://relay.damus.io,wss://nostr.wine,wss://relay.nostr.band,wss://nos.lol,wss://relay.primal.net"
-								urls="naddr:njump.me/,npub:njump.me/,nprofile:njump.me/,nevent:njump.me/,note:njump.me/,tag:snort.social/t/"
-								disable="replyAnonymously" />
-						
             
-		<div class="footer">
-			Built with <a target="_blank" href="https://github.com/dhalsim/nostr-static">nostr-static</a>
-		</div>
-		
+		<zap-threads 
+			anchor="naddr1qvzqqqr4gupzqwlsccluhy6xxsr6l9a9uhhxf75g85g8a709tprjcn4e42h053vaqqyrzwrxvc6ngvfkxty9t8" 
+			relays="wss://relay.damus.io,wss://nostr.wine,wss://relay.nostr.band,wss://nos.lol,wss://relay.primal.net"
+			urls="naddr:njump.me/,npub:njump.me/,nprofile:njump.me/,nevent:njump.me/,note:njump.me/,tag:snort.social/t/"
+			disable="replyAnonymously" />
+	
+            
+				<div class="footer">
+					Built with <a target="_blank" href="https://github.com/dhalsim/nostr-static">nostr-static</a>
+				</div>
+			
         </div>
     </div>
-		
-			<script>
-				window.wnjParams = {
-					position: 'bottom',
-					startHidden: true,
-					compactMode: true,
-					disableOverflowFix: true,
-				}
-			</script>
-			<script src="https://cdn.jsdelivr.net/npm/window.nostr.js/dist/window.nostr.min.js"></script>
-			<script type="text/javascript" src="https://unpkg.com/zapthreads/dist/zapthreads.iife.js"></script>
-		
+    
+		<script>
+			window.wnjParams = {
+				position: 'bottom',
+				startHidden: true,
+				compactMode: true,
+				disableOverflowFix: true,
+			}
+		</script>
+		<script src="https://cdn.jsdelivr.net/npm/window.nostr.js/dist/window.nostr.min.js"></script>
+		<script type="text/javascript" src="https://unpkg.com/zapthreads/dist/zapthreads.iife.js"></script>
+	
+    <script src="/output/static/js/time-ago.js"></script>
 </body>
 </html>
