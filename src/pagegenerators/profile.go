@@ -3,7 +3,6 @@ package pagegenerators
 import (
 	"encoding/json"
 	"fmt"
-	"html/template"
 	"log"
 	"net/http"
 	"os"
@@ -11,100 +10,13 @@ import (
 	"strings"
 
 	"nostr-static/src/types"
+
+	. "github.com/julvo/htmlgo"
+	a "github.com/julvo/htmlgo/attributes"
 )
 
-const profileTemplate = `<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Profile: {{.Name}}</title>
-    <style>
-        ` + CommonStyles + `
-        .profile-picture {
-            width: 50px;
-            height: 50px;
-						border-radius: 50%;
-        }
-        .profile-links {
-            margin-top: 10px;
-            display: flex;
-            gap: 15px;
-            align-items: center;
-        }
-        .profile-links a {
-            color: inherit;
-            text-decoration: none;
-            display: flex;
-            align-items: center;
-            gap: 5px;
-        }
-        .profile-links a:hover {
-            text-decoration: underline;
-        }
-        .verified-badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 5px;
-        }
-        .verified-badge.verified {
-            color: #22c55e;
-        }
-        .verified-badge.unverified {
-            color: #ef4444;
-        }
-
-				.profile-header {
-					display: flex;
-					flex-direction: column;
-					gap: 10px;
-				}
-
-				.profile-header-left {
-						display: flex;
-						align-content: space-around;
-						flex-wrap: wrap;
-						align-items: flex-end;
-				}
-
-				.profile-header-left h2 {
-					margin: 0;
-				}` + ResponsiveStyles + `
-    </style>
-</head>
-<body class="{{.Color}} profile">
-    <div class="page-container">
-        <div class="logo-container">
-            {{renderLogo .}}
-        </div>
-        <div class="main-content">
-            <div class="profile-header">
-						    <div class="profile-header-left">
-									{{renderProfilePicture .}}
-									{{renderProfileName .}}
-								</div>
-								{{renderProfileAbout .}}
-								{{renderProfileLinks .}}
-            </div>
-            <div class="profile-articles">
-                <h2>Articles of {{displayNameOrName .DisplayName .Name}}</h2>
-                {{range .Articles}}
-                <div class="article-card">
-                    {{renderImage .Image .Title .Naddr "../"}}
-                    <h3><a href="../{{.Naddr}}.html">{{.Title}}</a></h3>
-                    {{renderSummary .Summary}}
-                    {{renderTags .Tags "../"}}
-                </div>
-                {{end}}
-            </div>
-            {{RenderFooter}}
-        </div>
-    </div>
-    {{RenderTimeAgoScript}}
-</body>
-</html>`
-
-type profileData struct {
+// ProfileData represents all data needed for profile templates
+type ProfileData struct {
 	BaseFolder    string
 	Color         string
 	Logo          string
@@ -121,38 +33,14 @@ type profileData struct {
 	Articles      []ProfileArticleData
 }
 
-func NewProfileData(
-	baseFolder string,
-	color string,
-	logo string,
-	nprofile string,
-	pubkey string,
-	name string,
-	about string,
-	picture string,
-	website string,
-	displayName string,
-	nip05 string,
-	nip05Verified bool,
-	lud16 string,
-	articles []ProfileArticleData,
-) profileData {
-	return profileData{
-		BaseFolder:    baseFolder,
-		Color:         color,
-		Logo:          logo,
-		Nprofile:      nprofile,
-		PubKey:        pubkey,
-		Name:          name,
-		About:         about,
-		Picture:       picture,
-		Website:       website,
-		DisplayName:   displayName,
-		Nip05:         nip05,
-		Nip05Verified: nip05Verified,
-		Lud16:         lud16,
-		Articles:      articles,
-	}
+// GetLogo returns the logo path
+func (d ProfileData) GetLogo() string {
+	return d.Logo
+}
+
+// GetBaseFolder returns the base folder path
+func (d ProfileData) GetBaseFolder() string {
+	return d.BaseFolder
 }
 
 type ProfileArticleData struct {
@@ -164,7 +52,7 @@ type ProfileArticleData struct {
 	CreatedAt int64
 }
 
-type generateProfilePagesParams struct {
+type GenerateProfilePagesParams struct {
 	BaseFolder       string
 	Profiles         map[string]types.Event
 	Events           []types.Event
@@ -174,27 +62,113 @@ type generateProfilePagesParams struct {
 	EventIDToNaddr   map[string]string
 }
 
-func NewGenerateProfilePagesParams(
-	baseFolder string,
-	profiles map[string]types.Event,
-	events []types.Event,
-	outputDir string,
-	layout types.Layout,
-	pubkeyToNProfile map[string]string,
-	eventIDToNaddr map[string]string,
-) generateProfilePagesParams {
-	return generateProfilePagesParams{
-		BaseFolder:       baseFolder,
-		Profiles:         profiles,
-		Events:           events,
-		OutputDir:        outputDir,
-		Layout:           layout,
-		PubkeyToNProfile: pubkeyToNProfile,
-		EventIDToNaddr:   eventIDToNaddr,
+// Profile-specific HTML rendering functions
+func renderProfilePicture(data ProfileData) HTML {
+	if data.Picture == "" {
+		return Text("")
 	}
+
+	return Img(Attr(
+		a.Src(data.Picture),
+		a.Alt(data.Name),
+		a.Class("profile-picture"),
+	))
 }
 
-func GenerateProfilePages(params generateProfilePagesParams) error {
+func renderProfileName(data ProfileData) HTML {
+	return H2_(Text(displayNameOrName(data.DisplayName, data.Name)))
+}
+
+func renderProfileAbout(data ProfileData) HTML {
+	if data.About == "" {
+		return Text("")
+	}
+
+	return P(Attr(a.Class("profile-about")), Text(data.About))
+}
+
+func renderProfileLinks(data ProfileData) HTML {
+	return Div(Attr(a.Class("profile-links")),
+		renderWebsite(data),
+		renderNip05(data),
+		renderLud16(data),
+	)
+}
+
+func renderWebsite(data ProfileData) HTML {
+	if data.Website == "" {
+		return Text("")
+	}
+
+	return A(Attr(
+		a.Href(data.Website),
+		a.Target("_blank"),
+		a.Rel("noopener noreferrer"),
+	),
+		Img(Attr(
+			a.Src("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9ImN1cnJlbnRDb2xvciIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiIGNsYXNzPSJsdWNpZGUgbHVjaWRlLWxpbmsyLWljb24gbHVjaWRlLWxpbmstMiI+PHBhdGggZD0iTTkgMTdIN0E1IDUgMCAwIDEgNyA3aDIiLz48cGF0aCBkPSJNMTUgN2gyYTUgNSAwIDEgMSAwIDEwaC0yIi8+PGxpbmUgeDE9IjgiIHgyPSIxNiIgeTE9IjEyIiB5Mj0iMTIiLz48L3N2Zz4="),
+			a.Alt("Website"),
+			a.Class("author-website"),
+			a.Width("16"),
+			a.Height("16"),
+		)),
+		Text(data.Website),
+	)
+}
+
+func renderNip05(data ProfileData) HTML {
+	if data.Nip05 == "" {
+		return Text("")
+	}
+
+	badgeClass := ternary(data.Nip05Verified, "verified", "unverified")
+
+	badgeIcon := ternary(data.Nip05Verified,
+		`<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>`,
+		`<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>`,
+	)
+
+	return Span(Attr(a.Class("verified-badge "+badgeClass)),
+		Text(badgeIcon),
+		Text(data.Nip05),
+	)
+}
+
+func renderLud16(data ProfileData) HTML {
+	if data.Lud16 == "" {
+		return Text("")
+	}
+
+	return A(Attr(a.Href("lightning:"+data.Lud16)),
+		Text("⚡ "+data.Lud16),
+	)
+}
+
+func renderProfileArticles(data ProfileData) HTML {
+	var articleElements []HTML
+	for _, article := range data.Articles {
+		articleElements = append(articleElements,
+			Div(Attr(a.Class("article-card")),
+				renderImageHTML(article.Image, article.Title, article.Naddr, "../"),
+				H3_(
+					A(Attr(a.Href("../"+article.Naddr+".html")),
+						Text(article.Title),
+					),
+				),
+				renderSummaryHTML(article.Summary),
+				renderTagsHTML(article.Tags, "../"),
+			),
+		)
+	}
+
+	return Div(Attr(a.Class("profile-articles")),
+		append([]HTML{
+			H2_(Text("Articles of " + displayNameOrName(data.DisplayName, data.Name))),
+		}, articleElements...)...,
+	)
+}
+
+func GenerateProfilePages(params GenerateProfilePagesParams) error {
 	// Create profile directory if it doesn't exist
 	profileDir := filepath.Join(params.OutputDir, "profile")
 	if err := os.MkdirAll(profileDir, 0755); err != nil {
@@ -210,7 +184,10 @@ func GenerateProfilePages(params generateProfilePagesParams) error {
 	// Generate a page for each profile
 	for pubkey, profileEvent := range params.Profiles {
 		// Parse profile metadata
-		parsedProfile := parseProfile(profileEvent)
+		parsedProfile, err := parseProfile(profileEvent)
+		if err != nil {
+			return err
+		}
 
 		// Verify Nip05 if present
 		nip05Verified := false
@@ -259,94 +236,59 @@ func GenerateProfilePages(params generateProfilePagesParams) error {
 			}
 		}
 
-		data := NewProfileData(
-			params.BaseFolder,
-			params.Layout.Color,
-			params.Layout.Logo,
-			params.PubkeyToNProfile[pubkey],
-			pubkey,
-			parsedProfile.Name,
-			parsedProfile.About,
-			parsedProfile.Picture,
-			parsedProfile.Website,
-			parsedProfile.DisplayName,
-			parsedProfile.Nip05,
-			nip05Verified,
-			parsedProfile.Lud16,
-			articles,
+		data := ProfileData{
+			BaseFolder:    params.BaseFolder,
+			Color:         params.Layout.Color,
+			Logo:          params.Layout.Logo,
+			Nprofile:      params.PubkeyToNProfile[pubkey],
+			PubKey:        pubkey,
+			Name:          parsedProfile.Name,
+			About:         parsedProfile.About,
+			Picture:       parsedProfile.Picture,
+			Website:       parsedProfile.Website,
+			DisplayName:   parsedProfile.DisplayName,
+			Nip05:         parsedProfile.Nip05,
+			Nip05Verified: nip05Verified,
+			Lud16:         parsedProfile.Lud16,
+			Articles:      articles,
+		}
+
+		// Generate the HTML using htmlgo
+		html := Html5_(
+			Head_(
+				Meta(Attr(a.Charset("UTF-8"))),
+				Meta(Attr(
+					a.Name("viewport"),
+					a.Content("width=device-width, initial-scale=1.0"),
+				)),
+				Title_(Text("Profile: "+data.Name)),
+				Style_(Text_(CommonStyles+ResponsiveStyles)),
+			),
+			Body(Attr(a.Class(data.Color+" profile")),
+				Div(Attr(a.Class("page-container")),
+					Div(Attr(a.Class("logo-container")),
+						renderLogo(data.Logo, data.BaseFolder),
+					),
+					Div(Attr(a.Class("main-content")),
+						Div(Attr(a.Class("profile-header")),
+							Div(Attr(a.Class("profile-header-left")),
+								renderProfilePicture(data),
+								renderProfileName(data),
+							),
+							renderProfileAbout(data),
+							renderProfileLinks(data),
+						),
+						renderProfileArticles(data),
+					),
+				),
+				renderFooter(),
+				renderTimeAgoScript(),
+			),
 		)
 
-		funcs := template.FuncMap{
-			"RenderTimeAgoScript": RenderTimeAgoScript,
-			"RenderFooter":        RenderFooter,
-			"renderLogo": func(data profileData) template.HTML {
-				return RenderLogo(data.Logo, data.BaseFolder)
-			},
-			"renderProfilePicture": func(data profileData) template.HTML {
-				if data.Picture == "" {
-					return ""
-				}
-
-				return template.HTML(
-					`<img src="` + data.Picture + `" alt="` + data.Name + `" class="profile-picture">`,
-				)
-			},
-			"renderProfileName": func(data profileData) template.HTML {
-				return template.HTML(
-					`<h2>` + displayNameOrName(data.DisplayName, data.Name) + `</h2>`,
-				)
-			},
-			"renderProfileAbout": func(data profileData) template.HTML {
-				if data.About == "" {
-					return ""
-				}
-
-				return template.HTML(`<p class="profile-about">` + data.About + `</p>`)
-			},
-			"renderProfileLinks": func(data profileData) template.HTML {
-				return template.HTML(`<div class="profile-links">` +
-					renderWebsite(data) +
-					renderNip05(data) +
-					renderLud16(data) +
-					`</div>`)
-			},
-			"renderProfileArticles": func(data profileData) template.HTML {
-				return template.HTML(`
-				  <div class="profile-articles">` +
-					`<h2>Articles of ` + displayNameOrName(data.DisplayName, data.Name) + `</h2>
-					  {{range .Articles}}
-               {{renderArticle .}}
-						{{end}}
-					</div>`,
-				)
-			},
-			"renderArticle": func(data ProfileArticleData) template.HTML {
-				return template.HTML(`
-					<div class="article-card">
-						{{renderImage .Image .Title .Naddr "../"}}
-					</div>
-				`)
-			},
-			"renderImage": func(data ProfileArticleData) template.HTML {
-				return template.HTML(`
-					<img src="` + data.Image + `" alt="` + data.Title + `" class="article-image">
-				`)
-			},
-		}
-
-		tmpl, err := template.New("profile").Funcs(funcs).Parse(profileTemplate)
-		if err != nil {
-			return err
-		}
-
+		// Write the HTML to file
 		outputFile := filepath.Join(profileDir, data.Nprofile+".html")
-		f, err := os.Create(outputFile)
-		if err != nil {
-			return err
-		}
-		defer f.Close()
-
-		if err := tmpl.Execute(f, data); err != nil {
+		if err := os.WriteFile(outputFile, []byte(html), 0644); err != nil {
 			return err
 		}
 	}
@@ -354,52 +296,12 @@ func GenerateProfilePages(params generateProfilePagesParams) error {
 	return nil
 }
 
-func renderWebsite(data profileData) template.HTML {
-	if data.Website == "" {
-		return ""
-	}
-
-	return template.HTML(
-		`<a href="` + data.Website + `" target="_blank" rel="noopener noreferrer">
-		  <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9ImN1cnJlbnRDb2xvciIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiIGNsYXNzPSJsdWNpZGUgbHVjaWRlLWxpbmsyLWljb24gbHVjaWRlLWxpbmstMiI+PHBhdGggZD0iTTkgMTdIN0E1IDUgMCAwIDEgNyA3aDIiLz48cGF0aCBkPSJNMTUgN2gyYTUgNSAwIDEgMSAwIDEwaC0yIi8+PGxpbmUgeDE9IjgiIHgyPSIxNiIgeTE9IjEyIiB5Mj0iMTIiLz48L3N2Zz4=" alt="Website" class="author-website" width="16" height="16">
-			` + data.Website + `
-		</a>`,
-	)
-}
-
-func renderNip05(data profileData) template.HTML {
-	if data.Nip05 == "" {
-		return ""
-	}
-
-	badgeClass := ternary(data.Nip05Verified, "verified", "unverified")
-
-	badgeIcon := ternary(data.Nip05Verified,
-		`<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>`,
-		`<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>`,
-	)
-
-	return template.HTML(`<span class="verified-badge ` + badgeClass + `">` +
-		badgeIcon +
-		data.Nip05 +
-		`</span>`)
-}
-
-func renderLud16(data profileData) template.HTML {
-	if data.Lud16 == "" {
-		return ""
-	}
-
-	return template.HTML(`<a href="lightning:` + data.Lud16 + `">
-	    ⚡ ` + data.Lud16 +
-		`</a>`)
-}
-
-func parseProfile(event types.Event) ParsedProfile {
+func parseProfile(event types.Event) (*ParsedProfile, error) {
 	var profile ParsedProfile
+
 	if err := json.Unmarshal([]byte(event.Content), &profile); err != nil {
-		return ParsedProfile{}
+		return nil, err
 	}
 
-	return profile
+	return &profile, nil
 }

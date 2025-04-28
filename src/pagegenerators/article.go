@@ -5,15 +5,14 @@ import (
 	"nostr-static/src/types"
 	"os"
 	"path/filepath"
-	"strconv"
 	"strings"
 
 	. "github.com/julvo/htmlgo"
 	a "github.com/julvo/htmlgo/attributes"
 )
 
-// TemplateData represents all data needed for article templates
-type TemplateData struct {
+// ArticleData represents all data needed for article templates
+type ArticleData struct {
 	Title          string
 	CreatedAt      int64
 	Content        template.HTML
@@ -31,7 +30,7 @@ type TemplateData struct {
 	BaseFolder     string
 }
 
-type generateArticleParams struct {
+type GenerateArticleParams struct {
 	BaseFolder string
 	Event      types.Event
 	OutputDir  string
@@ -44,9 +43,15 @@ type generateArticleParams struct {
 }
 
 // Regular Go functions for rendering HTML components
-func renderArticleHeader(data TemplateData) HTML {
+func renderArticleHeader(data ArticleData) HTML {
 	return Div(Attr(a.Class("article-header")),
-		renderCompactProfileHTML(data),
+		renderCompactProfile(
+			data.AuthorName,
+			data.AuthorPicture,
+			data.AuthorNProfile,
+			data.Naddr,
+			data.CreatedAt,
+		),
 		H1_(Text(data.Title)),
 		renderSummaryHTML(data.Summary),
 		renderTagsHTML(data.Tags, data.BaseFolder),
@@ -54,116 +59,24 @@ func renderArticleHeader(data TemplateData) HTML {
 	)
 }
 
-func renderCompactProfileHTML(data TemplateData) HTML {
-	if data.AuthorName == "" {
-		return Text("")
-	}
-
-	var pictureHTML HTML
-	if data.AuthorPicture != "" {
-		pictureHTML = Img(Attr(
-			a.Src(data.AuthorPicture),
-			a.Alt(data.AuthorName),
-			a.Class("compact-profile-picture"),
-		))
-	}
-
-	return Div(Attr(a.Class("compact-profile")),
-		A(Attr(
-			a.Href("profile/"+data.AuthorNProfile+".html"),
-			a.Class("compact-profile-link"),
-		),
-			pictureHTML,
-			Span(Attr(a.Class("compact-profile-name")),
-				Text(data.AuthorName),
-			),
-		),
-		A(Attr(
-			a.Href(data.Naddr+".html"),
-			a.Class("compact-profile-ago"),
-		),
-			Span(Attr(
-				a.Class("time-ago"),
-				a.Dataset("timestamp", strconv.FormatInt(data.CreatedAt, 10)),
-			)),
-		),
-	)
-}
-
-func renderSummaryHTML(summary string) HTML {
-	if summary == "" {
-		return Text("")
-	}
-	return P(Attr(a.Class("summary")), Text(summary))
-}
-
-func renderTagsHTML(tags []string, baseFolder string) HTML {
-	if len(tags) == 0 {
-		return Text("")
-	}
-
-	var tagElements []HTML
-	for _, tag := range tags {
-		baseFolder = strings.Trim(baseFolder, "/")
-		if baseFolder != "" {
-			baseFolder = baseFolder + "/"
-		}
-		tagElements = append(tagElements,
-			Span(Attr(a.Class("tag")),
-				A(Attr(
-					a.Href(baseFolder+"tag/"+strings.ToLower(tag)+".html"),
-				),
-					Text(tag),
-				),
-			),
-		)
-	}
-
-	return Div(Attr(a.Class("tags")), tagElements...)
-}
-
-func renderImageHTML(image, alt, imageLink, baseFolder string) HTML {
-	if image == "" {
-		return Text("")
-	}
-
-	if imageLink == "" {
-		return Div(Attr(a.Class("image-container")),
-			Img(Attr(
-				a.Src(image),
-				a.Alt(alt),
-			)),
-		)
-	}
-
-	return Div(Attr(a.Class("image-container")),
-		A(Attr(a.Href(baseFolder+imageLink+".html")),
-			Img(Attr(
-				a.Src(image),
-				a.Alt(alt),
-			)),
-		),
-	)
-}
-
-func renderCommentsHTML(data TemplateData) HTML {
+func renderCommentsHTML(data ArticleData) HTML {
 	if !data.Comments {
 		return Text("")
 	}
 
-	return Text(`<zap-threads 
+	return Text_(`<zap-threads 
 		anchor="` + data.Naddr + `" 
 		relays="` + data.Relays + `"
 		urls="naddr:njump.me/,npub:njump.me/,nprofile:njump.me/,nevent:njump.me/,note:njump.me/,tag:snort.social/t/"
 		disable="replyAnonymously" />`)
 }
 
-func renderCommentsScript(data TemplateData) HTML {
+func renderCommentsScript(data ArticleData) HTML {
 	if !data.Comments {
 		return Text("")
 	}
 
-	return Text(`
+	return Text_(`
 		<script>
 			window.wnjParams = {
 				position: 'bottom',
@@ -177,43 +90,53 @@ func renderCommentsScript(data TemplateData) HTML {
 	`)
 }
 
-func renderLogo(data TemplateData) HTML {
-	if data.Logo == "" {
-		return Text("")
-	}
-
-	baseFolder := strings.Trim(data.BaseFolder, "/")
-	if baseFolder != "" {
-		baseFolder = baseFolder + "/"
-	}
-
-	return Div(Attr(a.Class("logo")),
-		A(Attr(a.Href(baseFolder+"index.html")),
-			Img(Attr(
-				a.Src(baseFolder+data.Logo),
-				a.Alt("Logo"),
-			)),
-		),
-	)
+const ArticleStyles = `
+.page-container {
+		display: flex;
+		align-items: flex-start;
+		max-width: 1200px;
+		margin: 0 auto;
+}
+.main-content {
+		flex: 1;
+		max-width: 800px;
+}
+img {
+		max-width: 100%;
+		height: auto;
+}
+pre {
+		background-color: #f5f5f5;
+		padding: 15px;
+		border-radius: 5px;
+		overflow-x: auto;
+}
+code {
+		font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+}
+.article-header {
+		margin-bottom: 2em;
+}
+.article-header h1 {
+		margin-bottom: 0.5em;
+}
+article {
+		word-wrap: break-word;
+		overflow-wrap: break-word;
+		hyphens: auto;
+}
+article p {
+		max-width: 100%;
+		overflow-wrap: break-word;
+		word-wrap: break-word;
+		word-break: break-word;
 }
 
-func renderFooter() HTML {
-	return Div(Attr(a.Class("footer")),
-		Text("Built with "),
-		A(Attr(
-			a.Href("https://github.com/dhalsim/nostr-static"),
-			a.Target("_blank"),
-		),
-			Text("nostr-static"),
-		),
-	)
-}
+.tags {
+		margin-bottom: 1em;
+}`
 
-func renderTimeAgoScript() HTML {
-	return Script(Attr(a.Src("/output/static/js/time-ago.js")), JavaScript(""))
-}
-
-func GenerateArticleHTML(params generateArticleParams) error {
+func GenerateArticleHTML(params GenerateArticleParams) error {
 	event := params.Event
 	profile := params.Profile
 	nprofile := params.Nprofile
@@ -233,7 +156,10 @@ func GenerateArticleHTML(params generateArticleParams) error {
 		metadata.Title = "Untitled Article"
 	}
 
-	profileData := parseProfile(profile)
+	profileData, err := parseProfile(profile)
+	if err != nil {
+		return err
+	}
 
 	authorName := "Unknown Author"
 	authorPicture := ""
@@ -245,7 +171,7 @@ func GenerateArticleHTML(params generateArticleParams) error {
 	}
 	authorPicture = profileData.Picture
 
-	data := TemplateData{
+	data := ArticleData{
 		Title:          metadata.Title,
 		CreatedAt:      event.CreatedAt,
 		Content:        template.HTML(htmlContent),
@@ -272,17 +198,19 @@ func GenerateArticleHTML(params generateArticleParams) error {
 				a.Content("width=device-width, initial-scale=1.0"),
 			)),
 			Title_(Text(data.Title)),
-			Style_(Text(CommonStyles+ResponsiveStyles)),
+			Style_(Text_(CommonStyles+
+				ArticleStyles+
+				ResponsiveStyles)),
 		),
 		Body(Attr(a.Class(data.Color+" article")),
 			Div(Attr(a.Class("page-container")),
 				Div(Attr(a.Class("logo-container")),
-					renderLogo(data),
+					renderLogo(data.Logo, data.BaseFolder),
 				),
 				Div(Attr(a.Class("main-content")),
 					Article_(
 						renderArticleHeader(data),
-						Text(string(data.Content)),
+						Text_(string(data.Content)),
 					),
 					renderCommentsHTML(data),
 				),

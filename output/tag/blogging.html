@@ -1,468 +1,479 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
+<!DOCTYPE HTML>
+<html>
+  <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tag: blogging</title>
+    <title>
+      Tag: blogging
+    </title>
     <style>
-        
-     
-    body {
-        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-        line-height: 1.6;
-        max-width: 800px;
-        margin: 0 auto;
-        padding: 20px;
-        font-size: 16px;
-    }
-
-     
-    body.light {
-        background-color: #ffffff;
-        color: #333333;
-    }
-
-    body.dark {
-        background-color: #1a1a1a;
-        color: #ffffff;
-    }
-
-    body.light a {
-        color: #0066cc;
-    }
-
-    body.dark a {
-        color: #4a9eff;
-    }
-
-     
-    .logo {
-        text-align: center;
-    }
-
-    .logo img {
-        max-height: 100px;
-        width: auto;
-    }
-
-    .article-card {
-        border: 1px solid #ddd;
-        border-radius: 8px;
-        padding: 20px;
-        margin-bottom: 20px;
-    }
-
-    .article-card h2 {
-        margin-top: 0;
-        text-align: center;
-    }
-
-    .tags {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 0 8px;
-        margin-top: 1em;
-    }
-
-    .tag {
-        display: inline-block;
-        padding: 4px 8px;
-        border-radius: 4px;
-        margin-bottom: 8px;
-        font-size: 0.9em;
-    }
-
-    .tag a {
-        text-decoration: none;
-        color: inherit;
-    }
-
-     
-    body.light .tag {
-        background-color: #f0f0f0;
-        border: 1px solid #dee2e6;
-        color: #666666;
-    }
-
-    body.dark .tag {
-        background-color: #1a1a1a;
-        border: 1px solid #404040;
-        color: #e0e0e0;
-    }
-
-     
-    body.article .page-container, body.profile .page-container {
-        display: flex;
-        align-items: flex-start;
-        max-width: 1200px;
-        margin: 0 auto;
-    }
-
-    body.article .logo-container, body.profile .logo-container {
-        flex: 0 0 200px;
-        position: sticky;
-        top: 20px;
-    }
-
-    body.article .main-content, body.profile .main-content {
-        flex: 1;
-        max-width: 800px;
-    }
-
-    body.article img, body.profile img {
-        max-width: 100%;
-        height: auto;
-    }
-
-    body.article pre {
-        background-color: #f5f5f5;
-        padding: 15px;
-        border-radius: 5px;
-        overflow-x: auto;
-    }
-
-    body.article code {
-        font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
-    }
-
-    body.article .article-header {
-        margin-bottom: 2em;
-    }
-
-    body.article .article-header h1 {
-        margin-bottom: 0.5em;
-    }
-
-    body.article article {
-        word-wrap: break-word;
-        overflow-wrap: break-word;
-        hyphens: auto;
-    }
-
-    body.article article p {
-        max-width: 100%;
-        overflow-wrap: break-word;
-        word-wrap: break-word;
-        word-break: break-word;
-    }
-
-    body.index .page-container,
-    body.tags .page-container {
-        display: flex;
-        align-items: flex-start;
-    }
-
-    body.index .logo-container,
-    body.tags .logo-container {
-        flex: 0 0 200px;
-        position: sticky;
-        top: 20px;
-    }
-
-    body.index .main-content,
-    body.tags .main-content {
-        flex: 1;
-    }
-
-     
-    .image-container {
-        margin: 0 auto 20px;
-        text-align: center;
-    }
-
-    .image-container img {
-        max-width: 100%;
-        height: auto;
-        border-radius: 4px;
-    }
-
-     
-    body.index .image-container {
-        max-width: 300px;
-    }
-
-     
-    body.light .article-card {
-        background-color: #f8f9fa;
-        border: 1px solid #dee2e6;
-    }
-
-    body.dark .article-card {
-        background-color: #2d2d2d;
-        border: 1px solid #404040;
-    }
-
-    body.light pre {
-        background-color: #f5f5f5 !important;
-        border: 1px solid #e9ecef;
-    }
-
-    body.dark pre {
-        background-color: #2d2d2d !important;
-        border: 1px solid #404040;
-    }
-
-    body.light .article-card .summary {
-        color: #666666;
-    }
-
-    body.dark .article-card .summary {
-        color: #e0e0e0;
-    }
-
-     
-    .author {
-        display: flex;
-        align-items: center;
-        margin-bottom: 1em;
-    }
-
-    .author-link {
-        display: flex;
-        align-items: center;
-        text-decoration: none;
-        color: inherit;
-        gap: 10px;
-    }
-
-    .author-picture {
-        width: 40px;
-        height: 40px;
-        border-radius: 50%;
-        object-fit: cover;
-    }
-
-    .author-name {
-        font-weight: 500;
-    }
-
-     
-    body.light .author-website {
-        color: #000000;
-    }
-
-    body.light .author-website:hover {
-        color: #0066cc;
-    }
-
-    body.dark .author-website {
-        color: #e0e0e0;
-        filter: invert(1);
-    }
-
-    body.dark .author-website:hover {
-        color: #4a9eff;
-    }
-
-     
-    .compact-profile {
-        display: flex;
-        align-items: center;
-        gap: 8px;
-    }
-
-    .compact-profile-link {
-        display: flex;
-        align-items: center;
-        text-decoration: none;
-        color: inherit;
-        gap: 8px;
-    }
-
-    .compact-profile-ago {
-        margin-bottom: 1px;
-        font-size: 0.8em;
-    }
-
-    .compact-profile-picture {
-        width: 15px;
-        height: 15px;
-        border-radius: 50%;
-        object-fit: cover;
-    }
-
-    .compact-profile-name {
-        font-size: 0.9em;
-        font-weight: 500;
-    }
-
-     
-    body.light .compact-profile-link {
-        color: #000000;
-    }
-
-    body.light .compact-profile-link:hover {
-        color: #0066cc;
-    }
-
-    body.dark .compact-profile-link {
-        color: #e0e0e0;
-    }
-
-    body.dark .compact-profile-link:hover {
-        color: #4a9eff;
-    }
-
-     
-    .footer {
-        margin-top: 2em;
-        padding-top: 1em;
-        border-top: 1px solid #eee;
-        text-align: center;
-        font-size: 0.9em;
-        color: #666;
-    }
-
-    body.dark .footer {
-        border-top-color: #333;
-        color: #999;
-    }
-
-    .footer a {
-        text-decoration: none;
-    }
-
-    body.light .footer a {
-        color: #0066cc;
-    }
-
-    body.dark .footer a {
-        color: #4a9eff;
-    }
-
-				
-    @media (max-width: 768px) {
-        body {
-            font-size: 18px;
-            padding: 15px;
-        }
-
-        body.article .page-container,
-        body.index .page-container,
-        body.tags .page-container,
-        body.profile .page-container {
-            flex-direction: column;
-        }
-
-        body.article .logo-container,
-        body.index .logo-container,
-        body.tags .logo-container,
-        body.profile .logo-container {
-            flex: none;
-            position: static;
-        }
-
-        body.article .main-content,
-        body.index .main-content,
-        body.tags .main-content,
-        body.profile .main-content {
-            width: 100%;
-        }
-
-        .article-card {
-            padding: 15px;
-        }
-
-        .logo img {
-            max-height: 50px;
-            width: auto;
-        }
-
-        .logo-container {
-            text-align: center;
-            padding: 10px 0;
-        }
-
-        .article-header {
-            display: flex;
-            flex-direction: column;
-            align-items: baseline;
-            margin-top: 15px;
-        }
-
-        .author {
-            flex-direction: column;
-            align-items: center;
-            text-align: center;
-            margin-bottom: 15px;
-        }
-
-        .author-link {
-            flex-direction: column;
-            gap: 8px;
-        }
-
-        .profile-header {
-            flex-direction: column;
-            align-items: center;
-            text-align: center;
-            gap: 15px;
-        }
-
-        .profile-header-left {
-            align-items: center;
-        }
-
-        .profile-links {
-            flex-direction: column;
-            align-items: center;
-            gap: 10px;
-        }
-    }
-
+           
+          body {
+              font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+              line-height: 1.6;
+              max-width: 800px;
+              margin: 0 auto;
+              padding: 20px;
+              font-size: 16px;
+          }
+      
+           
+          body.light {
+              background-color: #ffffff;
+              color: #333333;
+          }
+      
+          body.dark {
+              background-color: #1a1a1a;
+              color: #ffffff;
+          }
+      
+          body.light a {
+              color: #0066cc;
+          }
+      
+          body.dark a {
+              color: #4a9eff;
+          }
+      
+           
+          .logo {
+              text-align: center;
+          }
+      
+          .logo img {
+              max-height: 100px;
+              width: auto;
+          }
+      
+          .article-card {
+              border: 1px solid #ddd;
+              border-radius: 8px;
+              padding: 20px;
+              margin-bottom: 20px;
+          }
+      
+          .article-card h2 {
+              margin-top: 0;
+              text-align: center;
+          }
+      
+          .tags {
+              display: flex;
+              flex-wrap: wrap;
+              gap: 0 8px;
+              margin-top: 1em;
+          }
+      
+          .tag {
+              display: inline-block;
+              padding: 4px 8px;
+              border-radius: 4px;
+              margin-bottom: 8px;
+              font-size: 0.9em;
+          }
+      
+          .tag a {
+              text-decoration: none;
+              color: inherit;
+          }
+      
+           
+          body.light .tag {
+              background-color: #f0f0f0;
+              border: 1px solid #dee2e6;
+              color: #666666;
+          }
+      
+          body.dark .tag {
+              background-color: #1a1a1a;
+              border: 1px solid #404040;
+              color: #e0e0e0;
+          }
+      
+           
+          body.article .page-container, body.profile .page-container {
+              display: flex;
+              align-items: flex-start;
+              max-width: 1200px;
+              margin: 0 auto;
+          }
+      
+          body.article .logo-container, body.profile .logo-container {
+              flex: 0 0 200px;
+              position: sticky;
+              top: 20px;
+          }
+      
+          body.article .main-content, body.profile .main-content {
+              flex: 1;
+              max-width: 800px;
+          }
+      
+          body.article img, body.profile img {
+              max-width: 100%;
+              height: auto;
+          }
+      
+          body.article pre {
+              background-color: #f5f5f5;
+              padding: 15px;
+              border-radius: 5px;
+              overflow-x: auto;
+          }
+      
+          body.article code {
+              font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+          }
+      
+          body.article .article-header {
+              margin-bottom: 2em;
+          }
+      
+          body.article .article-header h1 {
+              margin-bottom: 0.5em;
+          }
+      
+          body.article article {
+              word-wrap: break-word;
+              overflow-wrap: break-word;
+              hyphens: auto;
+          }
+      
+          body.article article p {
+              max-width: 100%;
+              overflow-wrap: break-word;
+              word-wrap: break-word;
+              word-break: break-word;
+          }
+      
+          body.index .page-container,
+          body.tags .page-container {
+              display: flex;
+              align-items: flex-start;
+          }
+      
+          body.index .logo-container,
+          body.tags .logo-container {
+              flex: 0 0 200px;
+              position: sticky;
+              top: 20px;
+          }
+      
+          body.index .main-content,
+          body.tags .main-content {
+              flex: 1;
+          }
+      
+           
+          .image-container {
+              margin: 20px auto 10px;
+              text-align: center;
+          }
+      
+          .image-container img {
+              max-width: 100%;
+              height: auto;
+              border-radius: 4px;
+          }
+      
+           
+          body.index .image-container {
+              max-width: 300px;
+          }
+      
+           
+          body.light .article-card {
+              background-color: #f8f9fa;
+              border: 1px solid #dee2e6;
+          }
+      
+          body.dark .article-card {
+              background-color: #2d2d2d;
+              border: 1px solid #404040;
+          }
+      
+          body.light pre {
+              background-color: #f5f5f5 !important;
+              border: 1px solid #e9ecef;
+          }
+      
+          body.dark pre {
+              background-color: #2d2d2d !important;
+              border: 1px solid #404040;
+          }
+      
+          body.light .article-card .summary {
+              color: #666666;
+          }
+      
+          body.dark .article-card .summary {
+              color: #e0e0e0;
+          }
+      
+           
+          .author {
+              display: flex;
+              align-items: center;
+              margin-bottom: 1em;
+          }
+      
+          .author-link {
+              display: flex;
+              align-items: center;
+              text-decoration: none;
+              color: inherit;
+              gap: 10px;
+          }
+      
+          .author-picture {
+              width: 40px;
+              height: 40px;
+              border-radius: 50%;
+              object-fit: cover;
+          }
+      
+          .author-name {
+              font-weight: 500;
+          }
+      
+           
+          body.light .author-website {
+              color: #000000;
+          }
+      
+          body.light .author-website:hover {
+              color: #0066cc;
+          }
+      
+          body.dark .author-website {
+              color: #e0e0e0;
+              filter: invert(1);
+          }
+      
+          body.dark .author-website:hover {
+              color: #4a9eff;
+          }
+      
+           
+          .compact-profile {
+              display: flex;
+              align-items: center;
+              gap: 8px;
+          }
+      
+          .compact-profile-link {
+              display: flex;
+              align-items: center;
+              text-decoration: none;
+              color: inherit;
+              gap: 8px;
+          }
+      
+          .compact-profile-ago {
+              margin-bottom: 1px;
+              font-size: 0.8em;
+          }
+      
+          .compact-profile-picture {
+              width: 15px;
+              height: 15px;
+              border-radius: 50%;
+              object-fit: cover;
+          }
+      
+          .compact-profile-name {
+              font-size: 0.9em;
+              font-weight: 500;
+          }
+      
+           
+          body.light .compact-profile-link {
+              color: #000000;
+          }
+      
+          body.light .compact-profile-link:hover {
+              color: #0066cc;
+          }
+      
+          body.dark .compact-profile-link {
+              color: #e0e0e0;
+          }
+      
+          body.dark .compact-profile-link:hover {
+              color: #4a9eff;
+          }
+      
+           
+          .footer {
+              margin-top: 2em;
+              padding-top: 1em;
+              border-top: 1px solid #eee;
+              text-align: center;
+              font-size: 0.9em;
+              color: #666;
+          }
+      
+          body.dark .footer {
+              border-top-color: #333;
+              color: #999;
+          }
+      
+          .footer a {
+              text-decoration: none;
+          }
+      
+          body.light .footer a {
+              color: #0066cc;
+          }
+      
+          body.dark .footer a {
+              color: #4a9eff;
+          }
+      
+          @media (max-width: 768px) {
+              body {
+                  font-size: 18px;
+                  padding: 15px;
+              }
+      
+              body.article .page-container,
+              body.index .page-container,
+              body.tags .page-container,
+              body.profile .page-container {
+                  flex-direction: column;
+              }
+      
+              body.article .logo-container,
+              body.index .logo-container,
+              body.tags .logo-container,
+              body.profile .logo-container {
+                  flex: none;
+                  position: static;
+              }
+      
+              body.article .main-content,
+              body.index .main-content,
+              body.tags .main-content,
+              body.profile .main-content {
+                  width: 100%;
+              }
+      
+              .article-card {
+                  padding: 15px;
+              }
+      
+              .logo img {
+                  max-height: 50px;
+                  width: auto;
+              }
+      
+              .logo-container {
+                  text-align: center;
+                  padding: 10px 0;
+              }
+      
+              .article-header {
+                  display: flex;
+                  flex-direction: column;
+                  align-items: baseline;
+                  margin-top: 15px;
+              }
+      
+              .author {
+                  flex-direction: column;
+                  align-items: center;
+                  text-align: center;
+                  margin-bottom: 15px;
+              }
+      
+              .author-link {
+                  flex-direction: column;
+                  gap: 8px;
+              }
+      
+              .profile-header {
+                  flex-direction: column;
+                  align-items: center;
+                  text-align: center;
+                  gap: 15px;
+              }
+      
+              .profile-header-left {
+                  align-items: center;
+              }
+      
+              .profile-links {
+                  flex-direction: column;
+                  align-items: center;
+                  gap: 10px;
+              }
+          }
+      
     </style>
-</head>
-<body class="dark tags">
+  </head>
+  <body class="dark tags">
     <div class="page-container">
-        <div class="logo-container">
-            
-		<div class="logo">
-			<a href="../index.html">
-				<img src="../logo.png" alt="Logo">
-			</a>
-		</div>
-		
+      <div class="logo-container">
+        <div class="logo">
+          <a href="../index.html">
+            <img src="../logo.png" alt="Logo">
+          </a>
         </div>
-        <div class="main-content">
-            <h1>Articles tagged with "blogging"</h1>
-            
-            <div class="article-card">
-								
-		<div class="compact-profile">
-			<a href="../profile/nprofile1qqsxue9c8s0kwnaspf03nqtv99akg99lvlcptz2wqnw5cet7jsgza6qpp4mhxue69uhkummn9ekx7mq8k7c9l.html" class="compact-profile-link">
-				<img src="https://dhalsim.github.io/assets/dhalsim_logo_sq.png" alt="dhalsim" class="compact-profile-picture">
-				<span class="compact-profile-name">dhalsim</span>
+      </div>
+      <div class="main-content">
+        <h1>
+          Articles tagged with &#34;blogging&#34;
+        </h1>
+        <div class="article-card">
+          <div class="compact-profile">
+            <a href="profile/nprofile1qqsxue9c8s0kwnaspf03nqtv99akg99lvlcptz2wqnw5cet7jsgza6qpp4mhxue69uhkummn9ekx7mq8k7c9l.html" class="compact-profile-link">
+              <img src="https://dhalsim.github.io/assets/dhalsim_logo_sq.png" alt="dhalsim" class="compact-profile-picture">
+              <span class="compact-profile-name">
+                dhalsim
+              </span>
             </a>
-            <a href="../naddr1qvzqqqr4gupzqmnyhq7p7e60kq997xvpds5hkeq5hanlq9vffczd6nr9062pqthgqq25x6r2d90hzaj529f9gur2x9h4yt2gfy69qm05rzu.html" class="compact-profile-ago">
-              <span class="time-ago" data-timestamp="1745710396"></span>
+            <a href="naddr1qvzqqqr4gupzqmnyhq7p7e60kq997xvpds5hkeq5hanlq9vffczd6nr9062pqthgqq25x6r2d90hzaj529f9gur2x9h4yt2gfy69qm05rzu.html" class="compact-profile-ago">
+              <span class="time-ago" data-timestamp="1745710396">
+              </span>
             </a>
-		</div>
-		
-                
-			<div class="image-container">
-				<a href="../naddr1qvzqqqr4gupzqmnyhq7p7e60kq997xvpds5hkeq5hanlq9vffczd6nr9062pqthgqq25x6r2d90hzaj529f9gur2x9h4yt2gfy69qm05rzu.html">
-					<img src="https://image.nostr.build/28ee6fa221c51f359c510d348ba98d82f566162ffb66eb5c9246eb5c0012748f.jpg" alt="How to Create a Blog Out of Nostr Long-Form Articles">
-				</a>
-			</div>
-		
-                <h2><a href="../naddr1qvzqqqr4gupzqmnyhq7p7e60kq997xvpds5hkeq5hanlq9vffczd6nr9062pqthgqq25x6r2d90hzaj529f9gur2x9h4yt2gfy69qm05rzu.html">How to Create a Blog Out of Nostr Long-Form Articles</a></h2>
-                
-		<p class="summary">nostr-static is a static site generator (SSG) tool that transforms Nostr long-form content into a beautiful, static blog (which works really fast). It fetches articles from the Nostr network and generates HTML pages that can be hosted anywhere. This tool bridges the gap between Nostr's decentralized content and traditional web hosting, making it easy to create and maintain a blog powered by Nostr content.</p>
-		
-                
-		<div class="tags">
-			<span class="tag"><a href="../tag/blogging.html">blogging</a></span><span class="tag"><a href="../tag/nostr.html">nostr</a></span>
-		</div>
-		
-            </div>
-            
-            
-		<div class="footer">
-			Built with <a target="_blank" href="https://github.com/dhalsim/nostr-static">nostr-static</a>
-		</div>
-		
+          </div>
+          <div class="image-container">
+            <a href="../naddr1qvzqqqr4gupzqmnyhq7p7e60kq997xvpds5hkeq5hanlq9vffczd6nr9062pqthgqq25x6r2d90hzaj529f9gur2x9h4yt2gfy69qm05rzu.html">
+              <img src="https://image.nostr.build/28ee6fa221c51f359c510d348ba98d82f566162ffb66eb5c9246eb5c0012748f.jpg" alt="How to Create a Blog Out of Nostr Long-Form Articles">
+            </a>
+          </div>
+          <h2>
+            <a href="naddr1qvzqqqr4gupzqmnyhq7p7e60kq997xvpds5hkeq5hanlq9vffczd6nr9062pqthgqq25x6r2d90hzaj529f9gur2x9h4yt2gfy69qm05rzu.html">
+              How to Create a Blog Out of Nostr Long-Form Articles
+            </a>
+          </h2>
+          <p class="summary">
+            nostr-static is a static site generator (SSG) tool that transforms Nostr long-form content into a beautiful, static blog (which works really fast). It fetches articles from the Nostr network and generates HTML pages that can be hosted anywhere. This tool bridges the gap between Nostr&#39;s decentralized content and traditional web hosting, making it easy to create and maintain a blog powered by Nostr content.
+          </p>
+          <div class="tags">
+            <span class="tag">
+              <a href="../tag/blogging.html">
+                blogging
+              </a>
+            </span>
+            <span class="tag">
+              <a href="../tag/nostr.html">
+                nostr
+              </a>
+            </span>
+          </div>
         </div>
+      </div>
     </div>
-    <script src="/output/static/js/time-ago.js"></script>
-</body>
+    <div class="footer">
+      Built with 
+      <a href="https://github.com/dhalsim/nostr-static" target="_blank">
+        nostr-static
+      </a>
+    </div>
+    <script src="/output/static/js/time-ago.js">
+      ""
+    </script>
+  </body>
 </html>

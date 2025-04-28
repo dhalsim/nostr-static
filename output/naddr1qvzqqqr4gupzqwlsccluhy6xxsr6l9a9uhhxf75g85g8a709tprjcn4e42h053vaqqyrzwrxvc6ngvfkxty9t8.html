@@ -1,549 +1,550 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
+<!DOCTYPE HTML>
+<html>
+  <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Redistributing Git with Nostr</title>
+    <title>
+      Redistributing Git with Nostr
+    </title>
     <style>
-        
-     
-    body {
-        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-        line-height: 1.6;
-        max-width: 800px;
-        margin: 0 auto;
-        padding: 20px;
-        font-size: 16px;
-    }
-
-     
-    body.light {
-        background-color: #ffffff;
-        color: #333333;
-    }
-
-    body.dark {
-        background-color: #1a1a1a;
-        color: #ffffff;
-    }
-
-    body.light a {
-        color: #0066cc;
-    }
-
-    body.dark a {
-        color: #4a9eff;
-    }
-
-     
-    .logo {
-        text-align: center;
-    }
-
-    .logo img {
-        max-height: 100px;
-        width: auto;
-    }
-
-    .article-card {
-        border: 1px solid #ddd;
-        border-radius: 8px;
-        padding: 20px;
-        margin-bottom: 20px;
-    }
-
-    .article-card h2 {
-        margin-top: 0;
-        text-align: center;
-    }
-
-    .tags {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 0 8px;
-        margin-top: 1em;
-    }
-
-    .tag {
-        display: inline-block;
-        padding: 4px 8px;
-        border-radius: 4px;
-        margin-bottom: 8px;
-        font-size: 0.9em;
-    }
-
-    .tag a {
-        text-decoration: none;
-        color: inherit;
-    }
-
-     
-    body.light .tag {
-        background-color: #f0f0f0;
-        border: 1px solid #dee2e6;
-        color: #666666;
-    }
-
-    body.dark .tag {
-        background-color: #1a1a1a;
-        border: 1px solid #404040;
-        color: #e0e0e0;
-    }
-
-     
-    body.article .page-container, body.profile .page-container {
-        display: flex;
-        align-items: flex-start;
-        max-width: 1200px;
-        margin: 0 auto;
-    }
-
-    body.article .logo-container, body.profile .logo-container {
-        flex: 0 0 200px;
-        position: sticky;
-        top: 20px;
-    }
-
-    body.article .main-content, body.profile .main-content {
-        flex: 1;
-        max-width: 800px;
-    }
-
-    body.article img, body.profile img {
-        max-width: 100%;
-        height: auto;
-    }
-
-    body.article pre {
-        background-color: #f5f5f5;
-        padding: 15px;
-        border-radius: 5px;
-        overflow-x: auto;
-    }
-
-    body.article code {
-        font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
-    }
-
-    body.article .article-header {
-        margin-bottom: 2em;
-    }
-
-    body.article .article-header h1 {
-        margin-bottom: 0.5em;
-    }
-
-    body.article article {
-        word-wrap: break-word;
-        overflow-wrap: break-word;
-        hyphens: auto;
-    }
-
-    body.article article p {
-        max-width: 100%;
-        overflow-wrap: break-word;
-        word-wrap: break-word;
-        word-break: break-word;
-    }
-
-    body.index .page-container,
-    body.tags .page-container {
-        display: flex;
-        align-items: flex-start;
-    }
-
-    body.index .logo-container,
-    body.tags .logo-container {
-        flex: 0 0 200px;
-        position: sticky;
-        top: 20px;
-    }
-
-    body.index .main-content,
-    body.tags .main-content {
-        flex: 1;
-    }
-
-     
-    .image-container {
-        margin: 0 auto 20px;
-        text-align: center;
-    }
-
-    .image-container img {
-        max-width: 100%;
-        height: auto;
-        border-radius: 4px;
-    }
-
-     
-    body.index .image-container {
-        max-width: 300px;
-    }
-
-     
-    body.light .article-card {
-        background-color: #f8f9fa;
-        border: 1px solid #dee2e6;
-    }
-
-    body.dark .article-card {
-        background-color: #2d2d2d;
-        border: 1px solid #404040;
-    }
-
-    body.light pre {
-        background-color: #f5f5f5 !important;
-        border: 1px solid #e9ecef;
-    }
-
-    body.dark pre {
-        background-color: #2d2d2d !important;
-        border: 1px solid #404040;
-    }
-
-    body.light .article-card .summary {
-        color: #666666;
-    }
-
-    body.dark .article-card .summary {
-        color: #e0e0e0;
-    }
-
-     
-    .author {
-        display: flex;
-        align-items: center;
-        margin-bottom: 1em;
-    }
-
-    .author-link {
-        display: flex;
-        align-items: center;
-        text-decoration: none;
-        color: inherit;
-        gap: 10px;
-    }
-
-    .author-picture {
-        width: 40px;
-        height: 40px;
-        border-radius: 50%;
-        object-fit: cover;
-    }
-
-    .author-name {
-        font-weight: 500;
-    }
-
-     
-    body.light .author-website {
-        color: #000000;
-    }
-
-    body.light .author-website:hover {
-        color: #0066cc;
-    }
-
-    body.dark .author-website {
-        color: #e0e0e0;
-        filter: invert(1);
-    }
-
-    body.dark .author-website:hover {
-        color: #4a9eff;
-    }
-
-     
-    .compact-profile {
-        display: flex;
-        align-items: center;
-        gap: 8px;
-    }
-
-    .compact-profile-link {
-        display: flex;
-        align-items: center;
-        text-decoration: none;
-        color: inherit;
-        gap: 8px;
-    }
-
-    .compact-profile-ago {
-        margin-bottom: 1px;
-        font-size: 0.8em;
-    }
-
-    .compact-profile-picture {
-        width: 15px;
-        height: 15px;
-        border-radius: 50%;
-        object-fit: cover;
-    }
-
-    .compact-profile-name {
-        font-size: 0.9em;
-        font-weight: 500;
-    }
-
-     
-    body.light .compact-profile-link {
-        color: #000000;
-    }
-
-    body.light .compact-profile-link:hover {
-        color: #0066cc;
-    }
-
-    body.dark .compact-profile-link {
-        color: #e0e0e0;
-    }
-
-    body.dark .compact-profile-link:hover {
-        color: #4a9eff;
-    }
-
-     
-    .footer {
-        margin-top: 2em;
-        padding-top: 1em;
-        border-top: 1px solid #eee;
-        text-align: center;
-        font-size: 0.9em;
-        color: #666;
-    }
-
-    body.dark .footer {
-        border-top-color: #333;
-        color: #999;
-    }
-
-    .footer a {
-        text-decoration: none;
-    }
-
-    body.light .footer a {
-        color: #0066cc;
-    }
-
-    body.dark .footer a {
-        color: #4a9eff;
-    }
-
-        .page-container {
-            display: flex;
-            align-items: flex-start;
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-        .main-content {
-            flex: 1;
-            max-width: 800px;
-        }
-        img {
-            max-width: 100%;
-            height: auto;
-        }
-        pre {
-            background-color: #f5f5f5;
-            padding: 15px;
-            border-radius: 5px;
-            overflow-x: auto;
-        }
-        code {
-            font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
-        }
-        .article-header {
-            margin-bottom: 2em;
-        }
-        .article-header h1 {
-            margin-bottom: 0.5em;
-        }
-        article {
-            word-wrap: break-word;
-            overflow-wrap: break-word;
-            hyphens: auto;
-        }
-        article p {
-            max-width: 100%;
-            overflow-wrap: break-word;
-            word-wrap: break-word;
-            word-break: break-word;
-        }
-
-        .tags {
-            margin-bottom: 1em;
-        }
-				
-    @media (max-width: 768px) {
-        body {
-            font-size: 18px;
-            padding: 15px;
-        }
-
-        body.article .page-container,
-        body.index .page-container,
-        body.tags .page-container,
-        body.profile .page-container {
-            flex-direction: column;
-        }
-
-        body.article .logo-container,
-        body.index .logo-container,
-        body.tags .logo-container,
-        body.profile .logo-container {
-            flex: none;
-            position: static;
-        }
-
-        body.article .main-content,
-        body.index .main-content,
-        body.tags .main-content,
-        body.profile .main-content {
-            width: 100%;
-        }
-
-        .article-card {
-            padding: 15px;
-        }
-
-        .logo img {
-            max-height: 50px;
-            width: auto;
-        }
-
-        .logo-container {
-            text-align: center;
-            padding: 10px 0;
-        }
-
-        .article-header {
-            display: flex;
-            flex-direction: column;
-            align-items: baseline;
-            margin-top: 15px;
-        }
-
-        .author {
-            flex-direction: column;
-            align-items: center;
-            text-align: center;
-            margin-bottom: 15px;
-        }
-
-        .author-link {
-            flex-direction: column;
-            gap: 8px;
-        }
-
-        .profile-header {
-            flex-direction: column;
-            align-items: center;
-            text-align: center;
-            gap: 15px;
-        }
-
-        .profile-header-left {
-            align-items: center;
-        }
-
-        .profile-links {
-            flex-direction: column;
-            align-items: center;
-            gap: 10px;
-        }
-    }
-
+           
+          body {
+              font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+              line-height: 1.6;
+              max-width: 800px;
+              margin: 0 auto;
+              padding: 20px;
+              font-size: 16px;
+          }
+      
+           
+          body.light {
+              background-color: #ffffff;
+              color: #333333;
+          }
+      
+          body.dark {
+              background-color: #1a1a1a;
+              color: #ffffff;
+          }
+      
+          body.light a {
+              color: #0066cc;
+          }
+      
+          body.dark a {
+              color: #4a9eff;
+          }
+      
+           
+          .logo {
+              text-align: center;
+          }
+      
+          .logo img {
+              max-height: 100px;
+              width: auto;
+          }
+      
+          .article-card {
+              border: 1px solid #ddd;
+              border-radius: 8px;
+              padding: 20px;
+              margin-bottom: 20px;
+          }
+      
+          .article-card h2 {
+              margin-top: 0;
+              text-align: center;
+          }
+      
+          .tags {
+              display: flex;
+              flex-wrap: wrap;
+              gap: 0 8px;
+              margin-top: 1em;
+          }
+      
+          .tag {
+              display: inline-block;
+              padding: 4px 8px;
+              border-radius: 4px;
+              margin-bottom: 8px;
+              font-size: 0.9em;
+          }
+      
+          .tag a {
+              text-decoration: none;
+              color: inherit;
+          }
+      
+           
+          body.light .tag {
+              background-color: #f0f0f0;
+              border: 1px solid #dee2e6;
+              color: #666666;
+          }
+      
+          body.dark .tag {
+              background-color: #1a1a1a;
+              border: 1px solid #404040;
+              color: #e0e0e0;
+          }
+      
+           
+          body.article .page-container, body.profile .page-container {
+              display: flex;
+              align-items: flex-start;
+              max-width: 1200px;
+              margin: 0 auto;
+          }
+      
+          body.article .logo-container, body.profile .logo-container {
+              flex: 0 0 200px;
+              position: sticky;
+              top: 20px;
+          }
+      
+          body.article .main-content, body.profile .main-content {
+              flex: 1;
+              max-width: 800px;
+          }
+      
+          body.article img, body.profile img {
+              max-width: 100%;
+              height: auto;
+          }
+      
+          body.article pre {
+              background-color: #f5f5f5;
+              padding: 15px;
+              border-radius: 5px;
+              overflow-x: auto;
+          }
+      
+          body.article code {
+              font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+          }
+      
+          body.article .article-header {
+              margin-bottom: 2em;
+          }
+      
+          body.article .article-header h1 {
+              margin-bottom: 0.5em;
+          }
+      
+          body.article article {
+              word-wrap: break-word;
+              overflow-wrap: break-word;
+              hyphens: auto;
+          }
+      
+          body.article article p {
+              max-width: 100%;
+              overflow-wrap: break-word;
+              word-wrap: break-word;
+              word-break: break-word;
+          }
+      
+          body.index .page-container,
+          body.tags .page-container {
+              display: flex;
+              align-items: flex-start;
+          }
+      
+          body.index .logo-container,
+          body.tags .logo-container {
+              flex: 0 0 200px;
+              position: sticky;
+              top: 20px;
+          }
+      
+          body.index .main-content,
+          body.tags .main-content {
+              flex: 1;
+          }
+      
+           
+          .image-container {
+              margin: 20px auto 10px;
+              text-align: center;
+          }
+      
+          .image-container img {
+              max-width: 100%;
+              height: auto;
+              border-radius: 4px;
+          }
+      
+           
+          body.index .image-container {
+              max-width: 300px;
+          }
+      
+           
+          body.light .article-card {
+              background-color: #f8f9fa;
+              border: 1px solid #dee2e6;
+          }
+      
+          body.dark .article-card {
+              background-color: #2d2d2d;
+              border: 1px solid #404040;
+          }
+      
+          body.light pre {
+              background-color: #f5f5f5 !important;
+              border: 1px solid #e9ecef;
+          }
+      
+          body.dark pre {
+              background-color: #2d2d2d !important;
+              border: 1px solid #404040;
+          }
+      
+          body.light .article-card .summary {
+              color: #666666;
+          }
+      
+          body.dark .article-card .summary {
+              color: #e0e0e0;
+          }
+      
+           
+          .author {
+              display: flex;
+              align-items: center;
+              margin-bottom: 1em;
+          }
+      
+          .author-link {
+              display: flex;
+              align-items: center;
+              text-decoration: none;
+              color: inherit;
+              gap: 10px;
+          }
+      
+          .author-picture {
+              width: 40px;
+              height: 40px;
+              border-radius: 50%;
+              object-fit: cover;
+          }
+      
+          .author-name {
+              font-weight: 500;
+          }
+      
+           
+          body.light .author-website {
+              color: #000000;
+          }
+      
+          body.light .author-website:hover {
+              color: #0066cc;
+          }
+      
+          body.dark .author-website {
+              color: #e0e0e0;
+              filter: invert(1);
+          }
+      
+          body.dark .author-website:hover {
+              color: #4a9eff;
+          }
+      
+           
+          .compact-profile {
+              display: flex;
+              align-items: center;
+              gap: 8px;
+          }
+      
+          .compact-profile-link {
+              display: flex;
+              align-items: center;
+              text-decoration: none;
+              color: inherit;
+              gap: 8px;
+          }
+      
+          .compact-profile-ago {
+              margin-bottom: 1px;
+              font-size: 0.8em;
+          }
+      
+          .compact-profile-picture {
+              width: 15px;
+              height: 15px;
+              border-radius: 50%;
+              object-fit: cover;
+          }
+      
+          .compact-profile-name {
+              font-size: 0.9em;
+              font-weight: 500;
+          }
+      
+           
+          body.light .compact-profile-link {
+              color: #000000;
+          }
+      
+          body.light .compact-profile-link:hover {
+              color: #0066cc;
+          }
+      
+          body.dark .compact-profile-link {
+              color: #e0e0e0;
+          }
+      
+          body.dark .compact-profile-link:hover {
+              color: #4a9eff;
+          }
+      
+           
+          .footer {
+              margin-top: 2em;
+              padding-top: 1em;
+              border-top: 1px solid #eee;
+              text-align: center;
+              font-size: 0.9em;
+              color: #666;
+          }
+      
+          body.dark .footer {
+              border-top-color: #333;
+              color: #999;
+          }
+      
+          .footer a {
+              text-decoration: none;
+          }
+      
+          body.light .footer a {
+              color: #0066cc;
+          }
+      
+          body.dark .footer a {
+              color: #4a9eff;
+          }
+      
+      .page-container {
+      		display: flex;
+      		align-items: flex-start;
+      		max-width: 1200px;
+      		margin: 0 auto;
+      }
+      .main-content {
+      		flex: 1;
+      		max-width: 800px;
+      }
+      img {
+      		max-width: 100%;
+      		height: auto;
+      }
+      pre {
+      		background-color: #f5f5f5;
+      		padding: 15px;
+      		border-radius: 5px;
+      		overflow-x: auto;
+      }
+      code {
+      		font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+      }
+      .article-header {
+      		margin-bottom: 2em;
+      }
+      .article-header h1 {
+      		margin-bottom: 0.5em;
+      }
+      article {
+      		word-wrap: break-word;
+      		overflow-wrap: break-word;
+      		hyphens: auto;
+      }
+      article p {
+      		max-width: 100%;
+      		overflow-wrap: break-word;
+      		word-wrap: break-word;
+      		word-break: break-word;
+      }
+      
+      .tags {
+      		margin-bottom: 1em;
+      }
+          @media (max-width: 768px) {
+              body {
+                  font-size: 18px;
+                  padding: 15px;
+              }
+      
+              body.article .page-container,
+              body.index .page-container,
+              body.tags .page-container,
+              body.profile .page-container {
+                  flex-direction: column;
+              }
+      
+              body.article .logo-container,
+              body.index .logo-container,
+              body.tags .logo-container,
+              body.profile .logo-container {
+                  flex: none;
+                  position: static;
+              }
+      
+              body.article .main-content,
+              body.index .main-content,
+              body.tags .main-content,
+              body.profile .main-content {
+                  width: 100%;
+              }
+      
+              .article-card {
+                  padding: 15px;
+              }
+      
+              .logo img {
+                  max-height: 50px;
+                  width: auto;
+              }
+      
+              .logo-container {
+                  text-align: center;
+                  padding: 10px 0;
+              }
+      
+              .article-header {
+                  display: flex;
+                  flex-direction: column;
+                  align-items: baseline;
+                  margin-top: 15px;
+              }
+      
+              .author {
+                  flex-direction: column;
+                  align-items: center;
+                  text-align: center;
+                  margin-bottom: 15px;
+              }
+      
+              .author-link {
+                  flex-direction: column;
+                  gap: 8px;
+              }
+      
+              .profile-header {
+                  flex-direction: column;
+                  align-items: center;
+                  text-align: center;
+                  gap: 15px;
+              }
+      
+              .profile-header-left {
+                  align-items: center;
+              }
+      
+              .profile-links {
+                  flex-direction: column;
+                  align-items: center;
+                  gap: 10px;
+              }
+          }
+      
     </style>
-</head>
-<body class="dark article">
+  </head>
+  <body class="dark article">
     <div class="page-container">
-        <div class="logo-container">
-            
+      <div class="logo-container">
         <div class="logo">
-            <a href="index.html">
-                <img src="logo.png" alt="Logo">
-            </a>
+          <a href="../index.html">
+            <img src="../logo.png" alt="Logo">
+          </a>
         </div>
-    
-        </div>
-        <div class="main-content">
-            <article>
-                
-		<div class="article-header">
-			
-		<div class="compact-profile">
-			<a href="profile/nprofile1qqsrhuxx8l9ex335q7he0f09aej04zpazpl0ne2cgukyawd24mayt8gpp4mhxue69uhkummn9ekx7mqprhgw8.html" class="compact-profile-link">
-				<img src="https://fiatjaf.com/static/favicon.jpg" alt="fiatjaf" class="compact-profile-picture">
-				<span class="compact-profile-name">fiatjaf</span>
-			</a>
-			<a href="naddr1qvzqqqr4gupzqwlsccluhy6xxsr6l9a9uhhxf75g85g8a709tprjcn4e42h053vaqqyrzwrxvc6ngvfkxty9t8.html" class="compact-profile-ago">
-				<span class="time-ago" data-timestamp="1745609208"></span>
-			</a>
-		</div>
-	
-			<h1>Redistributing Git with Nostr</h1>
-			
-			<div class="tags"><span class="tag"><a href="tag/nostr.html">nostr</a></span></div>
-			
-		</div>
-	
-                <h1 id="redistributing-git-with-nostr">Redistributing Git with Nostr</h1>
-<p>Every time someone tries to &quot;decentralize&quot; Git -- like many projects tried in the past to do it with BitTorrent, IPFS, ScuttleButt or custom p2p protocols -- there is always a lurking comment: &quot;but Git is already distributed!&quot;, and then the discussion proceeds to mention some facts about how Git supports multiple remotes and its magic syncing and merging abilities and so on.</p>
-<p>Turns out all that is true, Git is indeed all that powerful, and yet GitHub is the big central hub that hosts basically all Git repositories in the giant world of open-source. There are some crazy people that host their stuff elsewhere, but these projects end up not being found by many people, and even when they do they suffer from lack of contributions.</p>
-<p>Because everybody has a GitHub account it's easy to open a pull request to a repository of a project you're using if it's on GitHub (to be fair I think it's very annoying to have to clone the repository, then add it as a remote locally, push to it, then go on the web UI and click to open a pull request, then that cloned repository lurks forever in your profile unless you go through 16 screens to delete it -- but people in general seem to think it's easy).</p>
-<p>It's much harder to do it on some random other server where some project might be hosted, because now you have to add 4 more even more annoying steps: create an account; pick a password; confirm an email address; setup SSH keys for pushing. (And I'm not even mentioning the basic impossibility of offering <code>push</code> access to external <em>unknown</em> contributors to people who want to host their own simple homemade Git server.)</p>
-<p>At this point some may argue that we could all have accounts on GitLab, or Codeberg or wherever else, then those steps are removed. Besides not being a practical strategy this pseudo solution misses the point of being decentralized (or distributed, who knows) entirely: it's far from the ideal to force everybody to have the double of account management and SSH setup work in order to have the open-source world controlled by two shady companies instead of one.</p>
-<p>What we want is to give every person the opportunity to host their own Git server without being ostracized. at the same time we must recognize that most people won't want to host their own servers (not even most open-source programmers!) and give everybody the ability to host their stuff on multi-tenant servers (such as GitHub) too. Importantly, though, if we allow for a random person to have a standalone Git server on a standalone server they host themselves on their wood cabin that also means any new hosting company can show up and start offering Git hosting, with or without new cool features, charging high or low or zero, and be immediately competing against GitHub or GitLab, i.e. we must remove the network-effect centralization pressure.</p>
-<h3 id="external-contributions">External contributions</h3>
-<p>The first problem we have to solve is: how can Bob contribute to Alice's repository without having an account on Alice's server?</p>
-<p>SourceHut has reminded GitHub users that Git has always had this (for most) arcane <code>git send-email</code> command that is the original way to send patches, using an once-open protocol.</p>
-<p>Turns out Nostr acts as a quite powerful email replacement and can be used to send text content just like email, therefore patches are a very good fit for Nostr event contents.</p>
-<p>Once you get used to it and the proper UIs (or CLIs) are built sending and applying patches to and from others becomes a much easier flow than the intense clickops mixed with terminal copypasting that is interacting with GitHub (you have to clone the repository on GitHub, then update the remote URL in your local directory, then create a branch and then go back and turn that branch into a Pull Request, it's quite tiresome) that many people already dislike so much they went out of their way to build many GitHub CLI tools just so they could comment on issues and approve pull requests from their terminal.</p>
-<h2 id="replacing-github-features">Replacing GitHub features</h2>
-<p>Aside from being the &quot;hub&quot; that people use to send patches to other people's code (because no one can do the email flow anymore, justifiably), GitHub also has 3 other big features that are not directly related to Git, but that make its network-effect harder to overcome. Luckily Nostr can be used to create a new environment in which these same features are implemented in a more decentralized and healthy way.</p>
-<h3 id="issues-bug-reports-feature-requests-and-general-discussions">Issues: bug reports, feature requests and general discussions</h3>
-<p>Since the &quot;Issues&quot; GitHub feature is just a bunch of text comments it should be very obvious that Nostr is a perfect fit for it.</p>
-<p>I will not even mention the fact that Nostr is much better at threading comments than GitHub (which doesn't do it at all), which can generate much more productive and organized discussions (and you can opt out if you want).</p>
-<h3 id="search">Search</h3>
-<p>I use GitHub search all the time to find libraries and projects that may do something that I need, and it returns good results almost always. So if people migrated out to other code hosting providers wouldn't we lose it?</p>
-<p>The fact is that even though we think everybody is on GitHub that is a globalist falsehood. Some projects are not on GitHub, and if we use only GitHub for search those will be missed. So even if we didn't have a Nostr Git alternative it would still be necessary to create a search engine that incorporated GitLab, Codeberg, SourceHut and whatnot.</p>
-<p>Turns out on Nostr we can make that quite easy by not forcing anyone to integrate custom APIs or hardcoding Git provider URLs: each repository can make itself available by publishing an &quot;announcement&quot; event with a brief description and one or more Git URLs. That makes it easy for a search engine to index them -- and even automatically download the code and index the code (or index just README files or whatever) without a centralized platform ever having to be involved.</p>
-<p>The relays where such announcements will be available play a role, of course, but that isn't a bad role: each announcement can be in multiple relays known for storing &quot;public good&quot; projects, some relays may curate only projects known to be very good according to some standards, other relays may allow any kind of garbage, which wouldn't make them good for a search engine to rely upon, but would still be useful in case one knows the exact thing (and from whom) they're searching for (the same is valid for all Nostr content, by the way, and that's where it's censorship-resistance comes from).</p>
-<h3 id="continuous-integration">Continuous integration</h3>
-<p>GitHub Actions are a very hardly subsidized free-compute-for-all-paid-by-Microsoft feature, but one that isn't hard to replace at all. In fact there exists today many companies offering the same kind of service out there -- although they are mostly targeting businesses and not open-source projects, before GitHub Actions was introduced there were also many that were heavily used by open-source projects.</p>
-<p>One problem is that these services are still heavily tied to GitHub today, they require a GitHub login, sometimes BitBucket and GitLab and whatnot, and do not allow one to paste an arbitrary Git server URL, but that isn't a thing that is very hard to change anyway, or to start from scratch. All we need are services that offer the CI/CD flows, perhaps using the same framework of GitHub Actions (although I would prefer to not use that messy garbage), and charge some few satoshis for it.</p>
-<p>It may be the case that all the current services only support the big Git hosting platforms because they rely on their proprietary APIs, most notably the webhooks dispatched when a repository is updated, to trigger the jobs. It doesn't have to be said that Nostr can also solve that problem very easily.</p>
-
-            </article>
+      </div>
+      <div class="main-content">
+        <article>
+          <div class="article-header">
+            <div class="compact-profile">
+              <a href="profile/nprofile1qqsrhuxx8l9ex335q7he0f09aej04zpazpl0ne2cgukyawd24mayt8gpp4mhxue69uhkummn9ekx7mqprhgw8.html" class="compact-profile-link">
+                <img src="https://fiatjaf.com/static/favicon.jpg" alt="fiatjaf" class="compact-profile-picture">
+                <span class="compact-profile-name">
+                  fiatjaf
+                </span>
+              </a>
+              <a href="naddr1qvzqqqr4gupzqwlsccluhy6xxsr6l9a9uhhxf75g85g8a709tprjcn4e42h053vaqqyrzwrxvc6ngvfkxty9t8.html" class="compact-profile-ago">
+                <span class="time-ago" data-timestamp="1745609208">
+                </span>
+              </a>
+            </div>
+            <h1>
+              Redistributing Git with Nostr
+            </h1>
             
-		<zap-threads 
-			anchor="naddr1qvzqqqr4gupzqwlsccluhy6xxsr6l9a9uhhxf75g85g8a709tprjcn4e42h053vaqqyrzwrxvc6ngvfkxty9t8" 
-			relays="wss://relay.damus.io,wss://nostr.wine,wss://relay.nostr.band,wss://nos.lol,wss://relay.primal.net"
-			urls="naddr:njump.me/,npub:njump.me/,nprofile:njump.me/,nevent:njump.me/,note:njump.me/,tag:snort.social/t/"
-			disable="replyAnonymously" />
-	
-        </div>
+            <div class="tags">
+              <span class="tag">
+                <a href="../tag/nostr.html">
+                  nostr
+                </a>
+              </span>
+            </div>
+            
+          </div><h1 id="redistributing-git-with-nostr">Redistributing Git with Nostr</h1>
+          <p>Every time someone tries to &quot;decentralize&quot; Git -- like many projects tried in the past to do it with BitTorrent, IPFS, ScuttleButt or custom p2p protocols -- there is always a lurking comment: &quot;but Git is already distributed!&quot;, and then the discussion proceeds to mention some facts about how Git supports multiple remotes and its magic syncing and merging abilities and so on.</p>
+          <p>Turns out all that is true, Git is indeed all that powerful, and yet GitHub is the big central hub that hosts basically all Git repositories in the giant world of open-source. There are some crazy people that host their stuff elsewhere, but these projects end up not being found by many people, and even when they do they suffer from lack of contributions.</p>
+          <p>Because everybody has a GitHub account it's easy to open a pull request to a repository of a project you're using if it's on GitHub (to be fair I think it's very annoying to have to clone the repository, then add it as a remote locally, push to it, then go on the web UI and click to open a pull request, then that cloned repository lurks forever in your profile unless you go through 16 screens to delete it -- but people in general seem to think it's easy).</p>
+          <p>It's much harder to do it on some random other server where some project might be hosted, because now you have to add 4 more even more annoying steps: create an account; pick a password; confirm an email address; setup SSH keys for pushing. (And I'm not even mentioning the basic impossibility of offering <code>push</code> access to external <em>unknown</em> contributors to people who want to host their own simple homemade Git server.)</p>
+          <p>At this point some may argue that we could all have accounts on GitLab, or Codeberg or wherever else, then those steps are removed. Besides not being a practical strategy this pseudo solution misses the point of being decentralized (or distributed, who knows) entirely: it's far from the ideal to force everybody to have the double of account management and SSH setup work in order to have the open-source world controlled by two shady companies instead of one.</p>
+          <p>What we want is to give every person the opportunity to host their own Git server without being ostracized. at the same time we must recognize that most people won't want to host their own servers (not even most open-source programmers!) and give everybody the ability to host their stuff on multi-tenant servers (such as GitHub) too. Importantly, though, if we allow for a random person to have a standalone Git server on a standalone server they host themselves on their wood cabin that also means any new hosting company can show up and start offering Git hosting, with or without new cool features, charging high or low or zero, and be immediately competing against GitHub or GitLab, i.e. we must remove the network-effect centralization pressure.</p>
+          <h3 id="external-contributions">External contributions</h3>
+          <p>The first problem we have to solve is: how can Bob contribute to Alice's repository without having an account on Alice's server?</p>
+          <p>SourceHut has reminded GitHub users that Git has always had this (for most) arcane <code>git send-email</code> command that is the original way to send patches, using an once-open protocol.</p>
+          <p>Turns out Nostr acts as a quite powerful email replacement and can be used to send text content just like email, therefore patches are a very good fit for Nostr event contents.</p>
+          <p>Once you get used to it and the proper UIs (or CLIs) are built sending and applying patches to and from others becomes a much easier flow than the intense clickops mixed with terminal copypasting that is interacting with GitHub (you have to clone the repository on GitHub, then update the remote URL in your local directory, then create a branch and then go back and turn that branch into a Pull Request, it's quite tiresome) that many people already dislike so much they went out of their way to build many GitHub CLI tools just so they could comment on issues and approve pull requests from their terminal.</p>
+          <h2 id="replacing-github-features">Replacing GitHub features</h2>
+          <p>Aside from being the &quot;hub&quot; that people use to send patches to other people's code (because no one can do the email flow anymore, justifiably), GitHub also has 3 other big features that are not directly related to Git, but that make its network-effect harder to overcome. Luckily Nostr can be used to create a new environment in which these same features are implemented in a more decentralized and healthy way.</p>
+          <h3 id="issues-bug-reports-feature-requests-and-general-discussions">Issues: bug reports, feature requests and general discussions</h3>
+          <p>Since the &quot;Issues&quot; GitHub feature is just a bunch of text comments it should be very obvious that Nostr is a perfect fit for it.</p>
+          <p>I will not even mention the fact that Nostr is much better at threading comments than GitHub (which doesn't do it at all), which can generate much more productive and organized discussions (and you can opt out if you want).</p>
+          <h3 id="search">Search</h3>
+          <p>I use GitHub search all the time to find libraries and projects that may do something that I need, and it returns good results almost always. So if people migrated out to other code hosting providers wouldn't we lose it?</p>
+          <p>The fact is that even though we think everybody is on GitHub that is a globalist falsehood. Some projects are not on GitHub, and if we use only GitHub for search those will be missed. So even if we didn't have a Nostr Git alternative it would still be necessary to create a search engine that incorporated GitLab, Codeberg, SourceHut and whatnot.</p>
+          <p>Turns out on Nostr we can make that quite easy by not forcing anyone to integrate custom APIs or hardcoding Git provider URLs: each repository can make itself available by publishing an &quot;announcement&quot; event with a brief description and one or more Git URLs. That makes it easy for a search engine to index them -- and even automatically download the code and index the code (or index just README files or whatever) without a centralized platform ever having to be involved.</p>
+          <p>The relays where such announcements will be available play a role, of course, but that isn't a bad role: each announcement can be in multiple relays known for storing &quot;public good&quot; projects, some relays may curate only projects known to be very good according to some standards, other relays may allow any kind of garbage, which wouldn't make them good for a search engine to rely upon, but would still be useful in case one knows the exact thing (and from whom) they're searching for (the same is valid for all Nostr content, by the way, and that's where it's censorship-resistance comes from).</p>
+          <h3 id="continuous-integration">Continuous integration</h3>
+          <p>GitHub Actions are a very hardly subsidized free-compute-for-all-paid-by-Microsoft feature, but one that isn't hard to replace at all. In fact there exists today many companies offering the same kind of service out there -- although they are mostly targeting businesses and not open-source projects, before GitHub Actions was introduced there were also many that were heavily used by open-source projects.</p>
+          <p>One problem is that these services are still heavily tied to GitHub today, they require a GitHub login, sometimes BitBucket and GitLab and whatnot, and do not allow one to paste an arbitrary Git server URL, but that isn't a thing that is very hard to change anyway, or to start from scratch. All we need are services that offer the CI/CD flows, perhaps using the same framework of GitHub Actions (although I would prefer to not use that messy garbage), and charge some few satoshis for it.</p>
+          <p>It may be the case that all the current services only support the big Git hosting platforms because they rely on their proprietary APIs, most notably the webhooks dispatched when a repository is updated, to trigger the jobs. It doesn't have to be said that Nostr can also solve that problem very easily.</p>
+          
+        </article><zap-threads 
+        		anchor="naddr1qvzqqqr4gupzqwlsccluhy6xxsr6l9a9uhhxf75g85g8a709tprjcn4e42h053vaqqyrzwrxvc6ngvfkxty9t8" 
+        		relays="wss://relay.damus.io,wss://nostr.wine,wss://relay.nostr.band,wss://nos.lol,wss://relay.primal.net"
+        		urls="naddr:njump.me/,npub:njump.me/,nprofile:njump.me/,nevent:njump.me/,note:njump.me/,tag:snort.social/t/"
+        		disable="replyAnonymously" />
+      </div>
     </div>
-    
-		<div class="footer">
-			Built with <a target="_blank" href="https://github.com/dhalsim/nostr-static">nostr-static</a>
-		</div>
-	
-    
-		<script>
-			window.wnjParams = {
-				position: 'bottom',
-				startHidden: true,
-				compactMode: true,
-				disableOverflowFix: true,
-			}
-		</script>
-		<script src="https://cdn.jsdelivr.net/npm/window.nostr.js/dist/window.nostr.min.js"></script>
-		<script type="text/javascript" src="https://unpkg.com/zapthreads/dist/zapthreads.iife.js"></script>
-	
-    
-		<script src="/output/static/js/time-ago.js"></script>
-	
-</body>
+    <div class="footer">
+      Built with 
+      <a href="https://github.com/dhalsim/nostr-static" target="_blank">
+        nostr-static
+      </a>
+    </div>
+    		<script>
+    			window.wnjParams = {
+    				position: 'bottom',
+    				startHidden: true,
+    				compactMode: true,
+    				disableOverflowFix: true,
+    			}
+    		</script>
+    		<script src="https://cdn.jsdelivr.net/npm/window.nostr.js/dist/window.nostr.min.js"></script>
+    		<script type="text/javascript" src="https://unpkg.com/zapthreads/dist/zapthreads.iife.js"></script>
+    	
+    <script src="/output/static/js/time-ago.js">
+      ""
+    </script>
+  </body>
 </html>

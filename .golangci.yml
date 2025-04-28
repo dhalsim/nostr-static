@@ -9,6 +9,17 @@ linters:
       - common-false-positives
       - legacy
       - std-error-handling
+  settings:
+    exhaustruct:
+      include:
+        - 'nostr-static\/src\/commands\..*'
+        - 'nostr-static\/src\/pagegenerators\..*'
+        - 'nostr-static\/src\/types\..*'
+        - 'nostr-static\/src\/helpers\..*'
+        - 'nostr-static\/src\/main\..*'
+    staticcheck:
+      dot-import-whitelist:
+        - github.com/julvo/htmlgo
 formatters:
   exclusions:
     generated: lax

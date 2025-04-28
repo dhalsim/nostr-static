@@ -1,11 +1,13 @@
 package pagegenerators
 
 import (
-	"html/template"
 	"os"
 	"path/filepath"
 
 	"nostr-static/src/types"
+
+	. "github.com/julvo/htmlgo"
+	a "github.com/julvo/htmlgo/attributes"
 )
 
 type IndexArticleData struct {
@@ -21,54 +23,15 @@ type IndexArticleData struct {
 }
 
 type IndexData struct {
-	Color    string
-	Logo     string
-	Title    string
-	Articles []IndexArticleData
+	BaseFolder string
+	Color      string
+	Logo       string
+	Title      string
+	Articles   []IndexArticleData
 }
 
-const indexTemplate = `<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{.Title}}</title>
-    <style>
-        ` + CommonStyles + `
-				` + ResponsiveStyles + `
-    </style>
-</head>
-<body class="{{.Color}} index">
-    <div class="page-container">
-        <div class="logo-container">
-            {{renderLogo .Logo ""}}
-        </div>
-        <div class="main-content">
-            <h1>{{.Title}}</h1>
-            {{range .Articles}}
-            <div class="article-card">
-                {{renderCompactProfile 
-								  .AuthorName 
-									.Nprofile 
-									.Naddr
-									.AuthorPicture 
-									.CreatedAt 
-									""
-								}}
-                {{renderImage .Image .Title .Naddr ""}}
-                <h2><a href="{{.Naddr}}.html">{{.Title}}</a></h2>
-                {{renderSummary .Summary}}
-                {{renderTags .Tags ""}}
-            </div>
-            {{end}}
-            {{renderFooter}}
-        </div>
-    </div>
-    <script src="/output/static/js/time-ago.js"></script>
-</body>
-</html>`
-
-type generateIndexParams struct {
+type GenerateIndexParams struct {
+	BaseFolder       string
 	Events           []types.Event
 	Profiles         map[string]types.Event
 	OutputDir        string
@@ -77,25 +40,48 @@ type generateIndexParams struct {
 	PubkeyToNProfile map[string]string
 }
 
-func NewGenerateIndexParams(
-	events []types.Event,
-	profiles map[string]types.Event,
-	outputDir string,
-	layout types.Layout,
-	eventIDToNaddr map[string]string,
-	pubkeyToNProfile map[string]string,
-) generateIndexParams {
-	return generateIndexParams{
-		Events:           events,
-		Profiles:         profiles,
-		OutputDir:        outputDir,
-		Layout:           layout,
-		EventIDToNaddr:   eventIDToNaddr,
-		PubkeyToNProfile: pubkeyToNProfile,
-	}
+// Index-specific HTML rendering functions
+func renderIndexHeader(title string) HTML {
+	return H1_(Text(title))
 }
 
-func GenerateIndexHTML(params generateIndexParams) error {
+func renderIndexArticle(article IndexArticleData, baseFolder string) HTML {
+	return Div(Attr(a.Class("article-card")),
+		renderCompactProfile(
+			article.AuthorName,
+			article.AuthorPicture,
+			article.Nprofile,
+			article.Naddr,
+			article.CreatedAt,
+		),
+		renderImageHTML(article.Image, article.Title, article.Naddr, ""),
+		H2_(
+			A(Attr(a.Href(article.Naddr+".html")),
+				Text(article.Title),
+			),
+		),
+		renderSummaryHTML(article.Summary),
+		renderTagsHTML(article.Tags, baseFolder),
+	)
+}
+
+func renderIndexArticles(data IndexData) HTML {
+	var articleElements []HTML
+	for _, article := range data.Articles {
+		articleElements = append(
+			articleElements,
+			renderIndexArticle(article, data.BaseFolder),
+		)
+	}
+
+	return Div(Attr(a.Class("main-content")),
+		append([]HTML{
+			renderIndexHeader(data.Title),
+		}, articleElements...)...,
+	)
+}
+
+func GenerateIndexHTML(params GenerateIndexParams) error {
 	var indexData IndexData
 
 	indexData.Color = params.Layout.Color
@@ -105,19 +91,20 @@ func GenerateIndexHTML(params generateIndexParams) error {
 	indexData.Articles = make([]IndexArticleData, 0, len(params.Events))
 
 	for _, event := range params.Events {
-		parsedProfile := parseProfile(params.Profiles[event.PubKey])
+		parsedProfile, err := parseProfile(params.Profiles[event.PubKey])
+		if err != nil {
+			return err
+		}
+
 		authorName := displayNameOrName(
 			parsedProfile.DisplayName,
 			parsedProfile.Name,
 		)
 
-		article := IndexArticleData{
-			Naddr:         params.EventIDToNaddr[event.ID],
-			AuthorName:    authorName,
-			AuthorPicture: parsedProfile.Picture,
-			Nprofile:      params.PubkeyToNProfile[event.PubKey],
-			CreatedAt:     event.CreatedAt,
-		}
+		title := "Untitled Article"
+		summary := ""
+		image := ""
+		tags := []string{}
 
 		for _, tag := range event.Tags {
 			if len(tag) < 2 {
@@ -126,34 +113,55 @@ func GenerateIndexHTML(params generateIndexParams) error {
 
 			switch tag[0] {
 			case "title":
-				article.Title = tag[1]
+				title = tag[1]
 			case "summary":
-				article.Summary = tag[1]
+				summary = tag[1]
 			case "image":
-				article.Image = tag[1]
+				image = tag[1]
 			case "t":
-				article.Tags = append(article.Tags, tag[1])
+				tags = append(tags, tag[1])
 			}
 		}
 
-		if article.Title == "" {
-			article.Title = "Untitled Article"
+		article := IndexArticleData{
+			Title:         title,
+			Summary:       summary,
+			Image:         image,
+			Tags:          tags,
+			Naddr:         params.EventIDToNaddr[event.ID],
+			AuthorName:    authorName,
+			AuthorPicture: parsedProfile.Picture,
+			Nprofile:      params.PubkeyToNProfile[event.PubKey],
+			CreatedAt:     event.CreatedAt,
 		}
 
 		indexData.Articles = append(indexData.Articles, article)
 	}
 
-	tmpl, err := template.New("index").Funcs(ComponentFuncs).Parse(indexTemplate)
-	if err != nil {
-		return err
-	}
+	// Generate the HTML using htmlgo
+	html := Html5_(
+		Head_(
+			Meta(Attr(a.Charset("UTF-8"))),
+			Meta(Attr(
+				a.Name("viewport"),
+				a.Content("width=device-width, initial-scale=1.0"),
+			)),
+			Title_(Text(indexData.Title)),
+			Style_(Text_(CommonStyles+ResponsiveStyles)),
+		),
+		Body(Attr(a.Class(indexData.Color+" index")),
+			Div(Attr(a.Class("page-container")),
+				Div(Attr(a.Class("logo-container")),
+					renderLogo(indexData.Logo, ""),
+				),
+				renderIndexArticles(indexData),
+			),
+			renderFooter(),
+			renderTimeAgoScript(),
+		),
+	)
 
+	// Write the HTML to file
 	outputPath := filepath.Join(params.OutputDir, "index.html")
-	file, err := os.Create(outputPath)
-	if err != nil {
-		return err
-	}
-	defer file.Close()
-
-	return tmpl.Execute(file, indexData)
+	return os.WriteFile(outputPath, []byte(html), 0644)
 }

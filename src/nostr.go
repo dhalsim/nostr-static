@@ -6,6 +6,7 @@ import (
 	"sync"
 	"time"
 
+	"nostr-static/src/helpers"
 	"nostr-static/src/types"
 
 	"github.com/nbd-wtf/go-nostr"
@@ -124,6 +125,7 @@ func FetchProfiles(
 			Kind:      ev.Kind,
 			Content:   ev.Content,
 			Sig:       ev.Sig,
+			Tags:      helpers.ConvertTags(ev.Tags),
 		}
 
 		mu.Unlock()

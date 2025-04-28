@@ -146,15 +146,15 @@ func main() {
 						}
 					}
 
-					return commands.Generate(commands.NewGenerateCommandParams(
-						configPath,
-						outputDir,
-						config,
-						pubkeyToKind0,
-						pubkeyToNprofile,
-						events,
-						eventIDToNaddr,
-					))
+					return commands.Generate(commands.GenerateCommandParams{
+						ConfigPath:       configPath,
+						OutputDir:        outputDir,
+						Config:           config,
+						PubkeyToKind0:    pubkeyToKind0,
+						PubkeyToNprofile: pubkeyToNprofile,
+						Events:           events,
+						EventIDToNaddr:   eventIDToNaddr,
+					})
 				},
 			},
 		},
