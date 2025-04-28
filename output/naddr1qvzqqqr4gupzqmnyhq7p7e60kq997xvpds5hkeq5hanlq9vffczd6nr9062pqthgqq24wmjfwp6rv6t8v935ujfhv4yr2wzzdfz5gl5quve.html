@@ -91,62 +91,6 @@
               color: #e0e0e0;
           }
       
-           
-          body.article .page-container, body.profile .page-container {
-              display: flex;
-              align-items: flex-start;
-              max-width: 1200px;
-              margin: 0 auto;
-          }
-      
-          body.article .logo-container, body.profile .logo-container {
-              flex: 0 0 200px;
-              position: sticky;
-              top: 20px;
-          }
-      
-          body.article .main-content, body.profile .main-content {
-              flex: 1;
-              max-width: 800px;
-          }
-      
-          body.article img, body.profile img {
-              max-width: 100%;
-              height: auto;
-          }
-      
-          body.article pre {
-              background-color: #f5f5f5;
-              padding: 15px;
-              border-radius: 5px;
-              overflow-x: auto;
-          }
-      
-          body.article code {
-              font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
-          }
-      
-          body.article .article-header {
-              margin-bottom: 2em;
-          }
-      
-          body.article .article-header h1 {
-              margin-bottom: 0.5em;
-          }
-      
-          body.article article {
-              word-wrap: break-word;
-              overflow-wrap: break-word;
-              hyphens: auto;
-          }
-      
-          body.article article p {
-              max-width: 100%;
-              overflow-wrap: break-word;
-              word-wrap: break-word;
-              word-break: break-word;
-          }
-      
           body.index .page-container,
           body.tags .page-container {
               display: flex;
@@ -209,50 +153,6 @@
       
           body.dark .article-card .summary {
               color: #e0e0e0;
-          }
-      
-           
-          .author {
-              display: flex;
-              align-items: center;
-              margin-bottom: 1em;
-          }
-      
-          .author-link {
-              display: flex;
-              align-items: center;
-              text-decoration: none;
-              color: inherit;
-              gap: 10px;
-          }
-      
-          .author-picture {
-              width: 40px;
-              height: 40px;
-              border-radius: 50%;
-              object-fit: cover;
-          }
-      
-          .author-name {
-              font-weight: 500;
-          }
-      
-           
-          body.light .author-website {
-              color: #000000;
-          }
-      
-          body.light .author-website:hover {
-              color: #0066cc;
-          }
-      
-          body.dark .author-website {
-              color: #e0e0e0;
-              filter: invert(1);
-          }
-      
-          body.dark .author-website:hover {
-              color: #4a9eff;
           }
       
            
@@ -331,20 +231,78 @@
               color: #4a9eff;
           }
       
+      body.article .page-container {
+      		display: flex;
+      		align-items: flex-start;
+      		max-width: 1200px;
+      		margin: 0 auto;
+      }
+      
+      body.article .logo-container {
+      		flex: 0 0 200px;
+      		position: sticky;
+      		top: 20px;
+      }
+      
+      body.article .main-content {
+      		flex: 1;
+      		max-width: 800px;
+      }
+      
+      body.article img {
+      		max-width: 100%;
+      		height: auto;
+      }
+      
+      body.article pre {
+      		background-color: #f5f5f5;
+      		padding: 15px;
+      		border-radius: 5px;
+      		overflow-x: auto;
+      }
+      
+      body.article code {
+      		font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+      }
+      
+      body.article .article-header {
+      		margin-bottom: 2em;
+      }
+      
+      body.article .article-header h1 {
+      		margin-bottom: 0.5em;
+      }
+      
+      body.article article {
+      		word-wrap: break-word;
+      		overflow-wrap: break-word;
+      		hyphens: auto;
+      }
+      
+      body.article article p {
+      		max-width: 100%;
+      		overflow-wrap: break-word;
+      		word-wrap: break-word;
+      		word-break: break-word;
+      }
+      		
       .page-container {
       		display: flex;
       		align-items: flex-start;
       		max-width: 1200px;
       		margin: 0 auto;
       }
+      
       .main-content {
       		flex: 1;
       		max-width: 800px;
       }
+      
       img {
       		max-width: 100%;
       		height: auto;
       }
+      
       pre {
       		background-color: #f5f5f5;
       		padding: 15px;
@@ -354,17 +312,21 @@
       code {
       		font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
       }
+      
       .article-header {
       		margin-bottom: 2em;
       }
+      
       .article-header h1 {
       		margin-bottom: 0.5em;
       }
+      
       article {
       		word-wrap: break-word;
       		overflow-wrap: break-word;
       		hyphens: auto;
       }
+      
       article p {
       		max-width: 100%;
       		overflow-wrap: break-word;
@@ -375,6 +337,16 @@
       .tags {
       		margin-bottom: 1em;
       }
+      		
+      @media (max-width: 768px) {
+      	.article-header {
+      		display: flex;
+      		flex-direction: column;
+      		align-items: baseline;
+      		margin-top: 15px;
+      	}
+      }
+      
           @media (max-width: 768px) {
               body {
                   font-size: 18px;
@@ -416,42 +388,6 @@
                   text-align: center;
                   padding: 10px 0;
               }
-      
-              .article-header {
-                  display: flex;
-                  flex-direction: column;
-                  align-items: baseline;
-                  margin-top: 15px;
-              }
-      
-              .author {
-                  flex-direction: column;
-                  align-items: center;
-                  text-align: center;
-                  margin-bottom: 15px;
-              }
-      
-              .author-link {
-                  flex-direction: column;
-                  gap: 8px;
-              }
-      
-              .profile-header {
-                  flex-direction: column;
-                  align-items: center;
-                  text-align: center;
-                  gap: 15px;
-              }
-      
-              .profile-header-left {
-                  align-items: center;
-              }
-      
-              .profile-links {
-                  flex-direction: column;
-                  align-items: center;
-                  gap: 10px;
-              }
           }
       
     </style>
@@ -460,8 +396,8 @@
     <div class="page-container">
       <div class="logo-container">
         <div class="logo">
-          <a href="../index.html">
-            <img src="../logo.png" alt="Logo">
+          <a href="index.html">
+            <img src="logo.png" alt="Logo">
           </a>
         </div>
       </div>
@@ -488,33 +424,33 @@
             </p>
             <div class="tags">
               <span class="tag">
-                <a href="../tag/nostr.html">
+                <a href="tag/nostr.html">
                   Nostr
                 </a>
               </span>
               <span class="tag">
-                <a href="../tag/nak.html">
+                <a href="tag/nak.html">
                   nak
                 </a>
               </span>
               <span class="tag">
-                <a href="../tag/relay.html">
+                <a href="tag/relay.html">
                   relay
                 </a>
               </span>
               <span class="tag">
-                <a href="../tag/import.html">
+                <a href="tag/import.html">
                   import
                 </a>
               </span>
               <span class="tag">
-                <a href="../tag/export.html">
+                <a href="tag/export.html">
                   export
                 </a>
               </span>
             </div>
             <div class="image-container">
-              <a href="../naddr1qvzqqqr4gupzqmnyhq7p7e60kq997xvpds5hkeq5hanlq9vffczd6nr9062pqthgqq24wmjfwp6rv6t8v935ujfhv4yr2wzzdfz5gl5quve.html">
+              <a href="naddr1qvzqqqr4gupzqmnyhq7p7e60kq997xvpds5hkeq5hanlq9vffczd6nr9062pqthgqq24wmjfwp6rv6t8v935ujfhv4yr2wzzdfz5gl5quve.html">
                 <img src="https://image.nostr.build/09593373dc30cafd8174ed57a1cae310c517b17e664b2c59ab5a41d0c1aca3d8.jpg" alt="How to Import and Export Your Nostr Notes">
               </a>
             </div>

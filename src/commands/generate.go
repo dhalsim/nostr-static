@@ -42,7 +42,7 @@ func Generate(params GenerateCommandParams) error {
 	// Article pages
 	for _, event := range events {
 		if err := pagegenerators.GenerateArticleHTML(pagegenerators.GenerateArticleParams{
-			BaseFolder: "../",
+			BaseFolder: "",
 			Event:      event,
 			OutputDir:  outputDir,
 			Layout:     config.Layout,
@@ -91,7 +91,7 @@ func Generate(params GenerateCommandParams) error {
 
 	// Index page
 	if err := pagegenerators.GenerateIndexHTML(pagegenerators.GenerateIndexParams{
-		BaseFolder:       "../",
+		BaseFolder:       "",
 		Events:           events,
 		Profiles:         pubkeyToKind0,
 		OutputDir:        outputDir,

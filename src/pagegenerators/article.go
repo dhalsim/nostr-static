@@ -91,20 +91,78 @@ func renderCommentsScript(data ArticleData) HTML {
 }
 
 const ArticleStyles = `
+body.article .page-container {
+		display: flex;
+		align-items: flex-start;
+		max-width: 1200px;
+		margin: 0 auto;
+}
+
+body.article .logo-container {
+		flex: 0 0 200px;
+		position: sticky;
+		top: 20px;
+}
+
+body.article .main-content {
+		flex: 1;
+		max-width: 800px;
+}
+
+body.article img {
+		max-width: 100%;
+		height: auto;
+}
+
+body.article pre {
+		background-color: #f5f5f5;
+		padding: 15px;
+		border-radius: 5px;
+		overflow-x: auto;
+}
+
+body.article code {
+		font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+}
+
+body.article .article-header {
+		margin-bottom: 2em;
+}
+
+body.article .article-header h1 {
+		margin-bottom: 0.5em;
+}
+
+body.article article {
+		word-wrap: break-word;
+		overflow-wrap: break-word;
+		hyphens: auto;
+}
+
+body.article article p {
+		max-width: 100%;
+		overflow-wrap: break-word;
+		word-wrap: break-word;
+		word-break: break-word;
+}
+		
 .page-container {
 		display: flex;
 		align-items: flex-start;
 		max-width: 1200px;
 		margin: 0 auto;
 }
+
 .main-content {
 		flex: 1;
 		max-width: 800px;
 }
+
 img {
 		max-width: 100%;
 		height: auto;
 }
+
 pre {
 		background-color: #f5f5f5;
 		padding: 15px;
@@ -114,17 +172,21 @@ pre {
 code {
 		font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
 }
+
 .article-header {
 		margin-bottom: 2em;
 }
+
 .article-header h1 {
 		margin-bottom: 0.5em;
 }
+
 article {
 		word-wrap: break-word;
 		overflow-wrap: break-word;
 		hyphens: auto;
 }
+
 article p {
 		max-width: 100%;
 		overflow-wrap: break-word;
@@ -134,7 +196,17 @@ article p {
 
 .tags {
 		margin-bottom: 1em;
-}`
+}
+		
+@media (max-width: 768px) {
+	.article-header {
+		display: flex;
+		flex-direction: column;
+		align-items: baseline;
+		margin-top: 15px;
+	}
+}
+`
 
 func GenerateArticleHTML(params GenerateArticleParams) error {
 	event := params.Event
@@ -200,7 +272,7 @@ func GenerateArticleHTML(params GenerateArticleParams) error {
 			Title_(Text(data.Title)),
 			Style_(Text_(CommonStyles+
 				ArticleStyles+
-				ResponsiveStyles)),
+				CommonResponsiveStyles)),
 		),
 		Body(Attr(a.Class(data.Color+" article")),
 			Div(Attr(a.Class("page-container")),

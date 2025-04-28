@@ -155,7 +155,7 @@ func GenerateTagPages(params GenerateTagPagesParams) error {
 					a.Content("width=device-width, initial-scale=1.0"),
 				)),
 				Title_(Text("Tag: "+data.Tag)),
-				Style_(Text_(CommonStyles+ResponsiveStyles)),
+				Style_(Text_(CommonStyles+CommonResponsiveStyles)),
 			),
 			Body(Attr(a.Class(data.Color+" tags")),
 				Div(Attr(a.Class("page-container")),

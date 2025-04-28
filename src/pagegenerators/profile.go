@@ -33,16 +33,6 @@ type ProfileData struct {
 	Articles      []ProfileArticleData
 }
 
-// GetLogo returns the logo path
-func (d ProfileData) GetLogo() string {
-	return d.Logo
-}
-
-// GetBaseFolder returns the base folder path
-func (d ProfileData) GetBaseFolder() string {
-	return d.BaseFolder
-}
-
 type ProfileArticleData struct {
 	Naddr     string
 	Title     string
@@ -106,7 +96,7 @@ func renderWebsite(data ProfileData) HTML {
 		a.Rel("noopener noreferrer"),
 	),
 		Img(Attr(
-			a.Src("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9ImN1cnJlbnRDb2xvciIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiIGNsYXNzPSJsdWNpZGUgbHVjaWRlLWxpbmsyLWljb24gbHVjaWRlLWxpbmstMiI+PHBhdGggZD0iTTkgMTdIN0E1IDUgMCAwIDEgNyA3aDIiLz48cGF0aCBkPSJNMTUgN2gyYTUgNSAwIDEgMSAwIDEwaC0yIi8+PGxpbmUgeDE9IjgiIHgyPSIxNiIgeTE9IjEyIiB5Mj0iMTIiLz48L3N2Zz4="),
+			a.Src_("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9ImN1cnJlbnRDb2xvciIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiIGNsYXNzPSJsdWNpZGUgbHVjaWRlLWxpbmsyLWljb24gbHVjaWRlLWxpbmstMiI+PHBhdGggZD0iTTkgMTdIN0E1IDUgMCAwIDEgNyA3aDIiLz48cGF0aCBkPSJNMTUgN2gyYTUgNSAwIDEgMSAwIDEwaC0yIi8+PGxpbmUgeDE9IjgiIHgyPSIxNiIgeTE9IjEyIiB5Mj0iMTIiLz48L3N2Zz4="),
 			a.Alt("Website"),
 			a.Class("author-website"),
 			a.Width("16"),
@@ -124,12 +114,12 @@ func renderNip05(data ProfileData) HTML {
 	badgeClass := ternary(data.Nip05Verified, "verified", "unverified")
 
 	badgeIcon := ternary(data.Nip05Verified,
-		`<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>`,
-		`<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>`,
+		`<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>`,
+		`<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="red" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>`,
 	)
 
 	return Span(Attr(a.Class("verified-badge "+badgeClass)),
-		Text(badgeIcon),
+		Text_(badgeIcon),
 		Text(data.Nip05),
 	)
 }
@@ -262,7 +252,8 @@ func GenerateProfilePages(params GenerateProfilePagesParams) error {
 					a.Content("width=device-width, initial-scale=1.0"),
 				)),
 				Title_(Text("Profile: "+data.Name)),
-				Style_(Text_(CommonStyles+ResponsiveStyles)),
+				Style_(Text_(CommonStyles+CommonResponsiveStyles)),
+				Style_(Text_(ProfileStyles)),
 			),
 			Body(Attr(a.Class(data.Color+" profile")),
 				Div(Attr(a.Class("page-container")),
@@ -295,6 +286,83 @@ func GenerateProfilePages(params GenerateProfilePagesParams) error {
 
 	return nil
 }
+
+const ProfileStyles = `
+body.profile .page-container {
+		display: flex;
+		align-items: flex-start;
+		max-width: 1200px;
+		margin: 0 auto;
+}
+
+body.profile .logo-container {
+		flex: 0 0 200px;
+		position: sticky;
+		top: 20px;
+}
+
+body.profile .main-content {
+		flex: 1;
+		max-width: 800px;
+}
+
+body.profile img {
+		max-width: 100%;
+		height: auto;
+}
+
+/* Theme-specific author styles */
+body.light .author-website {
+		color: #000000;
+}
+
+body.light .author-website:hover {
+		color: #0066cc;
+}
+
+body.dark .author-website {
+		color: #e0e0e0;
+		filter: invert(1);
+}
+
+body.dark .author-website:hover {
+		color: #4a9eff;
+}
+
+.profile-picture {
+		width: 100px;
+		height: 100px;
+		border-radius: 50%;
+		object-fit: cover;
+}
+
+.profile-links {
+		display: flex;
+		align-items: center;
+		gap: 10px;
+}
+
+.profile-links a {
+		text-decoration: none;
+}
+
+@media (max-width: 768px) {
+		.profile-header {
+				flex-direction: column;
+				align-items: center;
+				text-align: center;
+				gap: 15px;
+		}
+
+		.profile-header-left {
+				align-items: center;
+		}
+
+		.profile-links {
+				flex-direction: column;
+		}
+}
+`
 
 func parseProfile(event types.Event) (*ParsedProfile, error) {
 	var profile ParsedProfile

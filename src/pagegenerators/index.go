@@ -147,7 +147,7 @@ func GenerateIndexHTML(params GenerateIndexParams) error {
 				a.Content("width=device-width, initial-scale=1.0"),
 			)),
 			Title_(Text(indexData.Title)),
-			Style_(Text_(CommonStyles+ResponsiveStyles)),
+			Style_(Text_(CommonStyles+CommonResponsiveStyles)),
 		),
 		Body(Attr(a.Class(indexData.Color+" index")),
 			Div(Attr(a.Class("page-container")),
