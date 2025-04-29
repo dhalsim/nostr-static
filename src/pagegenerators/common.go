@@ -434,3 +434,25 @@ func renderCompactProfile(
 		),
 	)
 }
+
+func renderFeedLinks(baseFolder, fileName string) HTML {
+	baseFolder = strings.Trim(baseFolder, "/")
+	if baseFolder != "" {
+		baseFolder = baseFolder + "/"
+	}
+
+	return Div(Attr(a.Class("feed-links")),
+		Link(Attr(
+			a.Rel("alternate"),
+			a.Type("application/rss+xml"),
+			a.Title("RSS Feed"),
+			a.Href(baseFolder+fileName+"-rss.xml"),
+		)),
+		Link(Attr(
+			a.Rel("alternate"),
+			a.Type("application/atom+xml"),
+			a.Title("Atom Feed"),
+			a.Href(baseFolder+fileName+"-atom.xml"),
+		)),
+	)
+}

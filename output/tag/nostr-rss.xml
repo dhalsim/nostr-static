@@ -1,0 +1,620 @@
+<?xml version="1.0" encoding="UTF-8"?><rss version="2.0" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>Nostr Articles</title>
+    <link>https://blog.nostrize.me</link>
+    <description>Nostr Articles Feed</description>
+    <managingEditor> (Nostr Static)</managingEditor>
+    <pubDate>Tue, 29 Apr 2025 12:05:53 +0300</pubDate>
+    <item>
+      <title>How to Create a Blog Out of Nostr Long-Form Articles</title>
+      <link>https://blog.nostrize.me/naddr1qvzqqqr4gupzqmnyhq7p7e60kq997xvpds5hkeq5hanlq9vffczd6nr9062pqthgqq25x6r2d90hzaj529f9gur2x9h4yt2gfy69qm05rzu.html</link>
+      <description>nostr-static is a static site generator (SSG) tool that transforms Nostr long-form content into a beautiful, static blog (which works really fast). It fetches articles from the Nostr network and generates HTML pages that can be hosted anywhere. This tool bridges the gap between Nostr&#39;s decentralized content and traditional web hosting, making it easy to create and maintain a blog powered by Nostr content.</description>
+      <content:encoded><![CDATA[<ul>
+<li><strong>Demo:</strong> <a href="https://blog.nostrize.me">https://blog.nostrize.me</a></li>
+<li><strong>Source code:</strong> <a href="https://github.com/dhalsim/nostr-static">nostr-static</a></li>
+</ul>
+<h3 id="prerequisites">Prerequisites</h3>
+<p>Before using nostr-static, you'll need:</p>
+<ol>
+<li>
+<p><strong>Nostr Articles</strong>: You can either:</p>
+<ul>
+<li>Create new articles using platforms like <a href="https://yakihonne.com">yakihonne.com</a> or <a href="https://habla.news">habla.news</a></li>
+<li>Find existing articles on Nostr</li>
+<li>Copy the naddr string from the article (usually can be found in the address bar)</li>
+</ul>
+</li>
+<li>
+<p><strong>Author Profiles</strong>: For each article's author:</p>
+<ul>
+<li>Copy their public key (pubkey)</li>
+<li>Visit <a href="https://njump.me">njump.me/npub1xxxxx</a> (replace with the actual pubkey)</li>
+<li>Copy the nprofile string from the page</li>
+</ul>
+</li>
+</ol>
+<p>These identifiers (naddr for articles and nprofile for authors) are essential for the tool to fetch and display your content correctly.</p>
+<h2 id="features">Features</h2>
+<h3 id="core-functionality">Core Functionality</h3>
+<ul>
+<li><strong>Index Page</strong>: A homepage featuring your blog's title, logo, article summaries, and tags</li>
+<li><strong>Article Pages</strong>: Individual pages for each article, including:
+<ul>
+<li>Title and logo</li>
+<li>Article summary</li>
+<li>Full content</li>
+<li>Tags</li>
+<li>Comments (via ZapThreads integration)</li>
+</ul>
+</li>
+</ul>
+<h3 id="social-features">Social Features</h3>
+<ul>
+<li><strong>Comments</strong>: Integrated with <a href="https://github.com/franzaps/zapthreads">ZapThreads</a> for decentralized commenting</li>
+<li><strong>Nostr Connect</strong>: Seamless integration with <a href="https://git.njump.me/wnj">window.nostr.js (wnj)</a>, supporting NIP-46 bunker connect</li>
+</ul>
+<h3 id="content-organization">Content Organization</h3>
+<ul>
+<li><strong>Tag Pages</strong>: Browse articles filtered by specific tags</li>
+<li><strong>Profile Pages</strong>: View articles from specific authors</li>
+<li><strong>Manual Curation</strong>: Select and order articles by adding their naddr strings (see <a href="https://nips.nostr.com/19">NIP-19</a>)</li>
+</ul>
+<h3 id="customization-options">Customization Options</h3>
+<ul>
+<li><strong>Themes</strong>: Choose between dark and light mode</li>
+<li><strong>Branding</strong>:
+<ul>
+<li>Custom logo</li>
+<li>Custom blog title</li>
+</ul>
+</li>
+<li><strong>Network</strong>: Specify your preferred Nostr relays</li>
+</ul>
+<h3 id="technical-requirements">Technical Requirements</h3>
+<ul>
+<li><strong>Profile Format</strong>: Authors must be added in nprofile format (see <a href="https://nips.nostr.com/19">NIP-19</a>) for consistency</li>
+<li><strong>Automatic Updates</strong>: Built-in scripts for:
+<ul>
+<li>Windows Task Scheduler</li>
+<li>Unix/Linux cron jobs</li>
+</ul>
+</li>
+</ul>
+<h2 id="getting-started">Getting Started</h2>
+<ol>
+<li>
+<p><strong>Fork and Clone</strong>:</p>
+<ul>
+<li>Fork <a href="https://github.com/dhalsim/nostr-static">this repository</a> to your GitHub account</li>
+<li>Clone it to your local machine or use <a href="https://docs.github.com/en/codespaces/quickstart">GitHub Codespaces</a> for a cloud-based development environment</li>
+<li>Watch this <a href="https://youtu.be/_W9B7qc9lVc">quick tutorial</a> to learn more about GitHub Codespaces</li>
+</ul>
+</li>
+<li>
+<p><strong>Configuration</strong>: Set up your <code>config.yaml</code> file with:</p>
+<ul>
+<li>Blog title and logo</li>
+<li>Theme preference</li>
+<li>Relay list</li>
+<li>Article naddr strings</li>
+<li>Author nprofile strings</li>
+</ul>
+</li>
+<li>
+<p><strong>Content Selection</strong>: Add your desired articles by including their naddr strings in the configuration</p>
+</li>
+<li>
+<p><strong>Author Selection</strong>: You have to add the nprofile strings of the articles. This is needed for URL consistancy.</p>
+</li>
+<li>
+<p><strong>Build &amp; Run</strong>: Follow the instruction in the README at <a href="https://github.com/dhalsim/nostr-static">https://github.com/dhalsim/nostr-static</a></p>
+</li>
+<li>
+<p><strong>Deployment</strong>: Choose your preferred static hosting service and deploy the generated HTML files</p>
+</li>
+<li>
+<p><strong>Updates</strong>: Set up automatic updates using the provided scripts for your operating system (For github pages)</p>
+</li>
+</ol>
+<h2 id="deployment-options">Deployment Options</h2>
+<h3 id="github-pages-recommended">GitHub Pages (Recommended)</h3>
+<p>GitHub Pages provides free hosting for static websites. Here's how to set it up:</p>
+<ol>
+<li>
+<p><strong>Enable GitHub Pages</strong>:</p>
+<ul>
+<li>Go to your repository's Settings</li>
+<li>Navigate to &quot;Pages&quot; in the menu</li>
+<li>Under &quot;Build and deployment&quot; &gt; &quot;Source&quot;, select &quot;GitHub Actions&quot;</li>
+<li>Enable Actions by following the <a href="https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/enabling-features-for-your-repository/managing-github-actions-settings-for-a-repository#allowing-select-actions-and-reusable-workflows-to-run">GitHub Actions settings guide</a></li>
+<li>Go to the &quot;Actions&quot; tab in the top menu. If you see the message &quot;Workflows aren't being run on this forked repository&quot;, click the &quot;I understand my workflows, go ahead and enable them&quot; button</li>
+</ul>
+</li>
+<li>
+<p><strong>Custom Domain Setup</strong>:</p>
+<ul>
+<li>Purchase a domain from your preferred domain registrar</li>
+<li>Create a CNAME record in your domain's DNS settings:
+<ul>
+<li>Type: CNAME</li>
+<li>Name: @ or www or a subdomain you prefer (depending on your preference)</li>
+<li>Value: YOUR_GITHUB_USERNAME.github.io</li>
+</ul>
+</li>
+<li>In your repository's GitHub Pages settings:
+<ul>
+<li>Enter your custom domain in the &quot;Custom domain&quot; field</li>
+<li>Check &quot;Enforce HTTPS&quot; for secure connections</li>
+</ul>
+</li>
+<li>Wait for DNS propagation (can take up to 24 hours)</li>
+<li>Your site will be available at your custom domain</li>
+</ul>
+</li>
+</ol>
+<h3 id="other-hosting-options">Other Hosting Options</h3>
+<p>You can also deploy your static site to any hosting service that supports static websites, such as:</p>
+<ul>
+<li>Netlify</li>
+<li>Vercel</li>
+<li>Cloudflare Pages</li>
+<li>Amazon S3</li>
+<li>Any traditional web hosting service</li>
+</ul>
+<h2 id="why-nostr-static">Why nostr-static?</h2>
+<p>nostr-static offers a unique solution for bloggers who want to leverage Nostr's decentralized content while maintaining a traditional web presence. It combines the best of both worlds:</p>
+<ul>
+<li><strong>Decentralized Content</strong>: Your articles live on the Nostr network</li>
+<li><strong>Traditional Web Presence</strong>: A familiar blog interface for your readers</li>
+<li><strong>Easy Maintenance</strong>: Simple configuration and automatic updates</li>
+<li><strong>Flexible Hosting</strong>: Deploy anywhere that supports static websites</li>
+<li><strong>Social interactions</strong>: Leverage nostr for comments</li>
+</ul>
+<h2 id="conclusion">Conclusion</h2>
+<p>nostr-static makes it easy to create a professional blog from your Nostr long-form content. Whether you're a seasoned Nostr user or new to the ecosystem, this tool provides a straightforward way to share your content with both the Nostr community and traditional web users.</p>
+<p>Start your Nostr-powered blog today by visiting the <a href="https://blog.nostrize.me">demo</a> and exploring the possibilities!</p>
+]]></content:encoded>
+      <author>dhalsim</author>
+      <enclosure url="https://image.nostr.build/28ee6fa221c51f359c510d348ba98d82f566162ffb66eb5c9246eb5c0012748f.jpg" length="0" type="image/jpeg"></enclosure>
+      <pubDate>Sun, 27 Apr 2025 02:33:16 +0300</pubDate>
+    </item>
+    <item>
+      <title>How to Run Your Own Nostr Relay on Android with Cloudflare Domain</title>
+      <link>https://blog.nostrize.me/naddr1qvzqqqr4gupzqmnyhq7p7e60kq997xvpds5hkeq5hanlq9vffczd6nr9062pqthgqq2j6ezsgu69j7n92cmxxmfsgyeyyvjtxfuk7lwjq6s.html</link>
+      <description>Step-by-step guide to running a personal Nostr relay on Android using Citrine and Cloudflare Tunnels. Learn how to set up secure WebSocket connections, manage relay lists, and maintain a reliable private relay with your custom domain.</description>
+      <content:encoded><![CDATA[<h2 id="prerequisites">Prerequisites</h2>
+<ol>
+<li>
+<p>Install Citrine on your Android device:</p>
+<ul>
+<li>Visit <a href="https://github.com/greenart7c3/Citrine/releases">https://github.com/greenart7c3/Citrine/releases</a></li>
+<li>Download the latest release using:
+<ul>
+<li>zap.store</li>
+<li>Obtainium</li>
+<li>F-Droid</li>
+<li>Or download the APK directly</li>
+</ul>
+</li>
+<li><strong>Note:</strong> You may need to enable &quot;Install from Unknown Sources&quot; in your Android settings</li>
+</ul>
+</li>
+<li>
+<p>Domain Requirements:</p>
+<ul>
+<li>Purchase a domain if you don't have one</li>
+<li>Transfer your domain to Cloudflare if it's not already there (for free SSL certificates and cloudflared support)</li>
+</ul>
+</li>
+<li>
+<p>Tools to use:</p>
+<ul>
+<li>nak (the nostr army knife):
+<ul>
+<li>Download from <a href="https://github.com/fiatjaf/nak/releases">https://github.com/fiatjaf/nak/releases</a></li>
+<li>Installation steps:
+<ul>
+<li>For Linux/macOS:
+<pre><code class="language-bash"># Download the appropriate version for your system
+wget https://github.com/fiatjaf/nak/releases/latest/download/nak-linux-amd64  # for Linux
+# or
+wget https://github.com/fiatjaf/nak/releases/latest/download/nak-darwin-amd64  # for macOS
+
+# Make it executable
+chmod +x nak-*
+
+# Move to a directory in your PATH
+sudo mv nak-* /usr/local/bin/nak
+</code></pre>
+</li>
+<li>For Windows:
+<pre><code class="language-batch"># Download the Windows version
+curl -L -o nak.exe https://github.com/fiatjaf/nak/releases/latest/download/nak-windows-amd64.exe
+
+# Move to a directory in your PATH (e.g., C:\Windows)
+move nak.exe C:\Windows\nak.exe
+</code></pre>
+</li>
+</ul>
+</li>
+<li>Verify installation:
+<pre><code class="language-bash">nak --version
+</code></pre>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ol>
+<h2 id="setting-up-citrine">Setting Up Citrine</h2>
+<ol>
+<li>Open the Citrine app</li>
+<li>Start the server</li>
+<li>You'll see it running on <code>ws://127.0.0.1:4869</code> (local network only)</li>
+<li>Go to settings and paste your npub into &quot;Accept events signed by&quot; inbox and press the + button. This prevents others from publishing events to your personal relay.</li>
+</ol>
+<h2 id="installing-required-tools">Installing Required Tools</h2>
+<ol>
+<li>Install Termux from Google Play Store</li>
+<li>Open Termux and run:</li>
+</ol>
+<pre><code class="language-bash">pkg update &amp;&amp; pkg install wget
+wget https://github.com/cloudflare/cloudflared/releases/latest/download/cloudflared-linux-arm64.deb
+dpkg -i cloudflared-linux-arm64.deb
+</code></pre>
+<h2 id="cloudflare-authentication">Cloudflare Authentication</h2>
+<ol>
+<li>Run the authentication command:</li>
+</ol>
+<pre><code class="language-bash">cloudflared tunnel login
+</code></pre>
+<ol start="2">
+<li>Follow the instructions:
+<ul>
+<li>Copy the provided URL to your browser</li>
+<li>Log in to your Cloudflare account</li>
+<li>If the URL expires, copy it again after logging in</li>
+</ul>
+</li>
+</ol>
+<h2 id="creating-the-tunnel">Creating the Tunnel</h2>
+<ol>
+<li>Create a new tunnel:</li>
+</ol>
+<pre><code class="language-bash">cloudflared tunnel create &lt;TUNNEL_NAME&gt;
+</code></pre>
+<ul>
+<li>Choose any name you prefer for your tunnel</li>
+<li>Copy the tunnel ID after creating the tunnel</li>
+</ul>
+<ol start="2">
+<li>Create and configure the tunnel config:</li>
+</ol>
+<pre><code class="language-bash">touch ~/.cloudflared/config.yml
+nano ~/.cloudflared/config.yml
+</code></pre>
+<ol start="3">
+<li>Add this configuration (replace the placeholders with your values):</li>
+</ol>
+<pre><code class="language-yaml">tunnel: &lt;TUNNEL_UUID&gt;
+credentials-file: /data/data/com.termux/files/home/.cloudflared/&lt;TUNNEL_UUID&gt;.json
+ingress:
+  - hostname: nostr.yourdomain.com
+    service: ws://localhost:4869
+  - service: http_status:404
+</code></pre>
+<ul>
+<li><strong>Note:</strong> In nano editor:
+<ul>
+<li><code>CTRL+O</code> and Enter to save</li>
+<li><code>CTRL+X</code> to exit</li>
+</ul>
+</li>
+<li><strong>Note:</strong> Check the credentials file path in the logs</li>
+</ul>
+<ol start="4">
+<li>Validate your configuration:</li>
+</ol>
+<pre><code class="language-bash">cloudflared tunnel validate
+</code></pre>
+<ol start="5">
+<li>Start the tunnel:</li>
+</ol>
+<pre><code class="language-bash">cloudflared tunnel run my-relay
+</code></pre>
+<h2 id="preventing-android-from-killing-the-tunnel">Preventing Android from Killing the Tunnel</h2>
+<p>Run these commands to maintain tunnel stability:</p>
+<pre><code class="language-bash">date &amp;&amp; apt install termux-tools &amp;&amp; termux-setup-storage &amp;&amp; termux-wake-lock
+echo &quot;nameserver 1.1.1.1&quot; &gt; $PREFIX/etc/resolv.conf
+</code></pre>
+<p><strong>Tip:</strong> You can open multiple Termux sessions by swiping from the left edge of the screen while keeping your tunnel process running.</p>
+<h2 id="updating-your-outbox-model-relays">Updating Your Outbox Model Relays</h2>
+<p>Once your relay is running and accessible via your domain, you'll want to update your relay list in the Nostr network. This ensures other clients know about your relay and can connect to it.</p>
+<h3 id="decoding-npub-public-key">Decoding npub (Public Key)</h3>
+<p>Private keys (nsec) and public keys (npub) are encoded in bech32 format, which includes:</p>
+<ul>
+<li>A prefix (like nsec1, npub1 etc.)</li>
+<li>The encoded data</li>
+<li>A checksum</li>
+</ul>
+<p>This format makes keys:</p>
+<ul>
+<li>Easy to distinguish</li>
+<li>Hard to copy incorrectly</li>
+</ul>
+<p>However, most tools require these keys in hexadecimal (hex) format.</p>
+<p>To decode an npub string to its hex format:</p>
+<pre><code class="language-bash">nak decode nostr:npub1dejts0qlva8mqzjlrxqkc2tmvs2t7elszky5upxaf3jha9qs9m5q605uc4
+</code></pre>
+<p>Change it with your own npub.</p>
+<pre><code class="language-bash">{
+  &quot;pubkey&quot;: &quot;6e64b83c1f674fb00a5f19816c297b6414bf67f015894e04dd4c657e94102ee8&quot;
+}
+</code></pre>
+<p>Copy the pubkey value in quotes.</p>
+<h3 id="create-a-kind-10002-event-with-your-relay-list">Create a kind 10002 event with your relay list:</h3>
+<ul>
+<li>Include your new relay with write permissions</li>
+<li>Include other relays you want to read from and write to, omit 3rd parameter to make it both read and write</li>
+</ul>
+<p>Example format:</p>
+<pre><code class="language-json">{
+  &quot;kind&quot;: 10002,
+  &quot;tags&quot;: [
+    [&quot;r&quot;, &quot;wss://your-relay-domain.com&quot;, &quot;write&quot;],
+    [&quot;r&quot;, &quot;wss://eden.nostr.land/&quot;],
+    [&quot;r&quot;, &quot;wss://nos.lol/&quot;],
+    [&quot;r&quot;, &quot;wss://nostr.bitcoiner.social/&quot;],
+    [&quot;r&quot;, &quot;wss://nostr.mom/&quot;],
+    [&quot;r&quot;, &quot;wss://relay.primal.net/&quot;],
+    [&quot;r&quot;, &quot;wss://nostr.wine/&quot;, &quot;read&quot;],
+    [&quot;r&quot;, &quot;wss://relay.damus.io/&quot;],
+    [&quot;r&quot;, &quot;wss://relay.nostr.band/&quot;],
+    [&quot;r&quot;, &quot;wss://relay.snort.social/&quot;]
+  ],
+  &quot;content&quot;: &quot;&quot;
+}
+</code></pre>
+<p>Save it to a file called <code>event.json</code></p>
+<p><strong>Note:</strong> Add or remove any relays you want. To check your existing 10002 relays:</p>
+<ul>
+<li>
+<p>Visit <a href="https://nostr.band/?q=by%3Anpub1dejts0qlva8mqzjlrxqkc2tmvs2t7elszky5upxaf3jha9qs9m5q605uc4+++kind%3A10002">https://nostr.band/?q=by%3Anpub1dejts0qlva8mqzjlrxqkc2tmvs2t7elszky5upxaf3jha9qs9m5q605uc4+++kind%3A10002</a></p>
+</li>
+<li>
+<p>nostr.band is an indexing service, it probably has your relay list.</p>
+</li>
+<li>
+<p>Replace <code>npub1xxx</code> in the URL with your own npub</p>
+</li>
+<li>
+<p>Click &quot;VIEW JSON&quot; from the menu to see the raw event</p>
+</li>
+<li>
+<p>Or use the <code>nak</code> tool if you know the relays</p>
+<pre><code class="language-bash">nak req -k 10002 -a &lt;your-pubkey&gt; wss://relay1.com wss://relay2.com
+</code></pre>
+<p>Replace <code>&lt;your-pubkey&gt;</code> with your public key in hex format (you can get it using <code>nak decode &lt;your-npub&gt;</code>)</p>
+</li>
+</ul>
+<ol start="2">
+<li>Sign and publish the event:
+<ul>
+<li>Use a Nostr client that supports kind 10002 events</li>
+<li>Or use the <code>nak</code> command-line tool:</li>
+</ul>
+<pre><code class="language-bash">nak event --sec ncryptsec1... wss://relay1.com wss://relay2.com $(cat event.json)
+</code></pre>
+</li>
+</ol>
+<p><strong>Important Security Notes:</strong></p>
+<ol>
+<li>Never share your nsec (private key) with anyone</li>
+<li>Consider using NIP-49 encrypted keys for better security</li>
+<li>Never paste your nsec or private key into the terminal. The command will be saved in your shell history, exposing your private key. To clear the command history:
+<ul>
+<li>For bash: use <code>history -c</code></li>
+<li>For zsh: use <code>fc -W</code> to write history to file, then <code>fc -p</code> to read it back</li>
+<li>Or manually edit your shell history file (e.g., <code>~/.zsh_history</code> or <code>~/.bash_history</code>)</li>
+</ul>
+</li>
+<li>if you're using <code>zsh</code>, use <code>fc -p</code> to prevent the next command from being saved to history</li>
+<li>Or temporarily disable history before running sensitive commands:</li>
+</ol>
+<pre><code class="language-bash">unset HISTFILE
+nak key encrypt ...
+set HISTFILE
+</code></pre>
+<h2 id="how-to-securely-create-nip-49-encypted-private-key">How to securely create NIP-49 encypted private key</h2>
+<pre><code class="language-bash"># Read your private key (input will be hidden)
+read -s SECRET 
+# Read your password (input will be hidden)
+read -s PASSWORD
+# encrypt command
+echo &quot;$SECRET&quot; | nak key encrypt &quot;$PASSWORD&quot;
+# copy and paste the ncryptsec1 text from the output
+read -s ENCRYPTED
+nak key decrypt &quot;$ENCRYPTED&quot;
+# clear variables from memory
+unset SECRET PASSWORD ENCRYPTED
+</code></pre>
+<p>On a Windows command line, to read from stdin and use the variables in <code>nak</code> commands, you can use a combination of <code>set /p</code> to read input and then use those variables in your command. Here's an example:</p>
+<pre><code class="language-bash">@echo off
+set /p &quot;SECRET=Enter your secret key: &quot;
+set /p &quot;PASSWORD=Enter your password: &quot;
+
+echo %SECRET%| nak key encrypt %PASSWORD%
+
+:: Clear the sensitive variables
+set &quot;SECRET=&quot;
+set &quot;PASSWORD=&quot;
+</code></pre>
+<p>If your key starts with <code>ncryptsec1</code>, the <code>nak</code> tool will securely prompt you for a password when using the <code>--sec</code> parameter, unless the command is used with a pipe <code>&lt; &gt;</code> or <code>|</code>.</p>
+<pre><code class="language-bash">nak event --sec ncryptsec1... wss://relay1.com wss://relay2.com $(cat event.json)
+</code></pre>
+<ol start="3">
+<li>Verify the event was published:
+<ul>
+<li>Check if your relay list is visible on other relays</li>
+<li>Use the <code>nak</code> tool to fetch your kind 10002 events:</li>
+</ul>
+</li>
+</ol>
+<pre><code class="language-bash">nak req -k 10002 -a &lt;your-pubkey&gt; wss://relay1.com wss://relay2.com
+</code></pre>
+<ol start="4">
+<li>Testing your relay:
+<ul>
+<li>Try connecting to your relay using different Nostr clients</li>
+<li>Verify you can both read from and write to your relay</li>
+<li>Check if events are being properly stored and retrieved</li>
+<li><strong>Tip:</strong> Use multiple Nostr clients to test different aspects of your relay</li>
+</ul>
+</li>
+</ol>
+<p><strong>Note:</strong> If anyone in the community has a more efficient method of doing things like updating outbox relays, please share your insights in the comments. Your expertise would be greatly appreciated!</p>
+]]></content:encoded>
+      <author>dhalsim</author>
+      <enclosure url="https://image.nostr.build/f708db07b85c002b20b3159b48447d51cbcb0bae0f5717ce6dbc060580c8b35d.jpg" length="0" type="image/jpeg"></enclosure>
+      <pubDate>Wed, 23 Apr 2025 23:23:34 +0300</pubDate>
+    </item>
+    <item>
+      <title>How to Import and Export Your Nostr Notes</title>
+      <link>https://blog.nostrize.me/naddr1qvzqqqr4gupzqmnyhq7p7e60kq997xvpds5hkeq5hanlq9vffczd6nr9062pqthgqq24wmjfwp6rv6t8v935ujfhv4yr2wzzdfz5gl5quve.html</link>
+      <description>Learn how to import your Nostr notes from public relays and export them into your own relay using the nak CLI tool. This step-by-step guide covers installation, fetching notes, filtering by event types, and uploading to a self-hosted relay—ensuring your content is safe and under your control.</description>
+      <content:encoded><![CDATA[<p>This guide will help you import your notes from various Nostr relays and export them into your own relay. This is particularly useful when you want to ensure your content is backed up or when you're setting up your own relay.</p>
+<h2 id="prerequisite">Prerequisite</h2>
+<p>Your own Nostr relay (if you don't have one, check out <a href="https://njump.me/nevent1qqsqd24rtzchjvxh7a9ahe9xs54w04rtlcpgt499uux8kkzgpucuhmqppamhxue69uhkummnw3ezumt0d5q3vamnwvaz7tmjv4kxz7fwwpexjmtpdshxuet5qy28wumn8ghj7un9d3shjtnyv9kh2uewd9hsz9nhwden5te0wfjkccte9ehx7um5wghxyctwvsq35amnwvaz7tmd0ykhyetvv9ujumn0wd68y6t6v5hx6eg8w8a7q">Part 1: How to Run Your Own Nostr Relay</a>)</p>
+<h2 id="installing-nak">Installing nak</h2>
+<p><code>nak</code> is a command-line tool that helps you interact with Nostr relays. Here's how to install it:</p>
+<h3 id="for-windows-users">For Windows Users</h3>
+<ol>
+<li>Visit the <a href="https://github.com/fiatjaf/nak/releases">nak releases page</a></li>
+<li>Download the latest <code>nak-windows-amd64.exe</code></li>
+<li>Rename it to <code>nak.exe</code></li>
+<li>Move it to a directory in your PATH or use it from its current location</li>
+</ol>
+<h3 id="for-macos-users">For macOS Users</h3>
+<ol>
+<li>Visit the <a href="https://github.com/fiatjaf/nak/releases">nak releases page</a></li>
+<li>Download the latest <code>nak-darwin-amd64</code></li>
+<li>Open Terminal and run:
+<pre><code class="language-bash">chmod +x nak-darwin-amd64
+sudo mv nak-darwin-amd64 /usr/local/bin/nak
+</code></pre>
+</li>
+</ol>
+<h3 id="for-linux-users">For Linux Users</h3>
+<ol>
+<li>Visit the <a href="https://github.com/fiatjaf/nak/releases">nak releases page</a></li>
+<li>Download the latest <code>nak-linux-amd64</code></li>
+<li>Open Terminal and run:
+<pre><code class="language-bash">chmod +x nak-linux-amd64
+sudo mv nak-linux-amd64 /usr/local/bin/nak
+</code></pre>
+</li>
+</ol>
+<h2 id="getting-your-public-key-in-hex-format">Getting Your Public Key in Hex Format</h2>
+<p>Before downloading your notes, you need to convert your npub (public key) to its hex format. If you have your npub, run:</p>
+<pre><code class="language-bash">nak decode npub1YOUR_NPUB_HERE
+</code></pre>
+<p>This will output your public key in hex format, which you'll need for the next steps.</p>
+<h2 id="downloading-your-notes">Downloading Your Notes</h2>
+<p>To download your notes, you'll need your public key in hex format and a list of reliable relays. Here are some popular relays you can use:</p>
+<ul>
+<li>wss://eden.nostr.land/</li>
+<li>wss://nos.lol/</li>
+<li>wss://nostr.bitcoiner.social/</li>
+<li>wss://nostr.mom/</li>
+<li>wss://relay.primal.net/</li>
+<li>wss://relay.damus.io/</li>
+<li>wss://relay.nostr.band/</li>
+<li>wss://relay.snort.social/</li>
+</ul>
+<p><strong>Note:</strong> You should check your Nostr client's settings to find additional relays where your notes are published. Add these to the list above.</p>
+<h3 id="important-event-kinds">Important Event Kinds</h3>
+<p>Here are some important event kinds you might want to filter for:</p>
+<ul>
+<li><code>0</code>: User Metadata (profile information)</li>
+<li><code>1</code>: Short Text Notes</li>
+<li><code>3</code>: Follow List</li>
+<li><code>4</code>: Encrypted Direct Messages</li>
+</ul>
+<p>Get the full list from: <a href="https://nips.nostr.com/#event-kinds">https://nips.nostr.com/#event-kinds</a></p>
+<h3 id="downloading-with-event-kind-filters">Downloading with Event Kind Filters</h3>
+<p>To download your notes with specific event kinds, use the <code>-k</code> flag followed by the kind number, use multiple if you need to. For example, to download your profile, short notes, follow list, and direct messages:</p>
+<pre><code class="language-bash">nak req -a YOUR_HEX_PUBKEY -k 0 -k 1 -k 3 -k 4 wss://eden.nostr.land/ wss://nos.lol/ wss://nostr.bitcoiner.social/ wss://nostr.mom/ wss://relay.primal.net/ wss://relay.damus.io/ wss://relay.nostr.band/ wss://relay.snort.social/ &gt; events_filtered.json
+</code></pre>
+<p>Or to download all your content, just don't provide any <code>k</code> flag:</p>
+<pre><code class="language-bash">nak req -a YOUR_HEX_PUBKEY wss://eden.nostr.land/ wss://nos.lol/ wss://nostr.bitcoiner.social/ wss://nostr.mom/ wss://relay.primal.net/ wss://relay.damus.io/ wss://relay.nostr.band/ wss://relay.snort.social/ &gt; events.json
+</code></pre>
+<p>This will create a file containing all your notes in JSON Lines format.</p>
+<h2 id="uploading-your-notes-to-your-relay">Uploading Your Notes to Your Relay</h2>
+<p>Once you have your <code>events.json</code> or <code>events_filtered.json</code> file, you can upload it to your own relay. Replace <code>YOUR_RELAY</code> with your relay's WebSocket URL (e.g., <code>wss://my-relay.nostrize.me</code>).</p>
+<pre><code class="language-bash">nak event YOUR_RELAY &lt; events.json
+</code></pre>
+<p><strong>Important Notes:</strong></p>
+<ol>
+<li>Make sure your relay is running and accessible</li>
+<li>The upload process might take some time depending on how many notes you have</li>
+<li>You can verify the upload by querying your relay for your notes</li>
+</ol>
+<h2 id="verifying-the-upload">Verifying the Upload</h2>
+<p>To verify that your notes were successfully uploaded to your relay, run:</p>
+<pre><code class="language-bash">nak req -a YOUR_HEX_PUBKEY YOUR_RELAY
+</code></pre>
+<p>This should return the same notes that were in your <code>events.json</code> file.</p>
+<h2 id="troubleshooting">Troubleshooting</h2>
+<p>If you encounter any issues:</p>
+<ol>
+<li>Make sure your relay is running and accessible</li>
+<li>Check that you're using the correct public key</li>
+<li>Verify that the relays in your download list are working</li>
+<li>Ensure you have proper permissions to write to your relay</li>
+</ol>
+<h2 id="next-steps">Next Steps</h2>
+<ul>
+<li>Remember to regularly backup your notes to ensure you don't lose any content.</li>
+<li>If you want to keep your friends' notes as well, add npubs that you want to import into your relay's settings (for Citrine it is &quot;Accept events signed by&quot; list), and run the commands for their pubkeys.</li>
+</ul>
+]]></content:encoded>
+      <author>dhalsim</author>
+      <enclosure url="https://image.nostr.build/09593373dc30cafd8174ed57a1cae310c517b17e664b2c59ab5a41d0c1aca3d8.jpg" length="0" type="image/jpeg"></enclosure>
+      <pubDate>Wed, 23 Apr 2025 23:44:28 +0300</pubDate>
+    </item>
+    <item>
+      <title>Redistributing Git with Nostr</title>
+      <link>https://blog.nostrize.me/naddr1qvzqqqr4gupzqwlsccluhy6xxsr6l9a9uhhxf75g85g8a709tprjcn4e42h053vaqqyrzwrxvc6ngvfkxty9t8.html</link>
+      <description></description>
+      <content:encoded><![CDATA[<h1 id="redistributing-git-with-nostr">Redistributing Git with Nostr</h1>
+<p>Every time someone tries to &quot;decentralize&quot; Git -- like many projects tried in the past to do it with BitTorrent, IPFS, ScuttleButt or custom p2p protocols -- there is always a lurking comment: &quot;but Git is already distributed!&quot;, and then the discussion proceeds to mention some facts about how Git supports multiple remotes and its magic syncing and merging abilities and so on.</p>
+<p>Turns out all that is true, Git is indeed all that powerful, and yet GitHub is the big central hub that hosts basically all Git repositories in the giant world of open-source. There are some crazy people that host their stuff elsewhere, but these projects end up not being found by many people, and even when they do they suffer from lack of contributions.</p>
+<p>Because everybody has a GitHub account it's easy to open a pull request to a repository of a project you're using if it's on GitHub (to be fair I think it's very annoying to have to clone the repository, then add it as a remote locally, push to it, then go on the web UI and click to open a pull request, then that cloned repository lurks forever in your profile unless you go through 16 screens to delete it -- but people in general seem to think it's easy).</p>
+<p>It's much harder to do it on some random other server where some project might be hosted, because now you have to add 4 more even more annoying steps: create an account; pick a password; confirm an email address; setup SSH keys for pushing. (And I'm not even mentioning the basic impossibility of offering <code>push</code> access to external <em>unknown</em> contributors to people who want to host their own simple homemade Git server.)</p>
+<p>At this point some may argue that we could all have accounts on GitLab, or Codeberg or wherever else, then those steps are removed. Besides not being a practical strategy this pseudo solution misses the point of being decentralized (or distributed, who knows) entirely: it's far from the ideal to force everybody to have the double of account management and SSH setup work in order to have the open-source world controlled by two shady companies instead of one.</p>
+<p>What we want is to give every person the opportunity to host their own Git server without being ostracized. at the same time we must recognize that most people won't want to host their own servers (not even most open-source programmers!) and give everybody the ability to host their stuff on multi-tenant servers (such as GitHub) too. Importantly, though, if we allow for a random person to have a standalone Git server on a standalone server they host themselves on their wood cabin that also means any new hosting company can show up and start offering Git hosting, with or without new cool features, charging high or low or zero, and be immediately competing against GitHub or GitLab, i.e. we must remove the network-effect centralization pressure.</p>
+<h3 id="external-contributions">External contributions</h3>
+<p>The first problem we have to solve is: how can Bob contribute to Alice's repository without having an account on Alice's server?</p>
+<p>SourceHut has reminded GitHub users that Git has always had this (for most) arcane <code>git send-email</code> command that is the original way to send patches, using an once-open protocol.</p>
+<p>Turns out Nostr acts as a quite powerful email replacement and can be used to send text content just like email, therefore patches are a very good fit for Nostr event contents.</p>
+<p>Once you get used to it and the proper UIs (or CLIs) are built sending and applying patches to and from others becomes a much easier flow than the intense clickops mixed with terminal copypasting that is interacting with GitHub (you have to clone the repository on GitHub, then update the remote URL in your local directory, then create a branch and then go back and turn that branch into a Pull Request, it's quite tiresome) that many people already dislike so much they went out of their way to build many GitHub CLI tools just so they could comment on issues and approve pull requests from their terminal.</p>
+<h2 id="replacing-github-features">Replacing GitHub features</h2>
+<p>Aside from being the &quot;hub&quot; that people use to send patches to other people's code (because no one can do the email flow anymore, justifiably), GitHub also has 3 other big features that are not directly related to Git, but that make its network-effect harder to overcome. Luckily Nostr can be used to create a new environment in which these same features are implemented in a more decentralized and healthy way.</p>
+<h3 id="issues-bug-reports-feature-requests-and-general-discussions">Issues: bug reports, feature requests and general discussions</h3>
+<p>Since the &quot;Issues&quot; GitHub feature is just a bunch of text comments it should be very obvious that Nostr is a perfect fit for it.</p>
+<p>I will not even mention the fact that Nostr is much better at threading comments than GitHub (which doesn't do it at all), which can generate much more productive and organized discussions (and you can opt out if you want).</p>
+<h3 id="search">Search</h3>
+<p>I use GitHub search all the time to find libraries and projects that may do something that I need, and it returns good results almost always. So if people migrated out to other code hosting providers wouldn't we lose it?</p>
+<p>The fact is that even though we think everybody is on GitHub that is a globalist falsehood. Some projects are not on GitHub, and if we use only GitHub for search those will be missed. So even if we didn't have a Nostr Git alternative it would still be necessary to create a search engine that incorporated GitLab, Codeberg, SourceHut and whatnot.</p>
+<p>Turns out on Nostr we can make that quite easy by not forcing anyone to integrate custom APIs or hardcoding Git provider URLs: each repository can make itself available by publishing an &quot;announcement&quot; event with a brief description and one or more Git URLs. That makes it easy for a search engine to index them -- and even automatically download the code and index the code (or index just README files or whatever) without a centralized platform ever having to be involved.</p>
+<p>The relays where such announcements will be available play a role, of course, but that isn't a bad role: each announcement can be in multiple relays known for storing &quot;public good&quot; projects, some relays may curate only projects known to be very good according to some standards, other relays may allow any kind of garbage, which wouldn't make them good for a search engine to rely upon, but would still be useful in case one knows the exact thing (and from whom) they're searching for (the same is valid for all Nostr content, by the way, and that's where it's censorship-resistance comes from).</p>
+<h3 id="continuous-integration">Continuous integration</h3>
+<p>GitHub Actions are a very hardly subsidized free-compute-for-all-paid-by-Microsoft feature, but one that isn't hard to replace at all. In fact there exists today many companies offering the same kind of service out there -- although they are mostly targeting businesses and not open-source projects, before GitHub Actions was introduced there were also many that were heavily used by open-source projects.</p>
+<p>One problem is that these services are still heavily tied to GitHub today, they require a GitHub login, sometimes BitBucket and GitLab and whatnot, and do not allow one to paste an arbitrary Git server URL, but that isn't a thing that is very hard to change anyway, or to start from scratch. All we need are services that offer the CI/CD flows, perhaps using the same framework of GitHub Actions (although I would prefer to not use that messy garbage), and charge some few satoshis for it.</p>
+<p>It may be the case that all the current services only support the big Git hosting platforms because they rely on their proprietary APIs, most notably the webhooks dispatched when a repository is updated, to trigger the jobs. It doesn't have to be said that Nostr can also solve that problem very easily.</p>
+]]></content:encoded>
+      <author>fiatjaf</author>
+      <pubDate>Fri, 25 Apr 2025 22:26:48 +0300</pubDate>
+    </item>
+  </channel>
+</rss>

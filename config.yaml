@@ -3,6 +3,8 @@ layout:
   logo: logo.png  # Logo image file name
   title: "Nostr Articles"  # Site title
 
+blog_url: https://blog.nostrize.me
+
 relays:
   - wss://relay.damus.io
   - wss://nostr.wine

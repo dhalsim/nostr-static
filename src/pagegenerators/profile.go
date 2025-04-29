@@ -44,6 +44,7 @@ type ProfileArticleData struct {
 
 type GenerateProfilePagesParams struct {
 	BaseFolder       string
+	BlogURL          string
 	Profiles         map[string]types.Event
 	Events           []types.Event
 	OutputDir        string
@@ -211,6 +212,19 @@ func GenerateProfilePages(params GenerateProfilePagesParams) error {
 			return fmt.Errorf("no articles found for profile: %s", pubkey)
 		}
 
+		// Generate feeds for this profile
+		if err := GenerateFeeds(GenerateFeedParams{
+			BlogURL:        params.BlogURL,
+			Folder:         profileDir,
+			FileName:       params.PubkeyToNProfile[pubkey],
+			Events:         articleEvents,
+			Profiles:       params.Profiles,
+			Layout:         params.Layout,
+			EventIDToNaddr: params.EventIDToNaddr,
+		}); err != nil {
+			return err
+		}
+
 		articles := make([]ProfileArticleData, len(articleEvents))
 
 		for i, event := range articleEvents {
@@ -254,6 +268,7 @@ func GenerateProfilePages(params GenerateProfilePagesParams) error {
 				Title_(Text("Profile: "+data.Name)),
 				Style_(Text_(CommonStyles+CommonResponsiveStyles)),
 				Style_(Text_(ProfileStyles)),
+				renderFeedLinks(data.BaseFolder, data.Nprofile),
 			),
 			Body(Attr(a.Class(data.Color+" profile")),
 				Div(Attr(a.Class("page-container")),

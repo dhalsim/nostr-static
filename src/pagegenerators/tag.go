@@ -14,6 +14,7 @@ import (
 
 type GenerateTagPagesParams struct {
 	BaseFolder       string
+	BlogURL          string
 	Events           []types.Event
 	Profiles         map[string]types.Event
 	OutputDir        string
@@ -114,8 +115,22 @@ func GenerateTagPages(params GenerateTagPagesParams) error {
 		return err
 	}
 
-	// Generate a page for each tag
+	// Generate feeds for each tag
 	for tag, tagEvents := range tagMap {
+		// Generate feeds for this tag
+		if err := GenerateFeeds(GenerateFeedParams{
+			Folder:         tagDir,
+			BlogURL:        params.BlogURL,
+			FileName:       tag,
+			Events:         tagEvents,
+			Profiles:       params.Profiles,
+			Layout:         params.Layout,
+			EventIDToNaddr: params.EventIDToNaddr,
+		}); err != nil {
+			return err
+		}
+
+		// Generate a page for each tag
 		data := TagData{
 			BaseFolder: params.BaseFolder,
 			Tag:        tag,
@@ -156,6 +171,7 @@ func GenerateTagPages(params GenerateTagPagesParams) error {
 				)),
 				Title_(Text("Tag: "+data.Tag)),
 				Style_(Text_(CommonStyles+CommonResponsiveStyles)),
+				renderFeedLinks("../", tag),
 			),
 			Body(Attr(a.Class(data.Color+" tags")),
 				Div(Attr(a.Class("page-container")),

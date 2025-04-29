@@ -62,6 +62,7 @@ func Generate(params GenerateCommandParams) error {
 	// Tag pages
 	if err := pagegenerators.GenerateTagPages(pagegenerators.GenerateTagPagesParams{
 		BaseFolder:       "../",
+		BlogURL:          config.BlogURL,
 		Events:           events,
 		Profiles:         pubkeyToKind0,
 		OutputDir:        outputDir,
@@ -77,6 +78,7 @@ func Generate(params GenerateCommandParams) error {
 	// Profile pages
 	if err := pagegenerators.GenerateProfilePages(pagegenerators.GenerateProfilePagesParams{
 		BaseFolder:       "../",
+		BlogURL:          config.BlogURL,
 		Profiles:         pubkeyToKind0,
 		Events:           events,
 		OutputDir:        outputDir,
@@ -92,6 +94,7 @@ func Generate(params GenerateCommandParams) error {
 	// Index page
 	if err := pagegenerators.GenerateIndexHTML(pagegenerators.GenerateIndexParams{
 		BaseFolder:       "",
+		BlogURL:          config.BlogURL,
 		Events:           events,
 		Profiles:         pubkeyToKind0,
 		OutputDir:        outputDir,

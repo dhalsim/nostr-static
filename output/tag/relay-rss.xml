@@ -1,0 +1,413 @@
+<?xml version="1.0" encoding="UTF-8"?><rss version="2.0" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>Nostr Articles</title>
+    <link>https://blog.nostrize.me</link>
+    <description>Nostr Articles Feed</description>
+    <managingEditor> (Nostr Static)</managingEditor>
+    <pubDate>Tue, 29 Apr 2025 12:05:53 +0300</pubDate>
+    <item>
+      <title>How to Run Your Own Nostr Relay on Android with Cloudflare Domain</title>
+      <link>https://blog.nostrize.me/naddr1qvzqqqr4gupzqmnyhq7p7e60kq997xvpds5hkeq5hanlq9vffczd6nr9062pqthgqq2j6ezsgu69j7n92cmxxmfsgyeyyvjtxfuk7lwjq6s.html</link>
+      <description>Step-by-step guide to running a personal Nostr relay on Android using Citrine and Cloudflare Tunnels. Learn how to set up secure WebSocket connections, manage relay lists, and maintain a reliable private relay with your custom domain.</description>
+      <content:encoded><![CDATA[<h2 id="prerequisites">Prerequisites</h2>
+<ol>
+<li>
+<p>Install Citrine on your Android device:</p>
+<ul>
+<li>Visit <a href="https://github.com/greenart7c3/Citrine/releases">https://github.com/greenart7c3/Citrine/releases</a></li>
+<li>Download the latest release using:
+<ul>
+<li>zap.store</li>
+<li>Obtainium</li>
+<li>F-Droid</li>
+<li>Or download the APK directly</li>
+</ul>
+</li>
+<li><strong>Note:</strong> You may need to enable &quot;Install from Unknown Sources&quot; in your Android settings</li>
+</ul>
+</li>
+<li>
+<p>Domain Requirements:</p>
+<ul>
+<li>Purchase a domain if you don't have one</li>
+<li>Transfer your domain to Cloudflare if it's not already there (for free SSL certificates and cloudflared support)</li>
+</ul>
+</li>
+<li>
+<p>Tools to use:</p>
+<ul>
+<li>nak (the nostr army knife):
+<ul>
+<li>Download from <a href="https://github.com/fiatjaf/nak/releases">https://github.com/fiatjaf/nak/releases</a></li>
+<li>Installation steps:
+<ul>
+<li>For Linux/macOS:
+<pre><code class="language-bash"># Download the appropriate version for your system
+wget https://github.com/fiatjaf/nak/releases/latest/download/nak-linux-amd64  # for Linux
+# or
+wget https://github.com/fiatjaf/nak/releases/latest/download/nak-darwin-amd64  # for macOS
+
+# Make it executable
+chmod +x nak-*
+
+# Move to a directory in your PATH
+sudo mv nak-* /usr/local/bin/nak
+</code></pre>
+</li>
+<li>For Windows:
+<pre><code class="language-batch"># Download the Windows version
+curl -L -o nak.exe https://github.com/fiatjaf/nak/releases/latest/download/nak-windows-amd64.exe
+
+# Move to a directory in your PATH (e.g., C:\Windows)
+move nak.exe C:\Windows\nak.exe
+</code></pre>
+</li>
+</ul>
+</li>
+<li>Verify installation:
+<pre><code class="language-bash">nak --version
+</code></pre>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ol>
+<h2 id="setting-up-citrine">Setting Up Citrine</h2>
+<ol>
+<li>Open the Citrine app</li>
+<li>Start the server</li>
+<li>You'll see it running on <code>ws://127.0.0.1:4869</code> (local network only)</li>
+<li>Go to settings and paste your npub into &quot;Accept events signed by&quot; inbox and press the + button. This prevents others from publishing events to your personal relay.</li>
+</ol>
+<h2 id="installing-required-tools">Installing Required Tools</h2>
+<ol>
+<li>Install Termux from Google Play Store</li>
+<li>Open Termux and run:</li>
+</ol>
+<pre><code class="language-bash">pkg update &amp;&amp; pkg install wget
+wget https://github.com/cloudflare/cloudflared/releases/latest/download/cloudflared-linux-arm64.deb
+dpkg -i cloudflared-linux-arm64.deb
+</code></pre>
+<h2 id="cloudflare-authentication">Cloudflare Authentication</h2>
+<ol>
+<li>Run the authentication command:</li>
+</ol>
+<pre><code class="language-bash">cloudflared tunnel login
+</code></pre>
+<ol start="2">
+<li>Follow the instructions:
+<ul>
+<li>Copy the provided URL to your browser</li>
+<li>Log in to your Cloudflare account</li>
+<li>If the URL expires, copy it again after logging in</li>
+</ul>
+</li>
+</ol>
+<h2 id="creating-the-tunnel">Creating the Tunnel</h2>
+<ol>
+<li>Create a new tunnel:</li>
+</ol>
+<pre><code class="language-bash">cloudflared tunnel create &lt;TUNNEL_NAME&gt;
+</code></pre>
+<ul>
+<li>Choose any name you prefer for your tunnel</li>
+<li>Copy the tunnel ID after creating the tunnel</li>
+</ul>
+<ol start="2">
+<li>Create and configure the tunnel config:</li>
+</ol>
+<pre><code class="language-bash">touch ~/.cloudflared/config.yml
+nano ~/.cloudflared/config.yml
+</code></pre>
+<ol start="3">
+<li>Add this configuration (replace the placeholders with your values):</li>
+</ol>
+<pre><code class="language-yaml">tunnel: &lt;TUNNEL_UUID&gt;
+credentials-file: /data/data/com.termux/files/home/.cloudflared/&lt;TUNNEL_UUID&gt;.json
+ingress:
+  - hostname: nostr.yourdomain.com
+    service: ws://localhost:4869
+  - service: http_status:404
+</code></pre>
+<ul>
+<li><strong>Note:</strong> In nano editor:
+<ul>
+<li><code>CTRL+O</code> and Enter to save</li>
+<li><code>CTRL+X</code> to exit</li>
+</ul>
+</li>
+<li><strong>Note:</strong> Check the credentials file path in the logs</li>
+</ul>
+<ol start="4">
+<li>Validate your configuration:</li>
+</ol>
+<pre><code class="language-bash">cloudflared tunnel validate
+</code></pre>
+<ol start="5">
+<li>Start the tunnel:</li>
+</ol>
+<pre><code class="language-bash">cloudflared tunnel run my-relay
+</code></pre>
+<h2 id="preventing-android-from-killing-the-tunnel">Preventing Android from Killing the Tunnel</h2>
+<p>Run these commands to maintain tunnel stability:</p>
+<pre><code class="language-bash">date &amp;&amp; apt install termux-tools &amp;&amp; termux-setup-storage &amp;&amp; termux-wake-lock
+echo &quot;nameserver 1.1.1.1&quot; &gt; $PREFIX/etc/resolv.conf
+</code></pre>
+<p><strong>Tip:</strong> You can open multiple Termux sessions by swiping from the left edge of the screen while keeping your tunnel process running.</p>
+<h2 id="updating-your-outbox-model-relays">Updating Your Outbox Model Relays</h2>
+<p>Once your relay is running and accessible via your domain, you'll want to update your relay list in the Nostr network. This ensures other clients know about your relay and can connect to it.</p>
+<h3 id="decoding-npub-public-key">Decoding npub (Public Key)</h3>
+<p>Private keys (nsec) and public keys (npub) are encoded in bech32 format, which includes:</p>
+<ul>
+<li>A prefix (like nsec1, npub1 etc.)</li>
+<li>The encoded data</li>
+<li>A checksum</li>
+</ul>
+<p>This format makes keys:</p>
+<ul>
+<li>Easy to distinguish</li>
+<li>Hard to copy incorrectly</li>
+</ul>
+<p>However, most tools require these keys in hexadecimal (hex) format.</p>
+<p>To decode an npub string to its hex format:</p>
+<pre><code class="language-bash">nak decode nostr:npub1dejts0qlva8mqzjlrxqkc2tmvs2t7elszky5upxaf3jha9qs9m5q605uc4
+</code></pre>
+<p>Change it with your own npub.</p>
+<pre><code class="language-bash">{
+  &quot;pubkey&quot;: &quot;6e64b83c1f674fb00a5f19816c297b6414bf67f015894e04dd4c657e94102ee8&quot;
+}
+</code></pre>
+<p>Copy the pubkey value in quotes.</p>
+<h3 id="create-a-kind-10002-event-with-your-relay-list">Create a kind 10002 event with your relay list:</h3>
+<ul>
+<li>Include your new relay with write permissions</li>
+<li>Include other relays you want to read from and write to, omit 3rd parameter to make it both read and write</li>
+</ul>
+<p>Example format:</p>
+<pre><code class="language-json">{
+  &quot;kind&quot;: 10002,
+  &quot;tags&quot;: [
+    [&quot;r&quot;, &quot;wss://your-relay-domain.com&quot;, &quot;write&quot;],
+    [&quot;r&quot;, &quot;wss://eden.nostr.land/&quot;],
+    [&quot;r&quot;, &quot;wss://nos.lol/&quot;],
+    [&quot;r&quot;, &quot;wss://nostr.bitcoiner.social/&quot;],
+    [&quot;r&quot;, &quot;wss://nostr.mom/&quot;],
+    [&quot;r&quot;, &quot;wss://relay.primal.net/&quot;],
+    [&quot;r&quot;, &quot;wss://nostr.wine/&quot;, &quot;read&quot;],
+    [&quot;r&quot;, &quot;wss://relay.damus.io/&quot;],
+    [&quot;r&quot;, &quot;wss://relay.nostr.band/&quot;],
+    [&quot;r&quot;, &quot;wss://relay.snort.social/&quot;]
+  ],
+  &quot;content&quot;: &quot;&quot;
+}
+</code></pre>
+<p>Save it to a file called <code>event.json</code></p>
+<p><strong>Note:</strong> Add or remove any relays you want. To check your existing 10002 relays:</p>
+<ul>
+<li>
+<p>Visit <a href="https://nostr.band/?q=by%3Anpub1dejts0qlva8mqzjlrxqkc2tmvs2t7elszky5upxaf3jha9qs9m5q605uc4+++kind%3A10002">https://nostr.band/?q=by%3Anpub1dejts0qlva8mqzjlrxqkc2tmvs2t7elszky5upxaf3jha9qs9m5q605uc4+++kind%3A10002</a></p>
+</li>
+<li>
+<p>nostr.band is an indexing service, it probably has your relay list.</p>
+</li>
+<li>
+<p>Replace <code>npub1xxx</code> in the URL with your own npub</p>
+</li>
+<li>
+<p>Click &quot;VIEW JSON&quot; from the menu to see the raw event</p>
+</li>
+<li>
+<p>Or use the <code>nak</code> tool if you know the relays</p>
+<pre><code class="language-bash">nak req -k 10002 -a &lt;your-pubkey&gt; wss://relay1.com wss://relay2.com
+</code></pre>
+<p>Replace <code>&lt;your-pubkey&gt;</code> with your public key in hex format (you can get it using <code>nak decode &lt;your-npub&gt;</code>)</p>
+</li>
+</ul>
+<ol start="2">
+<li>Sign and publish the event:
+<ul>
+<li>Use a Nostr client that supports kind 10002 events</li>
+<li>Or use the <code>nak</code> command-line tool:</li>
+</ul>
+<pre><code class="language-bash">nak event --sec ncryptsec1... wss://relay1.com wss://relay2.com $(cat event.json)
+</code></pre>
+</li>
+</ol>
+<p><strong>Important Security Notes:</strong></p>
+<ol>
+<li>Never share your nsec (private key) with anyone</li>
+<li>Consider using NIP-49 encrypted keys for better security</li>
+<li>Never paste your nsec or private key into the terminal. The command will be saved in your shell history, exposing your private key. To clear the command history:
+<ul>
+<li>For bash: use <code>history -c</code></li>
+<li>For zsh: use <code>fc -W</code> to write history to file, then <code>fc -p</code> to read it back</li>
+<li>Or manually edit your shell history file (e.g., <code>~/.zsh_history</code> or <code>~/.bash_history</code>)</li>
+</ul>
+</li>
+<li>if you're using <code>zsh</code>, use <code>fc -p</code> to prevent the next command from being saved to history</li>
+<li>Or temporarily disable history before running sensitive commands:</li>
+</ol>
+<pre><code class="language-bash">unset HISTFILE
+nak key encrypt ...
+set HISTFILE
+</code></pre>
+<h2 id="how-to-securely-create-nip-49-encypted-private-key">How to securely create NIP-49 encypted private key</h2>
+<pre><code class="language-bash"># Read your private key (input will be hidden)
+read -s SECRET 
+# Read your password (input will be hidden)
+read -s PASSWORD
+# encrypt command
+echo &quot;$SECRET&quot; | nak key encrypt &quot;$PASSWORD&quot;
+# copy and paste the ncryptsec1 text from the output
+read -s ENCRYPTED
+nak key decrypt &quot;$ENCRYPTED&quot;
+# clear variables from memory
+unset SECRET PASSWORD ENCRYPTED
+</code></pre>
+<p>On a Windows command line, to read from stdin and use the variables in <code>nak</code> commands, you can use a combination of <code>set /p</code> to read input and then use those variables in your command. Here's an example:</p>
+<pre><code class="language-bash">@echo off
+set /p &quot;SECRET=Enter your secret key: &quot;
+set /p &quot;PASSWORD=Enter your password: &quot;
+
+echo %SECRET%| nak key encrypt %PASSWORD%
+
+:: Clear the sensitive variables
+set &quot;SECRET=&quot;
+set &quot;PASSWORD=&quot;
+</code></pre>
+<p>If your key starts with <code>ncryptsec1</code>, the <code>nak</code> tool will securely prompt you for a password when using the <code>--sec</code> parameter, unless the command is used with a pipe <code>&lt; &gt;</code> or <code>|</code>.</p>
+<pre><code class="language-bash">nak event --sec ncryptsec1... wss://relay1.com wss://relay2.com $(cat event.json)
+</code></pre>
+<ol start="3">
+<li>Verify the event was published:
+<ul>
+<li>Check if your relay list is visible on other relays</li>
+<li>Use the <code>nak</code> tool to fetch your kind 10002 events:</li>
+</ul>
+</li>
+</ol>
+<pre><code class="language-bash">nak req -k 10002 -a &lt;your-pubkey&gt; wss://relay1.com wss://relay2.com
+</code></pre>
+<ol start="4">
+<li>Testing your relay:
+<ul>
+<li>Try connecting to your relay using different Nostr clients</li>
+<li>Verify you can both read from and write to your relay</li>
+<li>Check if events are being properly stored and retrieved</li>
+<li><strong>Tip:</strong> Use multiple Nostr clients to test different aspects of your relay</li>
+</ul>
+</li>
+</ol>
+<p><strong>Note:</strong> If anyone in the community has a more efficient method of doing things like updating outbox relays, please share your insights in the comments. Your expertise would be greatly appreciated!</p>
+]]></content:encoded>
+      <author>dhalsim</author>
+      <enclosure url="https://image.nostr.build/f708db07b85c002b20b3159b48447d51cbcb0bae0f5717ce6dbc060580c8b35d.jpg" length="0" type="image/jpeg"></enclosure>
+      <pubDate>Wed, 23 Apr 2025 23:23:34 +0300</pubDate>
+    </item>
+    <item>
+      <title>How to Import and Export Your Nostr Notes</title>
+      <link>https://blog.nostrize.me/naddr1qvzqqqr4gupzqmnyhq7p7e60kq997xvpds5hkeq5hanlq9vffczd6nr9062pqthgqq24wmjfwp6rv6t8v935ujfhv4yr2wzzdfz5gl5quve.html</link>
+      <description>Learn how to import your Nostr notes from public relays and export them into your own relay using the nak CLI tool. This step-by-step guide covers installation, fetching notes, filtering by event types, and uploading to a self-hosted relay—ensuring your content is safe and under your control.</description>
+      <content:encoded><![CDATA[<p>This guide will help you import your notes from various Nostr relays and export them into your own relay. This is particularly useful when you want to ensure your content is backed up or when you're setting up your own relay.</p>
+<h2 id="prerequisite">Prerequisite</h2>
+<p>Your own Nostr relay (if you don't have one, check out <a href="https://njump.me/nevent1qqsqd24rtzchjvxh7a9ahe9xs54w04rtlcpgt499uux8kkzgpucuhmqppamhxue69uhkummnw3ezumt0d5q3vamnwvaz7tmjv4kxz7fwwpexjmtpdshxuet5qy28wumn8ghj7un9d3shjtnyv9kh2uewd9hsz9nhwden5te0wfjkccte9ehx7um5wghxyctwvsq35amnwvaz7tmd0ykhyetvv9ujumn0wd68y6t6v5hx6eg8w8a7q">Part 1: How to Run Your Own Nostr Relay</a>)</p>
+<h2 id="installing-nak">Installing nak</h2>
+<p><code>nak</code> is a command-line tool that helps you interact with Nostr relays. Here's how to install it:</p>
+<h3 id="for-windows-users">For Windows Users</h3>
+<ol>
+<li>Visit the <a href="https://github.com/fiatjaf/nak/releases">nak releases page</a></li>
+<li>Download the latest <code>nak-windows-amd64.exe</code></li>
+<li>Rename it to <code>nak.exe</code></li>
+<li>Move it to a directory in your PATH or use it from its current location</li>
+</ol>
+<h3 id="for-macos-users">For macOS Users</h3>
+<ol>
+<li>Visit the <a href="https://github.com/fiatjaf/nak/releases">nak releases page</a></li>
+<li>Download the latest <code>nak-darwin-amd64</code></li>
+<li>Open Terminal and run:
+<pre><code class="language-bash">chmod +x nak-darwin-amd64
+sudo mv nak-darwin-amd64 /usr/local/bin/nak
+</code></pre>
+</li>
+</ol>
+<h3 id="for-linux-users">For Linux Users</h3>
+<ol>
+<li>Visit the <a href="https://github.com/fiatjaf/nak/releases">nak releases page</a></li>
+<li>Download the latest <code>nak-linux-amd64</code></li>
+<li>Open Terminal and run:
+<pre><code class="language-bash">chmod +x nak-linux-amd64
+sudo mv nak-linux-amd64 /usr/local/bin/nak
+</code></pre>
+</li>
+</ol>
+<h2 id="getting-your-public-key-in-hex-format">Getting Your Public Key in Hex Format</h2>
+<p>Before downloading your notes, you need to convert your npub (public key) to its hex format. If you have your npub, run:</p>
+<pre><code class="language-bash">nak decode npub1YOUR_NPUB_HERE
+</code></pre>
+<p>This will output your public key in hex format, which you'll need for the next steps.</p>
+<h2 id="downloading-your-notes">Downloading Your Notes</h2>
+<p>To download your notes, you'll need your public key in hex format and a list of reliable relays. Here are some popular relays you can use:</p>
+<ul>
+<li>wss://eden.nostr.land/</li>
+<li>wss://nos.lol/</li>
+<li>wss://nostr.bitcoiner.social/</li>
+<li>wss://nostr.mom/</li>
+<li>wss://relay.primal.net/</li>
+<li>wss://relay.damus.io/</li>
+<li>wss://relay.nostr.band/</li>
+<li>wss://relay.snort.social/</li>
+</ul>
+<p><strong>Note:</strong> You should check your Nostr client's settings to find additional relays where your notes are published. Add these to the list above.</p>
+<h3 id="important-event-kinds">Important Event Kinds</h3>
+<p>Here are some important event kinds you might want to filter for:</p>
+<ul>
+<li><code>0</code>: User Metadata (profile information)</li>
+<li><code>1</code>: Short Text Notes</li>
+<li><code>3</code>: Follow List</li>
+<li><code>4</code>: Encrypted Direct Messages</li>
+</ul>
+<p>Get the full list from: <a href="https://nips.nostr.com/#event-kinds">https://nips.nostr.com/#event-kinds</a></p>
+<h3 id="downloading-with-event-kind-filters">Downloading with Event Kind Filters</h3>
+<p>To download your notes with specific event kinds, use the <code>-k</code> flag followed by the kind number, use multiple if you need to. For example, to download your profile, short notes, follow list, and direct messages:</p>
+<pre><code class="language-bash">nak req -a YOUR_HEX_PUBKEY -k 0 -k 1 -k 3 -k 4 wss://eden.nostr.land/ wss://nos.lol/ wss://nostr.bitcoiner.social/ wss://nostr.mom/ wss://relay.primal.net/ wss://relay.damus.io/ wss://relay.nostr.band/ wss://relay.snort.social/ &gt; events_filtered.json
+</code></pre>
+<p>Or to download all your content, just don't provide any <code>k</code> flag:</p>
+<pre><code class="language-bash">nak req -a YOUR_HEX_PUBKEY wss://eden.nostr.land/ wss://nos.lol/ wss://nostr.bitcoiner.social/ wss://nostr.mom/ wss://relay.primal.net/ wss://relay.damus.io/ wss://relay.nostr.band/ wss://relay.snort.social/ &gt; events.json
+</code></pre>
+<p>This will create a file containing all your notes in JSON Lines format.</p>
+<h2 id="uploading-your-notes-to-your-relay">Uploading Your Notes to Your Relay</h2>
+<p>Once you have your <code>events.json</code> or <code>events_filtered.json</code> file, you can upload it to your own relay. Replace <code>YOUR_RELAY</code> with your relay's WebSocket URL (e.g., <code>wss://my-relay.nostrize.me</code>).</p>
+<pre><code class="language-bash">nak event YOUR_RELAY &lt; events.json
+</code></pre>
+<p><strong>Important Notes:</strong></p>
+<ol>
+<li>Make sure your relay is running and accessible</li>
+<li>The upload process might take some time depending on how many notes you have</li>
+<li>You can verify the upload by querying your relay for your notes</li>
+</ol>
+<h2 id="verifying-the-upload">Verifying the Upload</h2>
+<p>To verify that your notes were successfully uploaded to your relay, run:</p>
+<pre><code class="language-bash">nak req -a YOUR_HEX_PUBKEY YOUR_RELAY
+</code></pre>
+<p>This should return the same notes that were in your <code>events.json</code> file.</p>
+<h2 id="troubleshooting">Troubleshooting</h2>
+<p>If you encounter any issues:</p>
+<ol>
+<li>Make sure your relay is running and accessible</li>
+<li>Check that you're using the correct public key</li>
+<li>Verify that the relays in your download list are working</li>
+<li>Ensure you have proper permissions to write to your relay</li>
+</ol>
+<h2 id="next-steps">Next Steps</h2>
+<ul>
+<li>Remember to regularly backup your notes to ensure you don't lose any content.</li>
+<li>If you want to keep your friends' notes as well, add npubs that you want to import into your relay's settings (for Citrine it is &quot;Accept events signed by&quot; list), and run the commands for their pubkeys.</li>
+</ul>
+]]></content:encoded>
+      <author>dhalsim</author>
+      <enclosure url="https://image.nostr.build/09593373dc30cafd8174ed57a1cae310c517b17e664b2c59ab5a41d0c1aca3d8.jpg" length="0" type="image/jpeg"></enclosure>
+      <pubDate>Wed, 23 Apr 2025 23:44:28 +0300</pubDate>
+    </item>
+  </channel>
+</rss>

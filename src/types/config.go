@@ -14,6 +14,7 @@ type Config struct {
 	Relays   []string `yaml:"relays"`
 	Articles []string `yaml:"articles"`
 	Profiles []string `yaml:"profiles"`
+	BlogURL  string   `yaml:"blog_url"`
 	Layout   Layout   `yaml:"layout"`
 	Features Features `yaml:"features"`
 }

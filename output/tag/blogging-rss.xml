@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="UTF-8"?><rss version="2.0" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>Nostr Articles</title>
+    <link>https://blog.nostrize.me</link>
+    <description>Nostr Articles Feed</description>
+    <managingEditor> (Nostr Static)</managingEditor>
+    <pubDate>Tue, 29 Apr 2025 12:05:53 +0300</pubDate>
+    <item>
+      <title>How to Create a Blog Out of Nostr Long-Form Articles</title>
+      <link>https://blog.nostrize.me/naddr1qvzqqqr4gupzqmnyhq7p7e60kq997xvpds5hkeq5hanlq9vffczd6nr9062pqthgqq25x6r2d90hzaj529f9gur2x9h4yt2gfy69qm05rzu.html</link>
+      <description>nostr-static is a static site generator (SSG) tool that transforms Nostr long-form content into a beautiful, static blog (which works really fast). It fetches articles from the Nostr network and generates HTML pages that can be hosted anywhere. This tool bridges the gap between Nostr&#39;s decentralized content and traditional web hosting, making it easy to create and maintain a blog powered by Nostr content.</description>
+      <content:encoded><![CDATA[<ul>
+<li><strong>Demo:</strong> <a href="https://blog.nostrize.me">https://blog.nostrize.me</a></li>
+<li><strong>Source code:</strong> <a href="https://github.com/dhalsim/nostr-static">nostr-static</a></li>
+</ul>
+<h3 id="prerequisites">Prerequisites</h3>
+<p>Before using nostr-static, you'll need:</p>
+<ol>
+<li>
+<p><strong>Nostr Articles</strong>: You can either:</p>
+<ul>
+<li>Create new articles using platforms like <a href="https://yakihonne.com">yakihonne.com</a> or <a href="https://habla.news">habla.news</a></li>
+<li>Find existing articles on Nostr</li>
+<li>Copy the naddr string from the article (usually can be found in the address bar)</li>
+</ul>
+</li>
+<li>
+<p><strong>Author Profiles</strong>: For each article's author:</p>
+<ul>
+<li>Copy their public key (pubkey)</li>
+<li>Visit <a href="https://njump.me">njump.me/npub1xxxxx</a> (replace with the actual pubkey)</li>
+<li>Copy the nprofile string from the page</li>
+</ul>
+</li>
+</ol>
+<p>These identifiers (naddr for articles and nprofile for authors) are essential for the tool to fetch and display your content correctly.</p>
+<h2 id="features">Features</h2>
+<h3 id="core-functionality">Core Functionality</h3>
+<ul>
+<li><strong>Index Page</strong>: A homepage featuring your blog's title, logo, article summaries, and tags</li>
+<li><strong>Article Pages</strong>: Individual pages for each article, including:
+<ul>
+<li>Title and logo</li>
+<li>Article summary</li>
+<li>Full content</li>
+<li>Tags</li>
+<li>Comments (via ZapThreads integration)</li>
+</ul>
+</li>
+</ul>
+<h3 id="social-features">Social Features</h3>
+<ul>
+<li><strong>Comments</strong>: Integrated with <a href="https://github.com/franzaps/zapthreads">ZapThreads</a> for decentralized commenting</li>
+<li><strong>Nostr Connect</strong>: Seamless integration with <a href="https://git.njump.me/wnj">window.nostr.js (wnj)</a>, supporting NIP-46 bunker connect</li>
+</ul>
+<h3 id="content-organization">Content Organization</h3>
+<ul>
+<li><strong>Tag Pages</strong>: Browse articles filtered by specific tags</li>
+<li><strong>Profile Pages</strong>: View articles from specific authors</li>
+<li><strong>Manual Curation</strong>: Select and order articles by adding their naddr strings (see <a href="https://nips.nostr.com/19">NIP-19</a>)</li>
+</ul>
+<h3 id="customization-options">Customization Options</h3>
+<ul>
+<li><strong>Themes</strong>: Choose between dark and light mode</li>
+<li><strong>Branding</strong>:
+<ul>
+<li>Custom logo</li>
+<li>Custom blog title</li>
+</ul>
+</li>
+<li><strong>Network</strong>: Specify your preferred Nostr relays</li>
+</ul>
+<h3 id="technical-requirements">Technical Requirements</h3>
+<ul>
+<li><strong>Profile Format</strong>: Authors must be added in nprofile format (see <a href="https://nips.nostr.com/19">NIP-19</a>) for consistency</li>
+<li><strong>Automatic Updates</strong>: Built-in scripts for:
+<ul>
+<li>Windows Task Scheduler</li>
+<li>Unix/Linux cron jobs</li>
+</ul>
+</li>
+</ul>
+<h2 id="getting-started">Getting Started</h2>
+<ol>
+<li>
+<p><strong>Fork and Clone</strong>:</p>
+<ul>
+<li>Fork <a href="https://github.com/dhalsim/nostr-static">this repository</a> to your GitHub account</li>
+<li>Clone it to your local machine or use <a href="https://docs.github.com/en/codespaces/quickstart">GitHub Codespaces</a> for a cloud-based development environment</li>
+<li>Watch this <a href="https://youtu.be/_W9B7qc9lVc">quick tutorial</a> to learn more about GitHub Codespaces</li>
+</ul>
+</li>
+<li>
+<p><strong>Configuration</strong>: Set up your <code>config.yaml</code> file with:</p>
+<ul>
+<li>Blog title and logo</li>
+<li>Theme preference</li>
+<li>Relay list</li>
+<li>Article naddr strings</li>
+<li>Author nprofile strings</li>
+</ul>
+</li>
+<li>
+<p><strong>Content Selection</strong>: Add your desired articles by including their naddr strings in the configuration</p>
+</li>
+<li>
+<p><strong>Author Selection</strong>: You have to add the nprofile strings of the articles. This is needed for URL consistancy.</p>
+</li>
+<li>
+<p><strong>Build &amp; Run</strong>: Follow the instruction in the README at <a href="https://github.com/dhalsim/nostr-static">https://github.com/dhalsim/nostr-static</a></p>
+</li>
+<li>
+<p><strong>Deployment</strong>: Choose your preferred static hosting service and deploy the generated HTML files</p>
+</li>
+<li>
+<p><strong>Updates</strong>: Set up automatic updates using the provided scripts for your operating system (For github pages)</p>
+</li>
+</ol>
+<h2 id="deployment-options">Deployment Options</h2>
+<h3 id="github-pages-recommended">GitHub Pages (Recommended)</h3>
+<p>GitHub Pages provides free hosting for static websites. Here's how to set it up:</p>
+<ol>
+<li>
+<p><strong>Enable GitHub Pages</strong>:</p>
+<ul>
+<li>Go to your repository's Settings</li>
+<li>Navigate to &quot;Pages&quot; in the menu</li>
+<li>Under &quot;Build and deployment&quot; &gt; &quot;Source&quot;, select &quot;GitHub Actions&quot;</li>
+<li>Enable Actions by following the <a href="https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/enabling-features-for-your-repository/managing-github-actions-settings-for-a-repository#allowing-select-actions-and-reusable-workflows-to-run">GitHub Actions settings guide</a></li>
+<li>Go to the &quot;Actions&quot; tab in the top menu. If you see the message &quot;Workflows aren't being run on this forked repository&quot;, click the &quot;I understand my workflows, go ahead and enable them&quot; button</li>
+</ul>
+</li>
+<li>
+<p><strong>Custom Domain Setup</strong>:</p>
+<ul>
+<li>Purchase a domain from your preferred domain registrar</li>
+<li>Create a CNAME record in your domain's DNS settings:
+<ul>
+<li>Type: CNAME</li>
+<li>Name: @ or www or a subdomain you prefer (depending on your preference)</li>
+<li>Value: YOUR_GITHUB_USERNAME.github.io</li>
+</ul>
+</li>
+<li>In your repository's GitHub Pages settings:
+<ul>
+<li>Enter your custom domain in the &quot;Custom domain&quot; field</li>
+<li>Check &quot;Enforce HTTPS&quot; for secure connections</li>
+</ul>
+</li>
+<li>Wait for DNS propagation (can take up to 24 hours)</li>
+<li>Your site will be available at your custom domain</li>
+</ul>
+</li>
+</ol>
+<h3 id="other-hosting-options">Other Hosting Options</h3>
+<p>You can also deploy your static site to any hosting service that supports static websites, such as:</p>
+<ul>
+<li>Netlify</li>
+<li>Vercel</li>
+<li>Cloudflare Pages</li>
+<li>Amazon S3</li>
+<li>Any traditional web hosting service</li>
+</ul>
+<h2 id="why-nostr-static">Why nostr-static?</h2>
+<p>nostr-static offers a unique solution for bloggers who want to leverage Nostr's decentralized content while maintaining a traditional web presence. It combines the best of both worlds:</p>
+<ul>
+<li><strong>Decentralized Content</strong>: Your articles live on the Nostr network</li>
+<li><strong>Traditional Web Presence</strong>: A familiar blog interface for your readers</li>
+<li><strong>Easy Maintenance</strong>: Simple configuration and automatic updates</li>
+<li><strong>Flexible Hosting</strong>: Deploy anywhere that supports static websites</li>
+<li><strong>Social interactions</strong>: Leverage nostr for comments</li>
+</ul>
+<h2 id="conclusion">Conclusion</h2>
+<p>nostr-static makes it easy to create a professional blog from your Nostr long-form content. Whether you're a seasoned Nostr user or new to the ecosystem, this tool provides a straightforward way to share your content with both the Nostr community and traditional web users.</p>
+<p>Start your Nostr-powered blog today by visiting the <a href="https://blog.nostrize.me">demo</a> and exploring the possibilities!</p>
+]]></content:encoded>
+      <author>dhalsim</author>
+      <enclosure url="https://image.nostr.build/28ee6fa221c51f359c510d348ba98d82f566162ffb66eb5c9246eb5c0012748f.jpg" length="0" type="image/jpeg"></enclosure>
+      <pubDate>Sun, 27 Apr 2025 02:33:16 +0300</pubDate>
+    </item>
+  </channel>
+</rss>

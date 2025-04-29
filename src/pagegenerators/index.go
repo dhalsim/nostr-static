@@ -32,6 +32,7 @@ type IndexData struct {
 
 type GenerateIndexParams struct {
 	BaseFolder       string
+	BlogURL          string
 	Events           []types.Event
 	Profiles         map[string]types.Event
 	OutputDir        string
@@ -138,6 +139,19 @@ func GenerateIndexHTML(params GenerateIndexParams) error {
 		indexData.Articles = append(indexData.Articles, article)
 	}
 
+	// Generate feeds
+	if err := GenerateFeeds(GenerateFeedParams{
+		Folder:         params.OutputDir,
+		FileName:       "index",
+		BlogURL:        params.BlogURL,
+		Events:         params.Events,
+		Profiles:       params.Profiles,
+		Layout:         params.Layout,
+		EventIDToNaddr: params.EventIDToNaddr,
+	}); err != nil {
+		return err
+	}
+
 	// Generate the HTML using htmlgo
 	html := Html5_(
 		Head_(
@@ -148,6 +162,7 @@ func GenerateIndexHTML(params GenerateIndexParams) error {
 			)),
 			Title_(Text(indexData.Title)),
 			Style_(Text_(CommonStyles+CommonResponsiveStyles)),
+			renderFeedLinks("", "index"),
 		),
 		Body(Attr(a.Class(indexData.Color+" index")),
 			Div(Attr(a.Class("page-container")),
