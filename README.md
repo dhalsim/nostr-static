@@ -6,22 +6,23 @@ A static web site generator written in Go that creates HTML pages from long-form
 
 https://blog.nostrize.me
 
-## Version 0.5
+## Version 0.6
 
 ## Features
 
 - Downloads Nostr events by their naddr1 addresses
 - Generates static HTML pages from long-form content
-- Supports multiple relays
-- Customizable layout and styling
-- Easy deployment to any static hosting service
+- Choose between dark and light themes
+- Lists articles by profiles and tags
+- Has RSS and Atom feeds for index, profiles and tags
+- Easy deployment to Github Pages
 
 ## Todo
 
 - [x] support naddr
 - [x] profiles
 - [x] comments, zapthreads
-- [ ] atom, rss feeds
+- [x] atom, rss feeds
 - [ ] dynamic theme option
 
 ## Prequisites
@@ -96,6 +97,8 @@ layout:
   color: dark  # Options: light, dark
   logo: logo.png  # Logo image file name
   title: "Nostr Articles"
+
+blog_url: https://blog.nostrize.me
 
 relays:
   - wss://relay.damus.io

@@ -37,6 +37,28 @@
           }
       
            
+          .feed-links {
+              display: flex;
+              justify-content: center;
+              align-items: center;
+              gap: 0.5em;
+              padding: 1em;
+          }
+      
+          .feed-icon {
+              width: 16px;
+              height: 16px;
+          }
+      
+          body.light .feed-icon {
+              filter: invert(0.4);
+          }
+      
+          body.dark .feed-icon {
+              filter: invert(0.8);
+          }
+      
+           
           .logo {
               text-align: center;
           }
@@ -92,13 +114,13 @@
           }
       
           body.index .page-container,
-          body.tags .page-container {
+          body.tagspage .page-container {
               display: flex;
               align-items: flex-start;
           }
       
           .logo-container {
-              top: 20px;
+              margin-top: 20px;
               margin-right: 20px;
           }
       
@@ -108,7 +130,7 @@
           }
       
           body.index .main-content,
-          body.tags .main-content {
+          body.tagspage .main-content {
               flex: 1;
           }
       

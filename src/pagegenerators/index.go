@@ -162,7 +162,8 @@ func GenerateIndexHTML(params GenerateIndexParams) error {
 			)),
 			Title_(Text(indexData.Title)),
 			Style_(Text_(CommonStyles+CommonResponsiveStyles)),
-			renderFeedLinks("", "index"),
+			rssFeedLink("index"),
+			atomFeedLink("index"),
 		),
 		Body(Attr(a.Class(indexData.Color+" index")),
 			Div(Attr(a.Class("page-container")),
@@ -172,6 +173,7 @@ func GenerateIndexHTML(params GenerateIndexParams) error {
 				renderIndexArticles(indexData),
 			),
 			renderFooter(),
+			renderFeed("index"),
 			renderTimeAgoScript(),
 		),
 	)

@@ -268,7 +268,8 @@ func GenerateProfilePages(params GenerateProfilePagesParams) error {
 				Title_(Text("Profile: "+data.Name)),
 				Style_(Text_(CommonStyles+CommonResponsiveStyles)),
 				Style_(Text_(ProfileStyles)),
-				renderFeedLinks(data.BaseFolder, data.Nprofile),
+				rssFeedLink(data.Nprofile),
+				atomFeedLink(data.Nprofile),
 			),
 			Body(Attr(a.Class(data.Color+" profile")),
 				Div(Attr(a.Class("page-container")),
@@ -288,6 +289,7 @@ func GenerateProfilePages(params GenerateProfilePagesParams) error {
 					),
 				),
 				renderFooter(),
+				renderFeed(data.Nprofile),
 				renderTimeAgoScript(),
 			),
 		)
