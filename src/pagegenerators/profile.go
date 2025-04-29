@@ -295,12 +295,6 @@ body.profile .page-container {
 		margin: 0 auto;
 }
 
-body.profile .logo-container {
-		flex: 0 0 200px;
-		position: sticky;
-		top: 20px;
-}
-
 body.profile .main-content {
 		flex: 1;
 		max-width: 800px;

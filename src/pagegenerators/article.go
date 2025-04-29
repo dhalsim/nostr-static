@@ -98,12 +98,6 @@ body.article .page-container {
 		margin: 0 auto;
 }
 
-body.article .logo-container {
-		flex: 0 0 200px;
-		position: sticky;
-		top: 20px;
-}
-
 body.article .main-content {
 		flex: 1;
 		max-width: 800px;
@@ -145,7 +139,7 @@ body.article article p {
 		word-wrap: break-word;
 		word-break: break-word;
 }
-		
+
 .page-container {
 		display: flex;
 		align-items: flex-start;

@@ -112,11 +112,14 @@ const CommonStyles = `
         align-items: flex-start;
     }
 
-    body.index .logo-container,
-    body.tags .logo-container {
-        flex: 0 0 200px;
-        position: sticky;
+    .logo-container {
         top: 20px;
+        margin-right: 20px;
+    }
+
+    .logo-container img {
+        max-height: 50px;
+        width: auto;
     }
 
     body.index .main-content,
@@ -254,40 +257,16 @@ const CommonResponsiveStyles = `
             padding: 15px;
         }
 
-        body.article .page-container,
-        body.index .page-container,
-        body.tags .page-container,
-        body.profile .page-container {
+        .page-container {
             flex-direction: column;
         }
 
-        body.article .logo-container,
-        body.index .logo-container,
-        body.tags .logo-container,
-        body.profile .logo-container {
-            flex: none;
-            position: static;
-        }
-
-        body.article .main-content,
-        body.index .main-content,
-        body.tags .main-content,
-        body.profile .main-content {
+        .main-content {
             width: 100%;
         }
 
         .article-card {
             padding: 15px;
-        }
-
-        .logo img {
-            max-height: 50px;
-            width: auto;
-        }
-
-        .logo-container {
-            text-align: center;
-            padding: 10px 0;
         }
     }
 `
