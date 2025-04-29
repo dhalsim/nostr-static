@@ -109,6 +109,7 @@ relays:
 
 features:
   - comments: true
+  - nostr_links: njump.me
 
 articles:
   - naddr1qvzqqqr4gupzqmnyhq7p7e60kq997xvpds5hkeq5hanlq9vffczd6nr9062pqthgqq2j6ezsgu69j7n92cmxxmfsgyeyyvjtxfuk7lwjq6s

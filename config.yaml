@@ -14,6 +14,7 @@ relays:
 
 features:
   comments: true
+  nostr_links: njump.me
 
 articles:
   - naddr1qvzqqqr4gupzqmnyhq7p7e60kq997xvpds5hkeq5hanlq9vffczd6nr9062pqthgqq25x6r2d90hzaj529f9gur2x9h4yt2gfy69qm05rzu

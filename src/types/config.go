@@ -7,7 +7,8 @@ type Layout struct {
 }
 
 type Features struct {
-	Comments bool `yaml:"comments"`
+	Comments   bool   `yaml:"comments"`
+	NostrLinks string `yaml:"nostr_links"`
 }
 
 type Config struct {

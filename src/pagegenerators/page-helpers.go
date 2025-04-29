@@ -1,12 +1,5 @@
 package pagegenerators
 
-func ternary[T any](cond bool, a, b T) T {
-	if cond {
-		return a
-	}
-	return b
-}
-
 // ExtractArticleMetadata extracts metadata from event tags
 func ExtractArticleMetadata(tags [][]string) ArticleMetadata {
 	var metadata ArticleMetadata

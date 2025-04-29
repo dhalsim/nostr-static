@@ -9,10 +9,12 @@ import (
 	"path/filepath"
 	"strings"
 
-	"nostr-static/src/types"
-
 	. "github.com/julvo/htmlgo"
 	a "github.com/julvo/htmlgo/attributes"
+
+	"nostr-static/src/pagegenerators/components"
+	"nostr-static/src/types"
+	"nostr-static/src/utils"
 )
 
 // ProfileData represents all data needed for profile templates
@@ -44,6 +46,7 @@ type ProfileArticleData struct {
 
 type GenerateProfilePagesParams struct {
 	BaseFolder       string
+	NostrLinks       string
 	BlogURL          string
 	Profiles         map[string]types.Event
 	Events           []types.Event
@@ -67,7 +70,9 @@ func renderProfilePicture(data ProfileData) HTML {
 }
 
 func renderProfileName(data ProfileData) HTML {
-	return H2_(Text(displayNameOrName(data.DisplayName, data.Name)))
+	return H2(Attr(a.Class("profile-name")),
+		Text(displayNameOrName(data.DisplayName, data.Name)),
+	)
 }
 
 func renderProfileAbout(data ProfileData) HTML {
@@ -112,9 +117,9 @@ func renderNip05(data ProfileData) HTML {
 		return Text("")
 	}
 
-	badgeClass := ternary(data.Nip05Verified, "verified", "unverified")
+	badgeClass := utils.Ternary(data.Nip05Verified, "verified", "unverified")
 
-	badgeIcon := ternary(data.Nip05Verified,
+	badgeIcon := utils.Ternary(data.Nip05Verified,
 		`<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>`,
 		`<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="red" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>`,
 	)
@@ -266,7 +271,7 @@ func GenerateProfilePages(params GenerateProfilePagesParams) error {
 					a.Content("width=device-width, initial-scale=1.0"),
 				)),
 				Title_(Text("Profile: "+data.Name)),
-				Style_(Text_(CommonStyles+CommonResponsiveStyles)),
+				Style_(Text_(CommonStyles+CommonResponsiveStyles+components.DotMenuCSS)),
 				Style_(Text_(ProfileStyles)),
 				rssFeedLink(data.Nprofile),
 				atomFeedLink(data.Nprofile),
@@ -280,7 +285,14 @@ func GenerateProfilePages(params GenerateProfilePagesParams) error {
 						Div(Attr(a.Class("profile-header")),
 							Div(Attr(a.Class("profile-header-left")),
 								renderProfilePicture(data),
-								renderProfileName(data),
+								Div(Attr(a.Class("profile-header-name")),
+									renderProfileName(data),
+									components.RenderNostrLinks(
+										"",
+										data.Nprofile,
+										params.NostrLinks,
+									),
+								),
 							),
 							renderProfileAbout(data),
 							renderProfileLinks(data),
@@ -291,6 +303,7 @@ func GenerateProfilePages(params GenerateProfilePagesParams) error {
 				renderFooter(),
 				renderFeed(data.Nprofile),
 				renderTimeAgoScript(),
+				components.RenderDropdownScript(),
 			),
 		)
 
@@ -340,6 +353,10 @@ body.dark .author-website:hover {
 		color: #4a9eff;
 }
 
+.profile-name {
+	display: inline-block;
+}
+
 .profile-picture {
 		width: 100px;
 		height: 100px;
@@ -357,6 +374,17 @@ body.dark .author-website:hover {
 		text-decoration: none;
 }
 
+.profile-header-name {
+		display: flex;
+		align-items: center;
+}
+
+.profile-header {
+		display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
 @media (max-width: 768px) {
 		.profile-header {
 				flex-direction: column;
@@ -366,7 +394,9 @@ body.dark .author-website:hover {
 		}
 
 		.profile-header-left {
-				align-items: center;
+				display: flex;
+    		flex-direction: column;
+    		align-items: center;
 		}
 
 		.profile-links {

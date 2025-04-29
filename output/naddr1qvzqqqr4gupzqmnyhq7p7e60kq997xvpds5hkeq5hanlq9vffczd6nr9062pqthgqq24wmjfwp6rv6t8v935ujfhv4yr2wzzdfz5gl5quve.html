@@ -50,14 +50,6 @@
               height: 16px;
           }
       
-          body.light .feed-icon {
-              filter: invert(0.4);
-          }
-      
-          body.dark .feed-icon {
-              filter: invert(0.8);
-          }
-      
            
           .logo {
               text-align: center;
@@ -180,6 +172,11 @@
               color: #e0e0e0;
           }
       
+          .time-ago {
+              display: inline-block;
+              min-width: 70px;
+          }
+      
            
           .compact-profile {
               display: flex;
@@ -256,105 +253,109 @@
               color: #4a9eff;
           }
       
+      body.article .logo-container {
+      	margin-top: 0;
+      }
+      
       body.article .page-container {
-      		display: flex;
-      		align-items: flex-start;
-      		max-width: 1200px;
-      		margin: 0 auto;
+      	display: flex;
+      	align-items: flex-start;
+      	max-width: 1200px;
+      	margin: 0 auto;
       }
       
       body.article .main-content {
-      		flex: 1;
-      		max-width: 800px;
+      	flex: 1;
+      	max-width: 800px;
       }
       
       body.article img {
-      		max-width: 100%;
-      		height: auto;
+      	max-width: 100%;
+      	height: auto;
       }
       
       body.article pre {
-      		background-color: #f5f5f5;
-      		padding: 15px;
-      		border-radius: 5px;
-      		overflow-x: auto;
+      	background-color: #f5f5f5;
+      	padding: 15px;
+      	border-radius: 5px;
+      	overflow-x: auto;
       }
       
       body.article code {
-      		font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+      	font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
       }
       
       body.article .article-header {
-      		margin-bottom: 2em;
+      	margin-bottom: 2em;
       }
       
       body.article .article-header h1 {
-      		margin-bottom: 0.5em;
+      	margin-bottom: 0.5em;
       }
       
       body.article article {
-      		word-wrap: break-word;
-      		overflow-wrap: break-word;
-      		hyphens: auto;
+      	word-wrap: break-word;
+      	overflow-wrap: break-word;
+      	hyphens: auto;
       }
       
       body.article article p {
-      		max-width: 100%;
-      		overflow-wrap: break-word;
-      		word-wrap: break-word;
-      		word-break: break-word;
+      	max-width: 100%;
+      	overflow-wrap: break-word;
+      	word-wrap: break-word;
+      	word-break: break-word;
       }
       
       .page-container {
-      		display: flex;
-      		align-items: flex-start;
-      		max-width: 1200px;
-      		margin: 0 auto;
+      	display: flex;
+      	align-items: flex-start;
+      	max-width: 1200px;
+      	margin: 0 auto;
       }
       
       .main-content {
-      		flex: 1;
-      		max-width: 800px;
+      	flex: 1;
+      	max-width: 800px;
       }
       
       img {
-      		max-width: 100%;
-      		height: auto;
+      	max-width: 100%;
+      	height: auto;
       }
       
       pre {
-      		background-color: #f5f5f5;
-      		padding: 15px;
-      		border-radius: 5px;
-      		overflow-x: auto;
+      	background-color: #f5f5f5;
+      	padding: 15px;
+      	border-radius: 5px;
+      	overflow-x: auto;
       }
       code {
-      		font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+      	font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
       }
       
       .article-header {
-      		margin-bottom: 2em;
+      	margin-bottom: 2em;
       }
       
       .article-header h1 {
-      		margin-bottom: 0.5em;
+      	margin-bottom: 0.5em;
       }
       
       article {
-      		word-wrap: break-word;
-      		overflow-wrap: break-word;
-      		hyphens: auto;
+      	word-wrap: break-word;
+      	overflow-wrap: break-word;
+      	hyphens: auto;
       }
       
       article p {
-      		max-width: 100%;
-      		overflow-wrap: break-word;
-      		word-wrap: break-word;
-      		word-break: break-word;
+      	max-width: 100%;
+      	overflow-wrap: break-word;
+      	word-wrap: break-word;
+      	word-break: break-word;
       }
       
       .tags {
-      		margin-bottom: 1em;
+      	margin-bottom: 1em;
       }
       		
       @media (max-width: 768px) {
@@ -364,6 +365,13 @@
       		align-items: baseline;
       		margin-top: 15px;
       	}
+      }
+      
+      .article-header-top {
+      	display: flex;
+      	justify-content: space-between;
+      	align-items: center;
+      	margin-bottom: 1em;
       }
       
           @media (max-width: 768px) {
@@ -385,6 +393,68 @@
               }
           }
       
+      .dropdown {
+      	position: relative;
+      	display: inline-block;
+      }
+      
+      .dropdown-button {
+      	background-color: #f0f0f0;
+      	border: none;
+      	border-radius: 50%;
+      	width: 20px;
+      	height: 20px;
+      	margin-left: 10px;
+      	display: flex;
+      	align-items: center;
+      	justify-content: center;
+      	font-size: 0.8em;
+      	cursor: pointer;
+      	color: #666;
+      	transition: background-color 0.2s;
+      }
+      
+      .dropdown-button:hover {
+      	background-color: #e0e0e0;
+      }
+      
+      .dropdown-content {
+      	display: none;
+      	position: absolute;
+      	right: -10px;
+      	top: 100%;
+      	background-color: white;
+      	min-width: 180px;
+      	box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.1);
+      	z-index: 1;
+      	border-radius: 8px;
+      	margin-top: 8px;
+      	border: 1px solid #eee;
+      }
+      
+      .dropdown.show .dropdown-content {
+      	display: block;
+      }
+      
+      .dropdown-content a {
+      	font-size: 0.8em;
+      	color: #333;
+      	padding: 12px 16px;
+      	text-decoration: none;
+      	display: block;
+      	transition: background-color 0.2s;
+      	border-bottom: 1px solid #eee;
+      	border-radius: 8px;
+      }
+      
+      .dropdown-content a:last-child {
+      	border-bottom: none;
+      }
+      
+      .dropdown-content a:hover {
+      	background-color: #f5f5f5;
+      }
+      
     </style>
   </head>
   <body class="dark article">
@@ -399,21 +469,33 @@
       <div class="main-content">
         <article>
           <div class="article-header">
-            <div class="compact-profile">
-              <a href="profile/nprofile1qqsxue9c8s0kwnaspf03nqtv99akg99lvlcptz2wqnw5cet7jsgza6qpp4mhxue69uhkummn9ekx7mq8k7c9l.html" class="compact-profile-link">
-                <img src="https://dhalsim.github.io/assets/dhalsim_logo_sq.png" alt="dhalsim" class="compact-profile-picture">
-                <span class="compact-profile-name">
-                  dhalsim
-                </span>
-              </a>
-              <a href="naddr1qvzqqqr4gupzqmnyhq7p7e60kq997xvpds5hkeq5hanlq9vffczd6nr9062pqthgqq24wmjfwp6rv6t8v935ujfhv4yr2wzzdfz5gl5quve.html" class="compact-profile-ago">
-                <span class="time-ago" data-timestamp="1745441068">
-                </span>
-              </a>
+            <div class="article-header-top">
+              <div class="compact-profile">
+                <a href="profile/nprofile1qqsxue9c8s0kwnaspf03nqtv99akg99lvlcptz2wqnw5cet7jsgza6qpp4mhxue69uhkummn9ekx7mq8k7c9l.html" class="compact-profile-link">
+                  <img src="https://dhalsim.github.io/assets/dhalsim_logo_sq.png" alt="dhalsim" class="compact-profile-picture">
+                  <span class="compact-profile-name">
+                    dhalsim
+                  </span>
+                </a>
+                <a href="naddr1qvzqqqr4gupzqmnyhq7p7e60kq997xvpds5hkeq5hanlq9vffczd6nr9062pqthgqq24wmjfwp6rv6t8v935ujfhv4yr2wzzdfz5gl5quve.html" class="compact-profile-ago">
+                  <span class="time-ago" data-timestamp="1745441068">
+                  </span>
+                </a>
+              </div>
+              <div class="dropdown">
+                <button class="dropdown-button" type="button">
+                  ⋯
+                </button>
+                <div class="dropdown-content">
+                  <a href="https://njump.me/naddr1qvzqqqr4gupzqmnyhq7p7e60kq997xvpds5hkeq5hanlq9vffczd6nr9062pqthgqq24wmjfwp6rv6t8v935ujfhv4yr2wzzdfz5gl5quve" class="nostr-link" target="_blank">
+                    Open Article in Nostr
+                  </a>
+                  <a href="https://njump.me/nprofile1qqsxue9c8s0kwnaspf03nqtv99akg99lvlcptz2wqnw5cet7jsgza6qpp4mhxue69uhkummn9ekx7mq8k7c9l" class="nostr-link" target="_blank">
+                    Open Author in Nostr
+                  </a>
+                </div>
+              </div>
             </div>
-            <h1>
-              How to Import and Export Your Nostr Notes
-            </h1>
             <p class="summary">
               Learn how to import your Nostr notes from public relays and export them into your own relay using the nak CLI tool. This step-by-step guide covers installation, fetching notes, filtering by event types, and uploading to a self-hosted relay—ensuring your content is safe and under your control.
             </p>
@@ -570,6 +652,9 @@
     		<script type="text/javascript" src="https://unpkg.com/zapthreads/dist/zapthreads.iife.js"></script>
     	
     <script src="/output/static/js/time-ago.js">
+      ""
+    </script>
+    <script src="/output/static/js/dropdown.js">
       ""
     </script>
   </body>

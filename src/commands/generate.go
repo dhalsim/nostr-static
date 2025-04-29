@@ -51,6 +51,7 @@ func Generate(params GenerateCommandParams) error {
 			Profile:    pubkeyToKind0[event.PubKey],
 			Nprofile:   pubkeyToNprofile[event.PubKey],
 			Relays:     config.Relays,
+			NostrLinks: config.Features.NostrLinks,
 		}); err != nil {
 			log.Printf("Failed to generate HTML for event %s: %v", event.ID, err)
 			continue
@@ -78,6 +79,7 @@ func Generate(params GenerateCommandParams) error {
 	// Profile pages
 	if err := pagegenerators.GenerateProfilePages(pagegenerators.GenerateProfilePagesParams{
 		BaseFolder:       "../",
+		NostrLinks:       config.Features.NostrLinks,
 		BlogURL:          config.BlogURL,
 		Profiles:         pubkeyToKind0,
 		Events:           events,

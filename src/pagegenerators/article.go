@@ -7,6 +7,8 @@ import (
 	"path/filepath"
 	"strings"
 
+	"nostr-static/src/pagegenerators/components"
+
 	. "github.com/julvo/htmlgo"
 	a "github.com/julvo/htmlgo/attributes"
 )
@@ -32,6 +34,7 @@ type ArticleData struct {
 
 type GenerateArticleParams struct {
 	BaseFolder string
+	NostrLinks string
 	Event      types.Event
 	OutputDir  string
 	Layout     types.Layout
@@ -43,16 +46,21 @@ type GenerateArticleParams struct {
 }
 
 // Regular Go functions for rendering HTML components
-func renderArticleHeader(data ArticleData) HTML {
+func renderArticleHeader(
+	data ArticleData,
+	nostrLinks string,
+) HTML {
 	return Div(Attr(a.Class("article-header")),
-		renderCompactProfile(
-			data.AuthorName,
-			data.AuthorPicture,
-			data.AuthorNProfile,
-			data.Naddr,
-			data.CreatedAt,
+		Div(Attr(a.Class("article-header-top")),
+			renderCompactProfile(
+				data.AuthorName,
+				data.AuthorPicture,
+				data.AuthorNProfile,
+				data.Naddr,
+				data.CreatedAt,
+			),
+			components.RenderNostrLinks(data.Naddr, data.AuthorNProfile, nostrLinks),
 		),
-		H1_(Text(data.Title)),
 		renderSummaryHTML(data.Summary),
 		renderTagsHTML(data.Tags, data.BaseFolder),
 		renderImageHTML(data.Image, data.Title, data.Naddr, data.BaseFolder),
@@ -90,118 +98,6 @@ func renderCommentsScript(data ArticleData) HTML {
 	`)
 }
 
-const ArticleStyles = `
-body.article .page-container {
-		display: flex;
-		align-items: flex-start;
-		max-width: 1200px;
-		margin: 0 auto;
-}
-
-body.article .main-content {
-		flex: 1;
-		max-width: 800px;
-}
-
-body.article img {
-		max-width: 100%;
-		height: auto;
-}
-
-body.article pre {
-		background-color: #f5f5f5;
-		padding: 15px;
-		border-radius: 5px;
-		overflow-x: auto;
-}
-
-body.article code {
-		font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
-}
-
-body.article .article-header {
-		margin-bottom: 2em;
-}
-
-body.article .article-header h1 {
-		margin-bottom: 0.5em;
-}
-
-body.article article {
-		word-wrap: break-word;
-		overflow-wrap: break-word;
-		hyphens: auto;
-}
-
-body.article article p {
-		max-width: 100%;
-		overflow-wrap: break-word;
-		word-wrap: break-word;
-		word-break: break-word;
-}
-
-.page-container {
-		display: flex;
-		align-items: flex-start;
-		max-width: 1200px;
-		margin: 0 auto;
-}
-
-.main-content {
-		flex: 1;
-		max-width: 800px;
-}
-
-img {
-		max-width: 100%;
-		height: auto;
-}
-
-pre {
-		background-color: #f5f5f5;
-		padding: 15px;
-		border-radius: 5px;
-		overflow-x: auto;
-}
-code {
-		font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
-}
-
-.article-header {
-		margin-bottom: 2em;
-}
-
-.article-header h1 {
-		margin-bottom: 0.5em;
-}
-
-article {
-		word-wrap: break-word;
-		overflow-wrap: break-word;
-		hyphens: auto;
-}
-
-article p {
-		max-width: 100%;
-		overflow-wrap: break-word;
-		word-wrap: break-word;
-		word-break: break-word;
-}
-
-.tags {
-		margin-bottom: 1em;
-}
-		
-@media (max-width: 768px) {
-	.article-header {
-		display: flex;
-		flex-direction: column;
-		align-items: baseline;
-		margin-top: 15px;
-	}
-}
-`
-
 func GenerateArticleHTML(params GenerateArticleParams) error {
 	event := params.Event
 	profile := params.Profile
@@ -211,6 +107,7 @@ func GenerateArticleHTML(params GenerateArticleParams) error {
 	layout := params.Layout
 	features := params.Features
 	relays := params.Relays
+	nostrLinks := params.NostrLinks
 
 	htmlContent, err := convertMarkdownToHTML(event.Content, true)
 	if err != nil {
@@ -266,7 +163,8 @@ func GenerateArticleHTML(params GenerateArticleParams) error {
 			Title_(Text(data.Title)),
 			Style_(Text_(CommonStyles+
 				ArticleStyles+
-				CommonResponsiveStyles)),
+				CommonResponsiveStyles+
+				components.DotMenuCSS)),
 		),
 		Body(Attr(a.Class(data.Color+" article")),
 			Div(Attr(a.Class("page-container")),
@@ -275,7 +173,7 @@ func GenerateArticleHTML(params GenerateArticleParams) error {
 				),
 				Div(Attr(a.Class("main-content")),
 					Article_(
-						renderArticleHeader(data),
+						renderArticleHeader(data, nostrLinks),
 						Text_(string(data.Content)),
 					),
 					renderCommentsHTML(data),
@@ -284,6 +182,7 @@ func GenerateArticleHTML(params GenerateArticleParams) error {
 			renderFooter(),
 			renderCommentsScript(data),
 			renderTimeAgoScript(),
+			components.RenderDropdownScript(),
 		),
 	)
 
@@ -291,3 +190,126 @@ func GenerateArticleHTML(params GenerateArticleParams) error {
 	outputPath := filepath.Join(outputDir, data.Naddr+".html")
 	return os.WriteFile(outputPath, []byte(html), 0644)
 }
+
+const ArticleStyles = `
+body.article .logo-container {
+	margin-top: 0;
+}
+
+body.article .page-container {
+	display: flex;
+	align-items: flex-start;
+	max-width: 1200px;
+	margin: 0 auto;
+}
+
+body.article .main-content {
+	flex: 1;
+	max-width: 800px;
+}
+
+body.article img {
+	max-width: 100%;
+	height: auto;
+}
+
+body.article pre {
+	background-color: #f5f5f5;
+	padding: 15px;
+	border-radius: 5px;
+	overflow-x: auto;
+}
+
+body.article code {
+	font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+}
+
+body.article .article-header {
+	margin-bottom: 2em;
+}
+
+body.article .article-header h1 {
+	margin-bottom: 0.5em;
+}
+
+body.article article {
+	word-wrap: break-word;
+	overflow-wrap: break-word;
+	hyphens: auto;
+}
+
+body.article article p {
+	max-width: 100%;
+	overflow-wrap: break-word;
+	word-wrap: break-word;
+	word-break: break-word;
+}
+
+.page-container {
+	display: flex;
+	align-items: flex-start;
+	max-width: 1200px;
+	margin: 0 auto;
+}
+
+.main-content {
+	flex: 1;
+	max-width: 800px;
+}
+
+img {
+	max-width: 100%;
+	height: auto;
+}
+
+pre {
+	background-color: #f5f5f5;
+	padding: 15px;
+	border-radius: 5px;
+	overflow-x: auto;
+}
+code {
+	font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+}
+
+.article-header {
+	margin-bottom: 2em;
+}
+
+.article-header h1 {
+	margin-bottom: 0.5em;
+}
+
+article {
+	word-wrap: break-word;
+	overflow-wrap: break-word;
+	hyphens: auto;
+}
+
+article p {
+	max-width: 100%;
+	overflow-wrap: break-word;
+	word-wrap: break-word;
+	word-break: break-word;
+}
+
+.tags {
+	margin-bottom: 1em;
+}
+		
+@media (max-width: 768px) {
+	.article-header {
+		display: flex;
+		flex-direction: column;
+		align-items: baseline;
+		margin-top: 15px;
+	}
+}
+
+.article-header-top {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	margin-bottom: 1em;
+}
+`

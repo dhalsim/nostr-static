@@ -5,6 +5,8 @@ import (
 	"strconv"
 	"strings"
 
+	"nostr-static/src/utils"
+
 	. "github.com/julvo/htmlgo"
 	a "github.com/julvo/htmlgo/attributes"
 	"github.com/yuin/goldmark"
@@ -63,14 +65,6 @@ const CommonStyles = `
     .feed-icon {
         width: 16px;
         height: 16px;
-    }
-
-    body.light .feed-icon {
-        filter: invert(0.4);
-    }
-
-    body.dark .feed-icon {
-        filter: invert(0.8);
     }
 
     /* Common components */
@@ -193,6 +187,11 @@ const CommonStyles = `
 
     body.dark .article-card .summary {
         color: #e0e0e0;
+    }
+
+    .time-ago {
+        display: inline-block;
+        min-width: 70px;
     }
 
     /* Compact profile styles */
@@ -426,7 +425,7 @@ func renderCompactProfile(
 		return Text("")
 	}
 
-	pictureHTML := ternary(authorPicture == "",
+	pictureHTML := utils.Ternary(authorPicture == "",
 		Text(""),
 		Img(Attr(
 			a.Src(authorPicture),
