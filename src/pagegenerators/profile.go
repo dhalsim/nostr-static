@@ -271,10 +271,17 @@ func GenerateProfilePages(params GenerateProfilePagesParams) error {
 					a.Content("width=device-width, initial-scale=1.0"),
 				)),
 				Title_(Text("Profile: "+data.Name)),
-				Style_(Text_(CommonStyles+CommonResponsiveStyles+components.DotMenuCSS)),
+				Style_(Text_(CommonCSS+
+					CommonResponsiveStyles+
+					components.DotMenuCSS+
+					components.LogoCSS+
+					components.FeedLinksCSS+
+					components.ArticleCardCSS+
+					components.TagsCSS+
+					components.ImageCSS)),
 				Style_(Text_(ProfileStyles)),
-				rssFeedLink(data.Nprofile),
-				atomFeedLink(data.Nprofile),
+				components.RenderFeedLinks(data.Nprofile),
+				components.RenderAtomFeedLink(data.Nprofile),
 			),
 			Body(Attr(a.Class(data.Color+" profile")),
 				Div(Attr(a.Class("page-container")),
@@ -301,7 +308,7 @@ func GenerateProfilePages(params GenerateProfilePagesParams) error {
 					),
 				),
 				renderFooter(),
-				renderFeed(data.Nprofile),
+				components.RenderFeed(data.Nprofile),
 				renderTimeAgoScript(),
 				components.RenderDropdownScript(),
 			),

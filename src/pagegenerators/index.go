@@ -4,6 +4,7 @@ import (
 	"os"
 	"path/filepath"
 
+	"nostr-static/src/pagegenerators/components"
 	"nostr-static/src/types"
 
 	. "github.com/julvo/htmlgo"
@@ -43,12 +44,15 @@ type GenerateIndexParams struct {
 
 // Index-specific HTML rendering functions
 func renderIndexHeader(title string) HTML {
-	return H1_(Text(title))
+	return H1_(
+		// Attr(a.Class("index-title")),
+		Text(title),
+	)
 }
 
 func renderIndexArticle(article IndexArticleData, baseFolder string) HTML {
 	return Div(Attr(a.Class("article-card")),
-		renderCompactProfile(
+		components.RenderCompactProfile(
 			article.AuthorName,
 			article.AuthorPicture,
 			article.Nprofile,
@@ -161,9 +165,18 @@ func GenerateIndexHTML(params GenerateIndexParams) error {
 				a.Content("width=device-width, initial-scale=1.0"),
 			)),
 			Title_(Text(indexData.Title)),
-			Style_(Text_(CommonStyles+CommonResponsiveStyles)),
-			rssFeedLink("index"),
-			atomFeedLink("index"),
+			Style_(Text_(CommonCSS+
+				CommonResponsiveStyles+
+				components.LogoCSS+
+				components.CompactProfileCSS+
+				components.FeedLinksCSS+
+				components.ArticleCardCSS+
+				components.TagsCSS+
+				components.ImageCSS+
+				components.FooterCSS+
+				indexCSS)),
+			components.RenderFeedLinks("index"),
+			components.RenderAtomFeedLink("index"),
 		),
 		Body(Attr(a.Class(indexData.Color+" index")),
 			Div(Attr(a.Class("page-container")),
@@ -173,7 +186,7 @@ func GenerateIndexHTML(params GenerateIndexParams) error {
 				renderIndexArticles(indexData),
 			),
 			renderFooter(),
-			renderFeed("index"),
+			components.RenderFeed("index"),
 			renderTimeAgoScript(),
 		),
 	)
@@ -182,3 +195,19 @@ func GenerateIndexHTML(params GenerateIndexParams) error {
 	outputPath := filepath.Join(params.OutputDir, "index.html")
 	return os.WriteFile(outputPath, []byte(html), 0644)
 }
+
+var indexCSS = `
+body.index .main-content {
+  flex: 1;
+}
+
+body.index .page-container {
+	display: flex;
+	align-items: flex-start;
+}
+
+body.index .image-container {
+	max-width: 300px;
+	margin: 20px auto 10px;
+}
+`

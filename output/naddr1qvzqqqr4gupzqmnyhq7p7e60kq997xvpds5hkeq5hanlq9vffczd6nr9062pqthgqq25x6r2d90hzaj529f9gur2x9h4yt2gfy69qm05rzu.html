@@ -7,251 +7,162 @@
       How to Create a Blog Out of Nostr Long-Form Articles
     </title>
     <style>
-           
-          body {
-              font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-              line-height: 1.6;
-              max-width: 800px;
-              margin: 0 auto;
-              padding: 20px;
-              font-size: 16px;
-          }
+       
+      body {
+          font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+          line-height: 1.6;
+          max-width: 800px;
+      	margin: 0 auto;
+      	padding: 20px;
+      	font-size: 16px;
+          color: #333;
+          background-color: #fff;
+      }
       
-           
-          body.light {
-              background-color: #ffffff;
-              color: #333333;
-          }
+       
+      body.light {
+          background-color: #ffffff;
+          color: #333333;
+      }
       
-          body.dark {
-              background-color: #1a1a1a;
-              color: #ffffff;
-          }
+      body.dark {
+          background-color: #1a1a1a;
+          color: #e0e0e0;
+      }
       
-          body.light a {
-              color: #0066cc;
-          }
+       
+      .container {
+          max-width: 800px;
+          margin: 0 auto;
+          padding: 20px;
+      }
       
-          body.dark a {
-              color: #4a9eff;
-          }
+       
+      a {
+          color: #0066cc;
+          text-decoration: none;
+      }
       
-           
-          .feed-links {
-              display: flex;
-              justify-content: center;
-              align-items: center;
-              gap: 0.5em;
-              padding: 1em;
-          }
+      body.light a {
+          color: #0066cc;
+      }
       
-          .feed-icon {
-              width: 16px;
-              height: 16px;
-          }
+      body.dark a {
+          color: #4a9eff;
+      }
       
-           
-          .logo {
-              text-align: center;
-          }
+      a:hover {
+          text-decoration: underline;
+      }
       
-          .logo img {
-              max-height: 100px;
-              width: auto;
-          }
+       
+      ul, ol {
+          padding-left: 2em;
+      }
       
-          .article-card {
-              border: 1px solid #ddd;
-              border-radius: 8px;
-              padding: 20px;
-              margin-bottom: 20px;
-          }
+       
+      pre {
+          background-color: #f5f5f5;
+          padding: 1em;
+          border-radius: 4px;
+          overflow-x: auto;
+      }
       
-          .article-card h2 {
-              margin-top: 0;
-              text-align: center;
-          }
+      body.dark pre {
+          background-color: #2d2d2d;
+      }
       
-          .tags {
-              display: flex;
-              flex-wrap: wrap;
-              gap: 0 8px;
-              margin-top: 1em;
-          }
+      code {
+          font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+          font-size: 0.9em;
+      }
       
-          .tag {
-              display: inline-block;
-              padding: 4px 8px;
-              border-radius: 4px;
-              margin-bottom: 8px;
-              font-size: 0.9em;
-          }
+       
+      blockquote {
+          margin: 1em 0;
+          padding: 0.5em 1em;
+          border-left: 4px solid #ddd;
+          background-color: #f9f9f9;
+      }
       
-          .tag a {
-              text-decoration: none;
-              color: inherit;
-          }
+      body.dark blockquote {
+          border-left-color: #404040;
+          background-color: #2d2d2d;
+      }
       
-           
-          body.light .tag {
-              background-color: #f0f0f0;
-              border: 1px solid #dee2e6;
-              color: #666666;
-          }
+       
+      table {
+          border-collapse: collapse;
+          width: 100%;
+          margin: 1em 0;
+      }
       
-          body.dark .tag {
-              background-color: #1a1a1a;
-              border: 1px solid #404040;
-              color: #e0e0e0;
-          }
+      th, td {
+          padding: 0.5em;
+          border: 1px solid #ddd;
+      }
       
-          body.index .page-container,
-          body.tagspage .page-container {
-              display: flex;
-              align-items: flex-start;
-          }
+      body.dark th, body.dark td {
+          border-color: #404040;
+      }
       
-          .logo-container {
-              margin-top: 20px;
-              margin-right: 20px;
-          }
+      th {
+          background-color: #f5f5f5;
+      }
       
-          .logo-container img {
-              max-height: 50px;
-              width: auto;
-          }
+      body.dark th {
+          background-color: #2d2d2d;
+      }
       
-          body.index .main-content,
-          body.tagspage .main-content {
-              flex: 1;
-          }
+       
+      hr {
+          border: none;
+          border-top: 1px solid #ddd;
+          margin: 2em 0;
+      }
       
-           
-          .image-container {
-              margin: 20px auto 10px;
-              text-align: center;
-          }
+      body.dark hr {
+          border-top-color: #404040;
+      }
       
-          .image-container img {
-              max-width: 100%;
-              height: auto;
-              border-radius: 4px;
-          }
+       
+      .theme-toggle {
+          position: fixed;
+          top: 20px;
+          right: 20px;
+          padding: 8px 16px;
+          border: none;
+          border-radius: 4px;
+          cursor: pointer;
+          font-size: 14px;
+          transition: background-color 0.3s;
+      }
       
-           
-          body.index .image-container {
-              max-width: 300px;
-          }
+      body.light .theme-toggle {
+          background-color: #f0f0f0;
+          color: #333;
+      }
       
-           
-          body.light .article-card {
-              background-color: #f8f9fa;
-              border: 1px solid #dee2e6;
-          }
+      body.dark .theme-toggle {
+          background-color: #404040;
+          color: #fff;
+      }
       
-          body.dark .article-card {
-              background-color: #2d2d2d;
-              border: 1px solid #404040;
-          }
+      .theme-toggle:hover {
+          opacity: 0.9;
+      }
       
-          body.light pre {
-              background-color: #f5f5f5 !important;
-              border: 1px solid #e9ecef;
+       
+      @media (max-width: 600px) {
+          .container {
+              padding: 10px;
           }
-      
-          body.dark pre {
-              background-color: #2d2d2d !important;
-              border: 1px solid #404040;
+          
+          .theme-toggle {
+              top: 10px;
+              right: 10px;
           }
-      
-          body.light .article-card .summary {
-              color: #666666;
-          }
-      
-          body.dark .article-card .summary {
-              color: #e0e0e0;
-          }
-      
-          .time-ago {
-              display: inline-block;
-              min-width: 70px;
-          }
-      
-           
-          .compact-profile {
-              display: flex;
-              align-items: center;
-              gap: 8px;
-          }
-      
-          .compact-profile-link {
-              display: flex;
-              align-items: center;
-              text-decoration: none;
-              color: inherit;
-              gap: 8px;
-          }
-      
-          .compact-profile-ago {
-              margin-bottom: 1px;
-              font-size: 0.8em;
-          }
-      
-          .compact-profile-picture {
-              width: 15px;
-              height: 15px;
-              border-radius: 50%;
-              object-fit: cover;
-          }
-      
-          .compact-profile-name {
-              font-size: 0.9em;
-              font-weight: 500;
-          }
-      
-           
-          body.light .compact-profile-link {
-              color: #000000;
-          }
-      
-          body.light .compact-profile-link:hover {
-              color: #0066cc;
-          }
-      
-          body.dark .compact-profile-link {
-              color: #e0e0e0;
-          }
-      
-          body.dark .compact-profile-link:hover {
-              color: #4a9eff;
-          }
-      
-           
-          .footer {
-              margin-top: 2em;
-              padding-top: 1em;
-              border-top: 1px solid #eee;
-              text-align: center;
-              font-size: 0.9em;
-              color: #666;
-          }
-      
-          body.dark .footer {
-              border-top-color: #333;
-              color: #999;
-          }
-      
-          .footer a {
-              text-decoration: none;
-          }
-      
-          body.light .footer a {
-              color: #0066cc;
-          }
-      
-          body.dark .footer a {
-              color: #4a9eff;
-          }
+      }
       
       body.article .logo-container {
       	margin-top: 0;
@@ -455,6 +366,164 @@
       	background-color: #f5f5f5;
       }
       
+      .logo {
+          text-align: center;
+      }
+      
+      .logo img {
+          max-height: 100px;
+          width: auto;
+      }
+      
+      .logo-container {
+          margin-top: 20px;
+          margin-right: 20px;
+      }
+      
+      .logo-container img {
+          max-height: 50px;
+          width: auto;
+      }
+      
+      .compact-profile {
+          display: flex;
+          align-items: center;
+          gap: 8px;
+      }
+      
+      .compact-profile-link {
+          display: flex;
+          align-items: center;
+          text-decoration: none;
+          color: inherit;
+          gap: 8px;
+      }
+      
+      .compact-profile-ago {
+          margin-bottom: 1px;
+          font-size: 0.8em;
+      }
+      
+      .compact-profile-picture {
+          width: 15px;
+          height: 15px;
+          border-radius: 50%;
+          object-fit: cover;
+      }
+      
+      .compact-profile-name {
+          font-size: 0.9em;
+          font-weight: 500;
+      }
+      
+       
+      body.light .compact-profile-link {
+          color: #000000;
+      }
+      
+      body.light .compact-profile-link:hover {
+          color: #0066cc;
+      }
+      
+      body.dark .compact-profile-link {
+          color: #e0e0e0;
+      }
+      
+      body.dark .compact-profile-link:hover {
+          color: #4a9eff;
+      }
+      
+      .time-ago {
+          display: inline-block;
+          min-width: 70px;
+      }
+      
+      .feed-links {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          gap: 0.5em;
+          padding: 1em;
+      }
+      
+      .feed-icon {
+          width: 16px;
+          height: 16px;
+      }
+      
+      .tags {
+      	display: flex;
+      	flex-wrap: wrap;
+      	gap: 0 8px;
+      	margin-top: 1em;
+      	margin-bottom: 1em;
+      }
+      
+      .tag {
+      	display: inline-block;
+      	padding: 4px 8px;
+      	border-radius: 4px;
+      	margin-bottom: 8px;
+      	font-size: 0.9em;
+      }
+      
+      .tag a {
+      	text-decoration: none;
+      	color: inherit;
+      }
+      
+      body.light .tag {
+      	background-color: #f0f0f0;
+      	border: 1px solid #dee2e6;
+      }	
+      
+      body.dark .tag {
+      	background-color: #1a1a1a;
+      	border: 1px solid #404040;
+      }
+      
+      .footer {
+          margin-top: 2em;
+          padding-top: 1em;
+          border-top: 1px solid #eee;
+          text-align: center;
+          font-size: 0.9em;
+          color: #666;
+      }
+      
+      body.dark .footer {
+          border-top-color: #333;
+          color: #999;
+      }
+      
+      .footer a {
+          text-decoration: none;
+      }
+      
+      body.light .footer a {
+          color: #0066cc;
+      }
+      
+      body.dark .footer a {
+          color: #4a9eff;
+      }
+      
+      .image-container {
+          margin: 20px 0;
+          text-align: center;
+      }
+      
+      .image-container img {
+          max-width: 100%;
+          height: auto;
+          border-radius: 8px;
+          box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      }
+      
+      body.dark .image-container img {
+          box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+      }
+      
     </style>
   </head>
   <body class="dark article">
@@ -496,6 +565,9 @@
                 </div>
               </div>
             </div>
+            <h1>
+              How to Create a Blog Out of Nostr Long-Form Articles
+            </h1>
             <p class="summary">
               nostr-static is a static site generator (SSG) tool that transforms Nostr long-form content into a beautiful, static blog (which works really fast). It fetches articles from the Nostr network and generates HTML pages that can be hosted anywhere. This tool bridges the gap between Nostr&#39;s decentralized content and traditional web hosting, making it easy to create and maintain a blog powered by Nostr content.
             </p>
@@ -694,6 +766,9 @@
         nostr-static
       </a>
     </div>
+    <script src="/output/static/js/time-ago.js">
+      ""
+    </script>
     		<script>
     			window.wnjParams = {
     				position: 'bottom',
@@ -705,9 +780,6 @@
     		<script src="https://cdn.jsdelivr.net/npm/window.nostr.js/dist/window.nostr.min.js"></script>
     		<script type="text/javascript" src="https://unpkg.com/zapthreads/dist/zapthreads.iife.js"></script>
     	
-    <script src="/output/static/js/time-ago.js">
-      ""
-    </script>
     <script src="/output/static/js/dropdown.js">
       ""
     </script>

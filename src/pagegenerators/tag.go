@@ -6,6 +6,7 @@ import (
 	"strconv"
 	"strings"
 
+	"nostr-static/src/pagegenerators/components"
 	"nostr-static/src/types"
 
 	. "github.com/julvo/htmlgo"
@@ -30,10 +31,10 @@ func renderTagHeader(tag string) HTML {
 
 func renderTagArticle(article TagArticleData, baseFolder string) HTML {
 	return Div(Attr(a.Class("article-card")),
-		renderTagCompactProfile(article),
+		renderTagCompactProfile(article, baseFolder),
 		renderImageHTML(article.Image, article.Title, article.Naddr, baseFolder),
 		H2_(
-			A(Attr(a.Href(article.Naddr+".html")),
+			A(Attr(a.Href(baseFolder+article.Naddr+".html")),
 				Text(article.Title),
 			),
 		),
@@ -58,7 +59,7 @@ func renderTagArticles(data TagData) HTML {
 	)
 }
 
-func renderTagCompactProfile(data TagArticleData) HTML {
+func renderTagCompactProfile(data TagArticleData, baseFolder string) HTML {
 	if data.AuthorName == "" {
 		return Text("")
 	}
@@ -74,7 +75,7 @@ func renderTagCompactProfile(data TagArticleData) HTML {
 
 	return Div(Attr(a.Class("compact-profile")),
 		A(Attr(
-			a.Href("profile/"+data.Nprofile+".html"),
+			a.Href(baseFolder+"profile/"+data.Nprofile+".html"),
 			a.Class("compact-profile-link"),
 		),
 			pictureHTML,
@@ -170,9 +171,18 @@ func GenerateTagPages(params GenerateTagPagesParams) error {
 					a.Content("width=device-width, initial-scale=1.0"),
 				)),
 				Title_(Text("Tag: "+data.Tag)),
-				Style_(Text_(CommonStyles+CommonResponsiveStyles)),
-				rssFeedLink(tag),
-				atomFeedLink(tag),
+				Style_(Text_(CommonCSS+
+					CommonResponsiveStyles+
+					components.LogoCSS+
+					components.CompactProfileCSS+
+					components.FeedLinksCSS+
+					components.ArticleCardCSS+
+					components.TagsCSS+
+					components.ImageCSS+
+					components.FooterCSS+
+					tagPageCSS)),
+				components.RenderFeedLinks(tag),
+				components.RenderAtomFeedLink(tag),
 			),
 			Body(Attr(a.Class(data.Color+" tagspage")),
 				Div(Attr(a.Class("page-container")),
@@ -182,7 +192,7 @@ func GenerateTagPages(params GenerateTagPagesParams) error {
 					renderTagArticles(data),
 				),
 				renderFooter(),
-				renderFeed(tag),
+				components.RenderFeed(tag),
 				renderTimeAgoScript(),
 			),
 		)
@@ -196,3 +206,19 @@ func GenerateTagPages(params GenerateTagPagesParams) error {
 
 	return nil
 }
+
+var tagPageCSS = `
+body.tagspage .main-content {
+	flex: 1;
+}
+
+body.tagspage .page-container {
+	display: flex;
+	align-items: flex-start;
+}
+
+body.tagspage .image-container {
+	max-width: 300px;
+	margin: 20px auto 10px;
+}
+`

@@ -52,7 +52,7 @@ func renderArticleHeader(
 ) HTML {
 	return Div(Attr(a.Class("article-header")),
 		Div(Attr(a.Class("article-header-top")),
-			renderCompactProfile(
+			components.RenderCompactProfile(
 				data.AuthorName,
 				data.AuthorPicture,
 				data.AuthorNProfile,
@@ -61,6 +61,7 @@ func renderArticleHeader(
 			),
 			components.RenderNostrLinks(data.Naddr, data.AuthorNProfile, nostrLinks),
 		),
+		renderTitleHTML(data.Title),
 		renderSummaryHTML(data.Summary),
 		renderTagsHTML(data.Tags, data.BaseFolder),
 		renderImageHTML(data.Image, data.Title, data.Naddr, data.BaseFolder),
@@ -161,10 +162,16 @@ func GenerateArticleHTML(params GenerateArticleParams) error {
 				a.Content("width=device-width, initial-scale=1.0"),
 			)),
 			Title_(Text(data.Title)),
-			Style_(Text_(CommonStyles+
+			Style_(Text_(CommonCSS+
 				ArticleStyles+
 				CommonResponsiveStyles+
-				components.DotMenuCSS)),
+				components.DotMenuCSS+
+				components.LogoCSS+
+				components.CompactProfileCSS+
+				components.FeedLinksCSS+
+				components.TagsCSS+
+				components.FooterCSS+
+				components.ImageCSS)),
 		),
 		Body(Attr(a.Class(data.Color+" article")),
 			Div(Attr(a.Class("page-container")),
@@ -180,8 +187,8 @@ func GenerateArticleHTML(params GenerateArticleParams) error {
 				),
 			),
 			renderFooter(),
-			renderCommentsScript(data),
 			renderTimeAgoScript(),
+			renderCommentsScript(data),
 			components.RenderDropdownScript(),
 		),
 	)
