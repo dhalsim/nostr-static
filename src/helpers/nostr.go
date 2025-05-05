@@ -4,6 +4,7 @@ import (
 	"context"
 	"encoding/json"
 	"log"
+	"sort"
 	"sync"
 	"time"
 
@@ -91,7 +92,12 @@ func FetchEvents(
 		})
 	}
 
+	sort.Slice(events, func(i, j int) bool {
+		return events[i].CreatedAt > events[j].CreatedAt
+	})
+
 	log.Printf("Finished fetching events. Total events received: %d", len(events))
+
 	return events, eventIDToNaddr, nil
 }
 

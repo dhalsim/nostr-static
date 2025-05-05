@@ -147,14 +147,14 @@ func renderProfileArticles(data ProfileData) HTML {
 	for _, article := range data.Articles {
 		articleElements = append(articleElements,
 			Div(Attr(a.Class("article-card")),
-				renderImageHTML(article.Image, article.Title, article.Naddr, "../"),
+				components.RenderImageHTML(article.Image, article.Title, article.Naddr, "../"),
 				H3_(
 					A(Attr(a.Href("../"+article.Naddr+".html")),
 						Text(article.Title),
 					),
 				),
-				renderSummaryHTML(article.Summary),
-				renderTagsHTML(article.Tags, "../"),
+				components.RenderSummaryHTML(article.Summary),
+				components.RenderTagsHTML(article.Tags, "../"),
 			),
 		)
 	}
@@ -288,7 +288,7 @@ func GenerateProfilePages(params GenerateProfilePagesParams) error {
 			Body(Attr(a.Class(data.Color+" profile")),
 				Div(Attr(a.Class("page-container")),
 					Div(Attr(a.Class("logo-container")),
-						renderLogo(data.Logo, data.BaseFolder),
+						components.RenderLogo(data.Logo, data.BaseFolder),
 					),
 					Div(Attr(a.Class("main-content")),
 						Div(Attr(a.Class("profile-header")),
@@ -309,9 +309,9 @@ func GenerateProfilePages(params GenerateProfilePagesParams) error {
 						renderProfileArticles(data),
 					),
 				),
-				renderFooter(),
+				components.RenderFooter(),
 				components.RenderFeed(data.Nprofile),
-				renderTimeAgoScript(),
+				components.RenderTimeAgoScript(),
 				components.RenderDropdownScript(),
 			),
 		)

@@ -8,7 +8,7 @@ import (
 )
 
 func RenderDropdownScript() HTML {
-	return Script(Attr(a.Src("/output/static/js/dropdown.js")), JavaScript(""))
+	return Script(Attr(a.Src("/static/js/dropdown.js")), JavaScript(""))
 }
 
 func RenderNostrLinks(naddr, nprofile, nostrLinks string) HTML {

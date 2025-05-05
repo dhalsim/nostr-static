@@ -34,14 +34,14 @@ func renderTagHeader(tag string) HTML {
 func renderTagArticle(article TagArticleData, baseFolder string) HTML {
 	return Div(Attr(a.Class("article-card")),
 		renderTagCompactProfile(article, baseFolder),
-		renderImageHTML(article.Image, article.Title, article.Naddr, baseFolder),
+		components.RenderImageHTML(article.Image, article.Title, article.Naddr, baseFolder),
 		H2_(
 			A(Attr(a.Href(baseFolder+article.Naddr+".html")),
 				Text(article.Title),
 			),
 		),
-		renderSummaryHTML(article.Summary),
-		renderTagsHTML(article.Tags, baseFolder),
+		components.RenderSummaryHTML(article.Summary),
+		components.RenderTagsHTML(article.Tags, baseFolder),
 	)
 }
 
@@ -200,13 +200,13 @@ func GenerateTagPages(params GenerateTagPagesParams) error {
 			Body(Attr(a.Class(data.Color+" tagspage")),
 				Div(Attr(a.Class("page-container")),
 					Div(Attr(a.Class("logo-container")),
-						renderLogo(data.Logo, "../"),
+						components.RenderLogo(data.Logo, "../"),
 					),
 					renderTagArticles(data),
 				),
-				renderFooter(),
+				components.RenderFooter(),
 				components.RenderFeed(tag),
-				renderTimeAgoScript(),
+				components.RenderTimeAgoScript(),
 			),
 		)
 

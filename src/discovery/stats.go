@@ -6,6 +6,8 @@ import (
 	"maps"
 	"net/http"
 	"strings"
+
+	"nostr-static/src/types"
 )
 
 type ZapStats struct {
@@ -118,22 +120,16 @@ func GetEventStats(eventIDs []string) (map[string]EventStats, error) {
 	return eventIdToStatsMap, nil
 }
 
-// CalculateEventScore calculates a popularity score for an event based on its stats
-// The scoring formula takes into account:
-// - Reactions (weight: 1)
-// - Reposts (weight: 2)
-// - Replies (weight: 1.5)
-// - Reports (weight: -5, negative impact)
-// - Zaps (weight: 3, normalized by msats and zapper count)
-func CalculateEventScore(stats EventStats) float64 {
+// CalculateEventScore calculates a popularity score for an event based on its stats and weights
+func CalculateEventScore(stats EventStats, weights *types.ScoringWeights) float64 {
 	// Base engagement score
 	engagementScore :=
-		float64(stats.ReactionCount) +
-			float64(stats.RepostCount)*2.0 +
-			float64(stats.ReplyCount)*1.5
+		float64(stats.ReactionCount)*weights.GetOrDefault(weights.ReactionWeight, types.DefaultReactionWeight) +
+			float64(stats.RepostCount)*weights.GetOrDefault(weights.RepostWeight, types.DefaultRepostWeight) +
+			float64(stats.ReplyCount)*weights.GetOrDefault(weights.ReplyWeight, types.DefaultReplyWeight)
 
 	// Negative impact from reports
-	reportPenalty := float64(stats.ReportCount) * 5.0
+	reportPenalty := float64(stats.ReportCount) * weights.GetOrDefault(weights.ReportPenalty, types.DefaultReportPenalty)
 
 	// Zap score calculation
 	zapScore := 0.0
@@ -141,18 +137,14 @@ func CalculateEventScore(stats EventStats) float64 {
 		// Convert msats to sats (1000 msats = 1 sat)
 		sats := float64(stats.Zaps.Msats) / 1000.0
 
-		// Calculate zap score based on:
-		// 1. Amount of sats (1 sat = 0.1 points)
-		// 2. Number of unique zappers (1 zapper = 0.5 points)
-		// 3. Average zap amount (normalized to 0-1 range, assuming 0.1 BTC as max)
-		maxSats := 10000000.0 // 0.1 BTC in sats
+		// Calculate zap score based on configured weights
 		avgSats := float64(stats.Zaps.Msats) / float64(stats.Zaps.Count) / 1000.0
-		avgSatsScore := avgSats / maxSats
+		avgSatsScore := avgSats / weights.GetOrDefault(weights.MaxSats, types.DefaultMaxSats)
 
-		zapScore = (sats * 0.1) + // Amount score
-			(float64(stats.Zaps.ZapperCount) * 0.5) + // Zapper count score
-			(avgSatsScore * 2.0) // Average zap amount score
+		zapScore = (sats * weights.GetOrDefault(weights.ZapAmountWeight, types.DefaultZapAmountWeight)) + // Amount score
+			(float64(stats.Zaps.ZapperCount) * weights.GetOrDefault(weights.ZapperCountWeight, types.DefaultZapperCountWeight)) + // Zapper count score
+			(avgSatsScore * weights.GetOrDefault(weights.ZapAvgWeight, types.DefaultZapAvgWeight)) // Average zap amount score
 	}
 
-	return engagementScore - reportPenalty + (zapScore * 3.0)
+	return engagementScore - reportPenalty + (zapScore * weights.GetOrDefault(weights.ZapTotalWeight, types.DefaultZapTotalWeight))
 }

@@ -6,7 +6,7 @@ A static web site generator written in Go that creates HTML pages from long-form
 
 https://blog.nostrize.me
 
-## Version 0.6
+## Version 0.7
 
 ## Features
 
@@ -15,7 +15,8 @@ https://blog.nostrize.me
 - Choose between dark and light themes
 - Lists articles by profiles and tags
 - Has RSS and Atom feeds for index, profiles and tags
-- Easy deployment to Github Pages
+- Smart content discovery with article recommendations
+- One-click deployment to GitHub Pages with automated workflows
 
 ## Todo
 
@@ -23,6 +24,7 @@ https://blog.nostrize.me
 - [x] profiles
 - [x] comments, zapthreads
 - [x] atom, rss feeds
+- [x] discoveribility
 - [ ] dynamic theme option
 
 ## Prequisites
@@ -96,7 +98,7 @@ The tool is configured using a `config.yaml` file. Here's an example configurati
 layout:
   color: dark  # Options: light, dark
   logo: logo.png  # Logo image file name
-  title: "Nostr Articles"
+  title: "Nostr Articles"  # Site title
 
 blog_url: https://blog.nostrize.me
 
@@ -108,14 +110,33 @@ relays:
   - wss://relay.primal.net
 
 features:
-  - comments: true
-  - nostr_links: njump.me
+  comments: true
+  nostr_links: njump.me
+  tag_discovery: true
+
+settings:
+  tag_discovery:
+    fetch_count_per_tag: 100      # fetch this many events per tag
+    popular_articles_count: 10    # max number of articles to display in tag discovery
+    weights:
+      reaction_weight: 1.0       # weight for reaction count
+      repost_weight: 2.0         # weight for repost count
+      reply_weight: 1.5          # weight for reply count
+      report_penalty: 5.0        # penalty for each report
+      zap_amount_weight: 0.1     # weight for total zap amount
+      zapper_count_weight: 0.5   # weight for number of unique zappers
+      zap_avg_weight: 2.0        # weight for average zap amount
+      zap_total_weight: 3.0      # multiplier for total zap score
+      max_sats: 10000000.0       # maximum sats for normalization (0.1 BTC)
 
 articles:
+  - naddr1qvzqqqr4gupzqmnyhq7p7e60kq997xvpds5hkeq5hanlq9vffczd6nr9062pqthgqq25x6r2d90hzaj529f9gur2x9h4yt2gfy69qm05rzu
   - naddr1qvzqqqr4gupzqmnyhq7p7e60kq997xvpds5hkeq5hanlq9vffczd6nr9062pqthgqq2j6ezsgu69j7n92cmxxmfsgyeyyvjtxfuk7lwjq6s
   - naddr1qvzqqqr4gupzqmnyhq7p7e60kq997xvpds5hkeq5hanlq9vffczd6nr9062pqthgqq24wmjfwp6rv6t8v935ujfhv4yr2wzzdfz5gl5quve
+  - naddr1qvzqqqr4gupzqwlsccluhy6xxsr6l9a9uhhxf75g85g8a709tprjcn4e42h053vaqqyrzwrxvc6ngvfkxty9t8
 
 profiles:
+  - nprofile1qqsrhuxx8l9ex335q7he0f09aej04zpazpl0ne2cgukyawd24mayt8gpp4mhxue69uhkummn9ekx7mqprhgw8
   - nprofile1qqsxue9c8s0kwnaspf03nqtv99akg99lvlcptz2wqnw5cet7jsgza6qpp4mhxue69uhkummn9ekx7mq8k7c9l
 ```
 
@@ -133,6 +154,41 @@ profiles:
    git commit -m "Added my events, changed logo, title, and light theme"
    git push origin main
    ```
+
+## Tag Discovery
+
+The tag discovery feature helps users find popular and relevant content by analyzing engagement metrics across different tags. To enable this feature:
+
+1. Set `features.tag_discovery: true` in your `config.yaml`
+2. Run `./nostr-static` once to generate the initial `tags.txt` file
+3. Create the content index by running:
+   ```bash
+   ./nostr-static index-tag-discovery
+   ```
+   This will fetch events from the Nostr network and their engagement statistics from [nostr.band API](https://api.nostr.band/).
+
+4. Calculate popularity scores for articles:
+   ```bash
+   ./nostr-static calculate-tag-discovery
+   ```
+   The scoring system considers:
+   - Engagement metrics (reposts, replies, reactions)
+   - Zap statistics (total amount, unique zappers, average zap size)
+   - Content quality signals (report penalties)
+
+5. Finally, run `./nostr-static` again to generate the recommended articles section
+
+You can customize the scoring weights in your `config.yaml` under `settings.tag_discovery.weights`. If not specified, the system will use default weights optimized for balanced content discovery. Setting a weight to 0 will disable that particular scoring factor.
+
+Example:
+```yaml
+settings:
+  tag_discovery:
+    weights:
+      report_penalty: 0      # disable report penalties
+      reaction_weight: 2.0   # increase reaction weight
+      # other weights will use defaults
+```
 
 ## Deployment
 

@@ -71,9 +71,9 @@ func renderArticleHeader(
 			components.RenderNostrLinks(data.Naddr, data.AuthorNProfile, nostrLinks),
 		),
 		renderTitleHTML(data.Title),
-		renderSummaryHTML(data.Summary),
-		renderTagsHTML(data.Tags, data.BaseFolder),
-		renderImageHTML(data.Image, data.Title, data.Naddr, data.BaseFolder),
+		components.RenderSummaryHTML(data.Summary),
+		components.RenderTagsHTML(data.Tags, data.BaseFolder),
+		components.RenderImageHTML(data.Image, data.Title, data.Naddr, data.BaseFolder),
 	)
 }
 
@@ -255,7 +255,7 @@ func GenerateArticleHTML(params GenerateArticleParams) error {
 		Body(Attr(a.Class(data.Color+" article")),
 			Div(Attr(a.Class("page-container")),
 				Div(Attr(a.Class("logo-container")),
-					renderLogo(data.Logo, data.BaseFolder),
+					components.RenderLogo(data.Logo, data.BaseFolder),
 				),
 				Div(Attr(a.Class("main-content")),
 					Article_(
@@ -266,8 +266,8 @@ func GenerateArticleHTML(params GenerateArticleParams) error {
 				),
 			),
 			renderTagDiscoveryHTML(data, nostrLinks),
-			renderFooter(),
-			renderTimeAgoScript(),
+			components.RenderFooter(),
+			components.RenderTimeAgoScript(),
 			renderCommentsScript(data),
 			components.RenderDropdownScript(),
 		),

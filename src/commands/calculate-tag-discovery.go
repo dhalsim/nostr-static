@@ -23,10 +23,15 @@ type CalculateTagDiscoveryCommandParams struct {
 }
 
 func CalculateTagDiscovery(params CalculateTagDiscoveryCommandParams) error {
+	indexDir := params.IndexDir
+	outputDir := params.OutputDir
+	config := params.Config
+	weights := config.Settings.TagDiscovery.Weights
+
 	log.Println("Calculating most popular articles for each tag...")
 
 	// read tags from file
-	tags, err := os.ReadFile(filepath.Join(params.OutputDir, "tags.txt"))
+	tags, err := os.ReadFile(filepath.Join(outputDir, "tags.txt"))
 	if err != nil {
 		return err
 	}
@@ -41,7 +46,7 @@ func CalculateTagDiscovery(params CalculateTagDiscoveryCommandParams) error {
 		log.Printf("Processing tag: %s", tag)
 
 		// Read stats file
-		statsData, err := os.ReadFile(filepath.Join(params.IndexDir, tag+"-stats.json"))
+		statsData, err := os.ReadFile(filepath.Join(indexDir, tag+"-stats.json"))
 		if err != nil {
 			if os.IsNotExist(err) {
 				log.Printf("No stats file found for tag %s, skipping...", tag)
@@ -56,7 +61,7 @@ func CalculateTagDiscovery(params CalculateTagDiscoveryCommandParams) error {
 		}
 
 		// Read tag event file
-		tagEventsData, err := os.ReadFile(filepath.Join(params.IndexDir, tag+".json"))
+		tagEventsData, err := os.ReadFile(filepath.Join(indexDir, tag+".json"))
 		if err != nil {
 			return err
 		}
@@ -75,7 +80,7 @@ func CalculateTagDiscovery(params CalculateTagDiscoveryCommandParams) error {
 
 			metadata := helpers.ExtractArticleMetadata(event.Tags)
 
-			score := discovery.CalculateEventScore(stats)
+			score := discovery.CalculateEventScore(stats, &weights)
 			authorData := statsResponse.PubkeyToAuthorDataMap[event.PubKey]
 
 			scoredEvents = append(scoredEvents, discovery.PopularItem{

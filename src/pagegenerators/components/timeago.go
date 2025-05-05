@@ -6,5 +6,5 @@ import (
 )
 
 func RenderTimeAgoScript() HTML {
-	return Script(Attr(a.Src("/output/static/js/time-ago.js")), JavaScript(""))
+	return Script(Attr(a.Src("/static/js/time-ago.js")), JavaScript(""))
 }

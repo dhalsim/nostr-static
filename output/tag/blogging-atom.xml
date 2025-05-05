@@ -1,12 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?><feed xmlns="http://www.w3.org/2005/Atom">
   <title>Nostr Articles</title>
   <id>https://blog.nostrize.me</id>
-  <updated>2025-05-05T18:03:36+03:00</updated>
+  <updated>2025-05-05T19:58:49+03:00</updated>
   <subtitle>Nostr Articles Feed</subtitle>
   <link href="https://blog.nostrize.me"></link>
   <author>
     <name>Nostr Static</name>
   </author>
+  <entry>
+    <title>Nostr-Static v0.7: Introducing RSS Feeds and Smart Content Discovery</title>
+    <updated>2025-05-05T19:50:13+03:00</updated>
+    <id>tag:blog.nostrize.me,2025-05-05:/naddr1qq2k2vph23v9y7rcvf8n27292avhv6rrve54sqgkwaehxw309aex2mrp0yh8qunfd4skctnwv46qz9nhwden5te0wfjkccte9ehx7um5wghxyctwvsq3camnwvaz7tmwdaehgu3wvf5hgcm0d9hx2u3wwdhkx6tpdsq3gamnwvaz7tmjv4kxz7fwv3sk6atn9e5k7qg0waehxw309ahx7um5wghx6mmdqgsxue9c8s0kwnaspf03nqtv99akg99lvlcptz2wqnw5cet7jsgza6qrqsqqqa28d4u2lk.html</id>
+    <content type="html">&lt;p&gt;&lt;a href=&#34;https://github.com/dhalsim/nostr-static&#34;&gt;Nostr-static&lt;/a&gt; is a powerful static site generator that transforms long-form Nostr content into beautiful, standalone websites. It makes your content accessible to everyone, even those not using Nostr clients. For more information check out my previous blog post &lt;a href=&#34;https://njump.me/naddr1qvzqqqr4gupzqmnyhq7p7e60kq997xvpds5hkeq5hanlq9vffczd6nr9062pqthgqq25x6r2d90hzaj529f9gur2x9h4yt2gfy69qm05rzu&#34;&gt;How to Create a Blog Out of Nostr Long-Form Articles&lt;/a&gt;&lt;/p&gt;&#xA;&lt;h2 id=&#34;whats-new-in-version-07&#34;&gt;What&#39;s New in Version 0.7?&lt;/h2&gt;&#xA;&lt;h3 id=&#34;rss-and-atom-feeds&#34;&gt;RSS and Atom Feeds&lt;/h3&gt;&#xA;&lt;p&gt;Version 0.7 brings comprehensive feed support with both RSS and Atom formats. The system automatically generates feeds for your main content, individual profiles, and tag-specific pages. These feeds are seamlessly integrated into your site&#39;s header, making them easily discoverable by feed readers and content aggregators.&lt;/p&gt;&#xA;&lt;p&gt;This feature bridges the gap between Nostr and traditional web publishing, allowing your content to reach readers who prefer feed readers or automated content distribution systems.&lt;/p&gt;&#xA;&lt;h3 id=&#34;smart-content-discovery&#34;&gt;Smart Content Discovery&lt;/h3&gt;&#xA;&lt;p&gt;The new tag discovery system enhances your readers&#39; experience by automatically finding and recommending relevant articles from the Nostr network. It works by:&lt;/p&gt;&#xA;&lt;ol&gt;&#xA;&lt;li&gt;Analyzing the tags in your articles&lt;/li&gt;&#xA;&lt;li&gt;Fetching popular articles from Nostr that share these tags&lt;/li&gt;&#xA;&lt;li&gt;Using configurable weights to rank these articles based on:&#xA;&lt;ul&gt;&#xA;&lt;li&gt;Engagement metrics (reactions, reposts, replies)&lt;/li&gt;&#xA;&lt;li&gt;Zap statistics (amount, unique zappers, average zap size)&lt;/li&gt;&#xA;&lt;li&gt;Content quality signals (report penalties)&lt;/li&gt;&#xA;&lt;/ul&gt;&#xA;&lt;/li&gt;&#xA;&lt;/ol&gt;&#xA;&lt;p&gt;This creates a dynamic &amp;quot;Recommended Articles&amp;quot; section that helps readers discover more content they might be interested in, all while staying within the Nostr ecosystem.&lt;/p&gt;&#xA;&lt;p&gt;See the new features yourself by visiting our demo at: &lt;a href=&#34;https://blog.nostrize.me&#34;&gt;https://blog.nostrize.me&lt;/a&gt;&lt;/p&gt;&#xA;</content>
+    <link href="https://blog.nostrize.me/naddr1qq2k2vph23v9y7rcvf8n27292avhv6rrve54sqgkwaehxw309aex2mrp0yh8qunfd4skctnwv46qz9nhwden5te0wfjkccte9ehx7um5wghxyctwvsq3camnwvaz7tmwdaehgu3wvf5hgcm0d9hx2u3wwdhkx6tpdsq3gamnwvaz7tmjv4kxz7fwv3sk6atn9e5k7qg0waehxw309ahx7um5wghx6mmdqgsxue9c8s0kwnaspf03nqtv99akg99lvlcptz2wqnw5cet7jsgza6qrqsqqqa28d4u2lk.html" rel="alternate"></link>
+    <link href="https://image.nostr.build/4bf0c17a906ee39f8a237f614f50084e4589ab172c12674b1e4bbe163ef0b70f.png" rel="enclosure" type="image/jpeg" length="0"></link>
+    <summary type="html">Nostr-static, a static site generator for Nostr, now offers RSS/Atom feeds and smart content discovery. The new version automatically generates recommended relevant articles from the Nostr network, helping your readers discover more engaging content.</summary>
+    <author>
+      <name>dhalsim</name>
+    </author>
+  </entry>
   <entry>
     <title>How to Create a Blog Out of Nostr Long-Form Articles</title>
     <updated>2025-04-27T02:33:16+03:00</updated>

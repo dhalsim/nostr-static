@@ -61,14 +61,14 @@ func renderIndexArticle(article IndexArticleData, baseFolder string) HTML {
 			article.Naddr,
 			article.CreatedAt,
 		),
-		renderImageHTML(article.Image, article.Title, article.Naddr, ""),
+		components.RenderImageHTML(article.Image, article.Title, article.Naddr, ""),
 		H2_(
 			A(Attr(a.Href(article.Naddr+".html")),
 				Text(article.Title),
 			),
 		),
-		renderSummaryHTML(article.Summary),
-		renderTagsHTML(article.Tags, baseFolder),
+		components.RenderSummaryHTML(article.Summary),
+		components.RenderTagsHTML(article.Tags, baseFolder),
 	)
 }
 
@@ -183,13 +183,13 @@ func GenerateIndexHTML(params GenerateIndexParams) error {
 		Body(Attr(a.Class(indexData.Color+" index")),
 			Div(Attr(a.Class("page-container")),
 				Div(Attr(a.Class("logo-container")),
-					renderLogo(indexData.Logo, ""),
+					components.RenderLogo(indexData.Logo, ""),
 				),
 				renderIndexArticles(indexData),
 			),
-			renderFooter(),
+			components.RenderFooter(),
 			components.RenderFeed("index"),
-			renderTimeAgoScript(),
+			components.RenderTimeAgoScript(),
 		),
 	)
 

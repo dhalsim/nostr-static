@@ -4,8 +4,6 @@ import (
 	"bytes"
 	"strings"
 
-	"nostr-static/src/pagegenerators/components"
-
 	. "github.com/julvo/htmlgo"
 	"github.com/yuin/goldmark"
 	"github.com/yuin/goldmark/extension"
@@ -230,31 +228,6 @@ func convertMarkdownToHTML(markdown string, stripTitle bool) (string, error) {
 	return buf.String(), nil
 }
 
-// Common HTML rendering functions
-func renderLogo(logo, baseFolder string) HTML {
-	return components.RenderLogo(logo, baseFolder)
-}
-
-func renderFooter() HTML {
-	return components.RenderFooter()
-}
-
-func renderTimeAgoScript() HTML {
-	return components.RenderTimeAgoScript()
-}
-
-func renderImageHTML(image, alt, imageLink, baseFolder string) HTML {
-	return components.RenderImageHTML(image, alt, imageLink, baseFolder)
-}
-
-func renderTagsHTML(tags []string, baseFolder string) HTML {
-	return components.RenderTagsHTML(tags, baseFolder)
-}
-
 func renderTitleHTML(title string) HTML {
 	return H1_(Text(title))
-}
-
-func renderSummaryHTML(summary string) HTML {
-	return components.RenderSummaryHTML(summary)
 }
