@@ -5,17 +5,19 @@ import (
 	"path/filepath"
 	"time"
 
+	"nostr-static/src/helpers"
 	"nostr-static/src/types"
 
 	"github.com/gorilla/feeds"
+	"github.com/nbd-wtf/go-nostr"
 )
 
 type GenerateFeedParams struct {
 	Folder         string
 	FileName       string
 	BlogURL        string
-	Events         []types.Event
-	Profiles       map[string]types.Event
+	Events         []nostr.Event
+	Profiles       map[string]nostr.Event
 	Layout         types.Layout
 	EventIDToNaddr map[string]string
 }
@@ -33,7 +35,7 @@ func GenerateFeeds(params GenerateFeedParams) error {
 
 	// Add items to feed
 	for _, event := range params.Events {
-		parsedProfile, err := parseProfile(params.Profiles[event.PubKey])
+		parsedProfile, err := helpers.ParseProfile(params.Profiles[event.PubKey])
 		if err != nil {
 			return err
 		}
@@ -75,7 +77,7 @@ func GenerateFeeds(params GenerateFeedParams) error {
 			Link:        &feeds.Link{Href: articleURL},
 			Description: summary,
 			Author:      &feeds.Author{Name: authorName},
-			Created:     time.Unix(event.CreatedAt, 0),
+			Created:     time.Unix(int64(event.CreatedAt), 0),
 			Content:     htmlContent,
 		}
 

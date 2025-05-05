@@ -5,6 +5,7 @@ import (
 
 	. "github.com/julvo/htmlgo"
 	a "github.com/julvo/htmlgo/attributes"
+	"github.com/nbd-wtf/go-nostr"
 )
 
 func RenderCompactProfile(
@@ -12,7 +13,7 @@ func RenderCompactProfile(
 	authorPicture,
 	authorNProfile,
 	naddr string,
-	createdAt int64,
+	createdAt nostr.Timestamp,
 ) HTML {
 	if authorName == "" {
 		return Text("")
@@ -43,7 +44,7 @@ func RenderCompactProfile(
 		),
 			Span(Attr(
 				a.Class("time-ago"),
-				a.Dataset("timestamp", strconv.FormatInt(createdAt, 10)),
+				a.Dataset("timestamp", strconv.FormatInt(int64(createdAt), 10)),
 			)),
 		),
 	)

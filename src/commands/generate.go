@@ -7,21 +7,25 @@ import (
 	"nostr-static/src/helpers"
 	"nostr-static/src/pagegenerators"
 	"nostr-static/src/types"
+
+	"github.com/nbd-wtf/go-nostr"
 )
 
 type GenerateCommandParams struct {
 	ConfigPath       string
 	OutputDir        string
+	IndexDir         string
 	Config           *types.Config
-	PubkeyToKind0    map[string]types.Event
+	PubkeyToKind0    map[string]nostr.Event
 	PubkeyToNprofile map[string]string
-	Events           []types.Event
+	Events           []nostr.Event
 	EventIDToNaddr   map[string]string
 }
 
 func Generate(params GenerateCommandParams) error {
 	configPath := params.ConfigPath
 	outputDir := params.OutputDir
+	indexDir := params.IndexDir
 	config := params.Config
 	events := params.Events
 	eventIDToNaddr := params.EventIDToNaddr
@@ -45,6 +49,8 @@ func Generate(params GenerateCommandParams) error {
 			BaseFolder: "",
 			Event:      event,
 			OutputDir:  outputDir,
+			IndexDir:   indexDir,
+			Settings:   config.Settings,
 			Layout:     config.Layout,
 			Features:   config.Features,
 			Naddr:      eventIDToNaddr[event.ID],

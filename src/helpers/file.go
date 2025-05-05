@@ -6,7 +6,7 @@ import (
 	"os"
 	"path/filepath"
 
-	"nostr-static/src/types"
+	"github.com/nbd-wtf/go-nostr"
 )
 
 func SaveNaddrMapping(eventIDToNaddr map[string]string, outputPath string) error {
@@ -33,7 +33,7 @@ func SaveNprofileMapping(pubkeyToNprofile map[string]string, outputPath string) 
 	return encoder.Encode(pubkeyToNprofile)
 }
 
-func SaveEvents(events []types.Event, outputPath string) error {
+func SaveEvents(events []nostr.Event, outputPath string) error {
 	file, err := os.Create(outputPath)
 	if err != nil {
 		return err
@@ -50,7 +50,7 @@ func SaveEvents(events []types.Event, outputPath string) error {
 	return nil
 }
 
-func SaveProfiles(profiles map[string]types.Event, outputPath string) error {
+func SaveProfiles(profiles map[string]nostr.Event, outputPath string) error {
 	file, err := os.Create(outputPath)
 	if err != nil {
 		return err

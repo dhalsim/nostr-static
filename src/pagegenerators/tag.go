@@ -6,18 +6,20 @@ import (
 	"strconv"
 	"strings"
 
+	"nostr-static/src/helpers"
 	"nostr-static/src/pagegenerators/components"
 	"nostr-static/src/types"
 
 	. "github.com/julvo/htmlgo"
 	a "github.com/julvo/htmlgo/attributes"
+	"github.com/nbd-wtf/go-nostr"
 )
 
 type GenerateTagPagesParams struct {
 	BaseFolder       string
 	BlogURL          string
-	Events           []types.Event
-	Profiles         map[string]types.Event
+	Events           []nostr.Event
+	Profiles         map[string]nostr.Event
 	OutputDir        string
 	Layout           types.Layout
 	EventIDToNaddr   map[string]string
@@ -89,7 +91,7 @@ func renderTagCompactProfile(data TagArticleData, baseFolder string) HTML {
 		),
 			Span(Attr(
 				a.Class("time-ago"),
-				a.Dataset("timestamp", strconv.FormatInt(data.CreatedAt, 10)),
+				a.Dataset("timestamp", strconv.FormatInt(int64(data.CreatedAt), 10)),
 			)),
 		),
 	)
@@ -97,7 +99,7 @@ func renderTagCompactProfile(data TagArticleData, baseFolder string) HTML {
 
 func GenerateTagPages(params GenerateTagPagesParams) error {
 	// Create a map to track tags and their associated events
-	tagMap := make(map[string][]types.Event)
+	tagMap := make(map[string][]nostr.Event)
 
 	// Populate the tag map
 	for _, event := range params.Events {
@@ -108,6 +110,17 @@ func GenerateTagPages(params GenerateTagPagesParams) error {
 				tagMap[tag] = append(tagMap[tag], event)
 			}
 		}
+	}
+
+	tagsArray := []string{}
+	for tag := range tagMap {
+		tagsArray = append(tagsArray, tag)
+	}
+
+	// save tagMap as an array of strings to file
+	tagArrayFile := filepath.Join(params.OutputDir, "tags.txt")
+	if err := os.WriteFile(tagArrayFile, []byte(strings.Join(tagsArray, "\n")), 0644); err != nil {
+		return err
 	}
 
 	// Create tag directory if it doesn't exist
@@ -142,9 +155,9 @@ func GenerateTagPages(params GenerateTagPagesParams) error {
 
 		for i, event := range tagEvents {
 			// Extract metadata from tags
-			metadata := ExtractArticleMetadata(event.Tags)
+			metadata := helpers.ExtractArticleMetadata(event.Tags)
 
-			parsedProfile, err := parseProfile(params.Profiles[event.PubKey])
+			parsedProfile, err := helpers.ParseProfile(params.Profiles[event.PubKey])
 			if err != nil {
 				return err
 			}

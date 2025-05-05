@@ -1,0 +1,145 @@
+{
+  "tag": "citrine",
+  "top_10": [
+    {
+      "EventID": "5825fdcf293fe224fb9ead098f1705f42736af19a67a705385079eaf2d1df379",
+      "Naddr": "naddr1qq652mtsdamk2unfdenj6nmsv4hxuetnwvk4gmms948x7um5wgk5zurswvkkvmmj94qkuerjda5kgtfsd94x2vr2qyt8wumn8ghj7un9d3shjtnswf5k6ctv9ehx2aqzyqlhwrt96wnkf2w9edgr4cfruchvwkv26q6asdhz4qg08pm6w3djgqcyqqq823cpdnccd",
+      "Nprofile": "nprofile1qqsr7acdvhf6we9fch94qwhpy0nza36e3tgrtkpku25ppuu80f69kfqpzemhxue69uhhyetvv9ujuurjd9kkzmpwdejhg5mh546",
+      "AuthorName": "Derek Ross",
+      "AuthorPicture": "https://i.nostr.build/MVIJ6OOFSUzzjVEc.jpg",
+      "Tag": "citrine",
+      "Title": "Empowering Openness: Top Nostr Apps for Android",
+      "Summary": "This article dives into the growing selection of powerful Nostr apps for Android—Amber, Citrine, Pokey, and zap.store—that are reshaping the landscape of self sovereign mobile technology. Each app provides a unique function in the Nostr ecosystem, from secure key management to real-time notifications, relays, and app discovery. Together, they highlight the openness and flexibility of Android as a platform, offering users enhanced security, control, and community-driven features in the world of Nostr.",
+      "Image": "https://cdn.satellite.earth/c0533fabe612e77d76360497062765f2adde346cd2ce32b273254968c9bcfa8b.jpg",
+      "Score": 75.500126,
+      "Stats": {
+        "event_id": "5825fdcf293fe224fb9ead098f1705f42736af19a67a705385079eaf2d1df379",
+        "reaction_count": 4,
+        "reaction_pubkey_count": 4,
+        "repost_count": 2,
+        "repost_pubkey_count": 2,
+        "reply_count": 2,
+        "reply_pubkey_count": 2,
+        "report_count": 0,
+        "report_pubkey_count": 0,
+        "zaps": {
+          "count": 1,
+          "zapper_count": 1,
+          "target_event_count": 1,
+          "target_pubkey_count": 1,
+          "provider_count": 1,
+          "msats": 210000,
+          "min_msats": 210000,
+          "max_msats": 210000,
+          "avg_msats": 210000,
+          "median_msats": 210000
+        }
+      }
+    },
+    {
+      "EventID": "03643a16e2cfb66ad9db1ea1893221286fd3b40a3dae9d26dfcd2666834f4503",
+      "Naddr": "naddr1qqxnzdejx56nyv3j8qervvejqyxhwumn8ghj7mn0wvhxcmmvqgsd03kszje59q2m52wy3u6yne8squ7lsn626kq2u9e48qzp564mdwqrqsqqqa28ncp3pm",
+      "Nprofile": "nprofile1qqsd03kszje59q2m52wy3u6yne8squ7lsn626kq2u9e48qzp564mdwqpzemhxue69uhhyetvv9ujuurjd9kkzmpwdejhgvur9zw",
+      "AuthorName": "kohei",
+      "AuthorPicture": "https://cdn.satellite.earth/5224faac2586d8fe394fa1532d37794282b45efd829f6f3da7a91a84a12f5f1e.jpg",
+      "Tag": "citrine",
+      "Title": "Android をローカルリレーサーバー化して Tor で公開する方法",
+      "Summary": "How To Set Up Android As A Local P2P Relay For Nostr.",
+      "Image": "https://img-21.ccm2.net/1QUzag2ISOf5Q_bvH5V8LVwNp38=/2509x/03dec81705f84e21968ae481821c36ad/ccm-faq/117960478_m.jpg",
+      "Score": 3,
+      "Stats": {
+        "event_id": "03643a16e2cfb66ad9db1ea1893221286fd3b40a3dae9d26dfcd2666834f4503",
+        "reaction_count": 3,
+        "reaction_pubkey_count": 3,
+        "repost_count": 0,
+        "repost_pubkey_count": 0,
+        "reply_count": 0,
+        "reply_pubkey_count": 0,
+        "report_count": 0,
+        "report_pubkey_count": 0,
+        "zaps": {
+          "count": 0,
+          "zapper_count": 0,
+          "target_event_count": 0,
+          "target_pubkey_count": 0,
+          "provider_count": 0,
+          "msats": 0,
+          "min_msats": 0,
+          "max_msats": 0,
+          "avg_msats": 0,
+          "median_msats": 0
+        }
+      }
+    },
+    {
+      "EventID": "4c3fff39eeb158bb0e3d880ee4a61358f8beabfbb6056bdbf9b42442ca99119f",
+      "Naddr": "naddr1qq2yx6t5wf5kuefdxqkn2tfn956hs6tnde6szrthwden5te0dehhxtnvdakqyg9c8ehc985m8c8nlzxuxlpf987ex99jhaarh3payhn2yqa88snhtqpsgqqqw4rstflqpv",
+      "Nprofile": "nprofile1qqsts0n0s20fk0s087ydcd7zj20ajv2t90m680zr6f0x5gp6w0p8wkqpp4mhxue69uhkummn9ekx7mqg54v36",
+      "AuthorName": "Citrine",
+      "AuthorPicture": "https://image.nostr.build/e18ff1422b36025d49474e406602920d34dd88904e2ddcb8b71f0aef129c2077.jpg",
+      "Tag": "citrine",
+      "Title": "Citrine 0.5.3",
+      "Summary": "",
+      "Image": "",
+      "Score": 3,
+      "Stats": {
+        "event_id": "4c3fff39eeb158bb0e3d880ee4a61358f8beabfbb6056bdbf9b42442ca99119f",
+        "reaction_count": 1,
+        "reaction_pubkey_count": 1,
+        "repost_count": 1,
+        "repost_pubkey_count": 1,
+        "reply_count": 0,
+        "reply_pubkey_count": 0,
+        "report_count": 0,
+        "report_pubkey_count": 0,
+        "zaps": {
+          "count": 0,
+          "zapper_count": 0,
+          "target_event_count": 0,
+          "target_pubkey_count": 0,
+          "provider_count": 0,
+          "msats": 0,
+          "min_msats": 0,
+          "max_msats": 0,
+          "avg_msats": 0,
+          "median_msats": 0
+        }
+      }
+    },
+    {
+      "EventID": "e053bd17c3e36ea81d69ae382aefedf0f53188fc4f95e67b21ce35a38dc9a1e2",
+      "Naddr": "naddr1qq2j6ezsgu69j7n92cmxxmfsgyeyyvjtxfuk7qgkwaehxw309aex2mrp0yh8qunfd4skctnwv46qygrwvjurc8m8f7cq5hces9kzj7myzjlk0uq4398qfh2vv4lfgypwaqpsgqqqw4rsklwcek",
+      "Nprofile": "nprofile1qqsxue9c8s0kwnaspf03nqtv99akg99lvlcptz2wqnw5cet7jsgza6qpzemhxue69uhhyetvv9ujuurjd9kkzmpwdejhghu4xkp",
+      "AuthorName": "dhalsim",
+      "AuthorPicture": "https://dhalsim.github.io/assets/dhalsim_logo_sq.png",
+      "Tag": "citrine",
+      "Title": "How to Run Your Own Nostr Relay on Android with Cloudflare Domain",
+      "Summary": "Step-by-step guide to running a personal Nostr relay on Android using Citrine and Cloudflare Tunnels. Learn how to set up secure WebSocket connections, manage relay lists, and maintain a reliable private relay with your custom domain.",
+      "Image": "https://image.nostr.build/f708db07b85c002b20b3159b48447d51cbcb0bae0f5717ce6dbc060580c8b35d.jpg",
+      "Score": 0,
+      "Stats": {
+        "event_id": "e053bd17c3e36ea81d69ae382aefedf0f53188fc4f95e67b21ce35a38dc9a1e2",
+        "reaction_count": 0,
+        "reaction_pubkey_count": 0,
+        "repost_count": 0,
+        "repost_pubkey_count": 0,
+        "reply_count": 0,
+        "reply_pubkey_count": 0,
+        "report_count": 0,
+        "report_pubkey_count": 0,
+        "zaps": {
+          "count": 0,
+          "zapper_count": 0,
+          "target_event_count": 0,
+          "target_pubkey_count": 0,
+          "provider_count": 0,
+          "msats": 0,
+          "min_msats": 0,
+          "max_msats": 0,
+          "avg_msats": 0,
+          "median_msats": 0
+        }
+      }
+    }
+  ]
+}

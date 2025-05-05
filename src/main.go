@@ -37,6 +37,12 @@ func main() {
 						Usage:   "output directory for generated files",
 						Aliases: []string{"o"},
 					},
+					&cli.StringFlag{
+						Name:    "index-dir",
+						Value:   "index-tag-discovery",
+						Usage:   "directory to save the tag discovery index",
+						Aliases: []string{"i"},
+					},
 					&cli.BoolFlag{
 						Name:    "clean",
 						Value:   true,
@@ -53,6 +59,7 @@ func main() {
 				Action: func(ctx context.Context, cmd *cli.Command) error {
 					configPath := cmd.String("config")
 					outputDir := cmd.String("output")
+					indexDir := cmd.String("index-dir")
 					clean := cmd.Bool("clean")
 					saveFiles := cmd.Bool("save-files")
 
@@ -67,7 +74,7 @@ func main() {
 					// Fetch events
 					log.Println("fetching events from relays: ", config.Relays)
 
-					events, eventIDToNaddr, err := FetchEvents(
+					events, eventIDToNaddr, err := helpers.FetchEvents(
 						config.Relays,
 						config.Articles,
 					)
@@ -127,7 +134,7 @@ func main() {
 
 					log.Println("fetching profiles from relays: ", config.Relays)
 
-					pubkeyToKind0, err := FetchProfiles(config.Relays, pubkeys)
+					pubkeyToKind0, err := helpers.FetchProfiles(config.Relays, pubkeys)
 					if err != nil {
 						return err
 					}
@@ -149,11 +156,100 @@ func main() {
 					return commands.Generate(commands.GenerateCommandParams{
 						ConfigPath:       configPath,
 						OutputDir:        outputDir,
+						IndexDir:         indexDir,
 						Config:           config,
 						PubkeyToKind0:    pubkeyToKind0,
 						PubkeyToNprofile: pubkeyToNprofile,
 						Events:           events,
 						EventIDToNaddr:   eventIDToNaddr,
+					})
+				},
+			},
+			{
+				Name:  "index-tag-discovery",
+				Usage: "Index tag discovery",
+				Flags: []cli.Flag{
+					&cli.StringFlag{
+						Name:    "config",
+						Value:   "config.yaml",
+						Usage:   "path to config file",
+						Aliases: []string{"c"},
+					},
+					&cli.BoolFlag{
+						Name:    "reset",
+						Value:   false,
+						Usage:   "reset the tag discovery index",
+						Aliases: []string{"r"},
+					},
+					&cli.StringFlag{
+						Name:    "index-dir",
+						Value:   "index-tag-discovery",
+						Usage:   "directory to save the tag discovery index",
+						Aliases: []string{"i"},
+					},
+					&cli.StringFlag{
+						Name:    "output-dir",
+						Value:   "output",
+						Usage:   "output directory for generated files",
+						Aliases: []string{"o"},
+					},
+				},
+				Action: func(ctx context.Context, cmd *cli.Command) error {
+					reset := cmd.Bool("reset")
+					indexDir := cmd.String("index-dir")
+					outputDir := cmd.String("output-dir")
+					configPath := cmd.String("config")
+
+					config, err := LoadConfig(configPath)
+					if err != nil {
+						return err
+					}
+
+					return commands.IndexTagDiscovery(commands.IndexTagDiscoveryCommandParams{
+						Reset:     reset,
+						IndexDir:  indexDir,
+						OutputDir: outputDir,
+						Config:    config,
+					})
+				},
+			},
+			{
+				Name:  "calculate-tag-discovery",
+				Usage: "Calculate tag discovery",
+				Flags: []cli.Flag{
+					&cli.StringFlag{
+						Name:    "config",
+						Value:   "config.yaml",
+						Usage:   "path to config file",
+						Aliases: []string{"c"},
+					},
+					&cli.StringFlag{
+						Name:    "index-dir",
+						Value:   "index-tag-discovery",
+						Usage:   "directory to save the tag discovery index",
+						Aliases: []string{"i"},
+					},
+					&cli.StringFlag{
+						Name:    "output-dir",
+						Value:   "output",
+						Usage:   "output directory for generated files",
+						Aliases: []string{"o"},
+					},
+				},
+				Action: func(ctx context.Context, cmd *cli.Command) error {
+					indexDir := cmd.String("index-dir")
+					outputDir := cmd.String("output-dir")
+					configPath := cmd.String("config")
+
+					config, err := LoadConfig(configPath)
+					if err != nil {
+						return err
+					}
+
+					return commands.CalculateTagDiscovery(commands.CalculateTagDiscoveryCommandParams{
+						IndexDir:  indexDir,
+						OutputDir: outputDir,
+						Config:    config,
 					})
 				},
 			},

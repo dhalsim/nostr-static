@@ -1,0 +1,110 @@
+{
+  "tag": "outbox",
+  "top_10": [
+    {
+      "EventID": "efb7cad4259dec8f0403367ed4198d12aa1be35cbc59d79c7be7bcbf24eb07ef",
+      "Naddr": "naddr1qq2nskt2w9vx6dznfdvj64rpw4mk5nmxf3v9xqgkwaehxw309aex2mrp0yh8qunfd4skctnwv46qygyhcu9ygdn2v56uz3dnx0uh865xmlwz675emfsccsxxguz6mx8rygpsgqqqw4rswgzyfp",
+      "Nprofile": "nprofile1qqsf03c2gsmx5ef4c9zmxvlew04gdh7u94afnknp33qvv3c94kvwxgspzemhxue69uhhyetvv9ujuurjd9kkzmpwdejhg4g3ves",
+      "AuthorName": " hodlbod",
+      "AuthorPicture": "https://i.nostr.build/AZ0L.jpg",
+      "Tag": "outbox",
+      "Title": "What is the Outbox Model?",
+      "Summary": "An explainer on the Outbox Model, including what it is, where it came from, and why it's integral to making nostr work.",
+      "Image": "https://yakihonne.s3.ap-east-1.amazonaws.com/97c70a44366a6535c145b333f973ea86dfdc2d7a99da618c40c64705ad98e322/files/1724892627307-YAKIHONNES3.jpg",
+      "Score": 3108.7003785250004,
+      "Stats": {
+        "event_id": "efb7cad4259dec8f0403367ed4198d12aa1be35cbc59d79c7be7bcbf24eb07ef",
+        "reaction_count": 22,
+        "reaction_pubkey_count": 22,
+        "repost_count": 3,
+        "repost_pubkey_count": 3,
+        "reply_count": 19,
+        "reply_pubkey_count": 9,
+        "report_count": 0,
+        "report_pubkey_count": 0,
+        "zaps": {
+          "count": 16,
+          "zapper_count": 16,
+          "target_event_count": 1,
+          "target_pubkey_count": 1,
+          "provider_count": 1,
+          "msats": 10094000,
+          "min_msats": 10000,
+          "max_msats": 5000000,
+          "avg_msats": 630875,
+          "median_msats": 69000
+        }
+      }
+    },
+    {
+      "EventID": "a5eadf5e75e94e0dc61d9ccfa86cf9132cb0c7fc6cc2375ef194af5bae06de2a",
+      "Naddr": "naddr1qqxnzde3xy6rvwpnx56rvdpkqyt8wumn8ghj7un9d3shjtnswf5k6ctv9ehx2aqzyqtnnkfhmjxqcums4gn4skfccyv7yhzp7mzyrfwnf3kns5p7xymw7qcyqqq823c4wuj34",
+      "Nprofile": "nprofile1qqspwwwexlwgcrrnwz4zwkze8rq3ncjug8mvgsd96dxx6wzs8ccndmcpzemhxue69uhhyetvv9ujuurjd9kkzmpwdejhgt2xpyc",
+      "AuthorName": "JeffG",
+      "AuthorPicture": "https://m.primal.net/HIVN.jpg",
+      "Tag": "outbox",
+      "Title": "What is (and isn't) the \"gossip\" model?",
+      "Summary": "It's Outbox, not Gossip. A non-technical overview of how Nostr can reduce relay centralization.",
+      "Image": "https://i.nostr.build/nWPOo.webp",
+      "Score": 1521.80029586,
+      "Stats": {
+        "event_id": "a5eadf5e75e94e0dc61d9ccfa86cf9132cb0c7fc6cc2375ef194af5bae06de2a",
+        "reaction_count": 13,
+        "reaction_pubkey_count": 13,
+        "repost_count": 5,
+        "repost_pubkey_count": 5,
+        "reply_count": 3,
+        "reply_pubkey_count": 3,
+        "report_count": 0,
+        "report_pubkey_count": 0,
+        "zaps": {
+          "count": 10,
+          "zapper_count": 10,
+          "target_event_count": 1,
+          "target_pubkey_count": 1,
+          "provider_count": 1,
+          "msats": 4931000,
+          "min_msats": 10000,
+          "max_msats": 1234000,
+          "avg_msats": 493100,
+          "median_msats": 500000
+        }
+      }
+    },
+    {
+      "EventID": "e053bd17c3e36ea81d69ae382aefedf0f53188fc4f95e67b21ce35a38dc9a1e2",
+      "Naddr": "naddr1qq2j6ezsgu69j7n92cmxxmfsgyeyyvjtxfuk7qgkwaehxw309aex2mrp0yh8qunfd4skctnwv46qygrwvjurc8m8f7cq5hces9kzj7myzjlk0uq4398qfh2vv4lfgypwaqpsgqqqw4rsklwcek",
+      "Nprofile": "nprofile1qqsxue9c8s0kwnaspf03nqtv99akg99lvlcptz2wqnw5cet7jsgza6qpzemhxue69uhhyetvv9ujuurjd9kkzmpwdejhghu4xkp",
+      "AuthorName": "dhalsim",
+      "AuthorPicture": "https://dhalsim.github.io/assets/dhalsim_logo_sq.png",
+      "Tag": "outbox",
+      "Title": "How to Run Your Own Nostr Relay on Android with Cloudflare Domain",
+      "Summary": "Step-by-step guide to running a personal Nostr relay on Android using Citrine and Cloudflare Tunnels. Learn how to set up secure WebSocket connections, manage relay lists, and maintain a reliable private relay with your custom domain.",
+      "Image": "https://image.nostr.build/f708db07b85c002b20b3159b48447d51cbcb0bae0f5717ce6dbc060580c8b35d.jpg",
+      "Score": 0,
+      "Stats": {
+        "event_id": "e053bd17c3e36ea81d69ae382aefedf0f53188fc4f95e67b21ce35a38dc9a1e2",
+        "reaction_count": 0,
+        "reaction_pubkey_count": 0,
+        "repost_count": 0,
+        "repost_pubkey_count": 0,
+        "reply_count": 0,
+        "reply_pubkey_count": 0,
+        "report_count": 0,
+        "report_pubkey_count": 0,
+        "zaps": {
+          "count": 0,
+          "zapper_count": 0,
+          "target_event_count": 0,
+          "target_pubkey_count": 0,
+          "provider_count": 0,
+          "msats": 0,
+          "min_msats": 0,
+          "max_msats": 0,
+          "avg_msats": 0,
+          "median_msats": 0
+        }
+      }
+    }
+  ]
+}

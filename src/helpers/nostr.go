@@ -1,12 +1,12 @@
-package main
+package helpers
 
 import (
 	"context"
+	"encoding/json"
 	"log"
 	"sync"
 	"time"
 
-	"nostr-static/src/helpers"
 	"nostr-static/src/types"
 
 	"github.com/nbd-wtf/go-nostr"
@@ -16,8 +16,8 @@ import (
 func FetchEvents(
 	relays []string,
 	naddrs []string,
-) ([]types.Event, map[string]string, error) {
-	var events []types.Event
+) ([]nostr.Event, map[string]string, error) {
+	var events []nostr.Event
 	var mu sync.Mutex
 	eventIDToNaddr := make(map[string]string)
 
@@ -66,23 +66,27 @@ func FetchEvents(
 		// Process events
 		eventMap.Range(func(key nostr.ReplaceableKey, ev *nostr.Event) bool {
 			log.Printf("Received event with ID: %s", ev.ID)
-			tags := make([][]string, len(ev.Tags))
+
+			tags := make(nostr.Tags, len(ev.Tags))
 			for i, tag := range ev.Tags {
-				tags[i] = []string(tag)
+				tags[i] = nostr.Tag(tag)
 			}
 
 			mu.Lock()
-			events = append(events, types.Event{
+
+			events = append(events, nostr.Event{
 				ID:        ev.ID,
 				PubKey:    ev.PubKey,
-				CreatedAt: int64(ev.CreatedAt),
+				CreatedAt: ev.CreatedAt,
 				Kind:      ev.Kind,
 				Tags:      tags,
 				Content:   ev.Content,
 				Sig:       ev.Sig,
 			})
 			eventIDToNaddr[ev.ID] = naddr
+
 			mu.Unlock()
+
 			return true
 		})
 	}
@@ -94,9 +98,9 @@ func FetchEvents(
 func FetchProfiles(
 	relays []string,
 	pubkeys []string,
-) (map[string]types.Event, error) {
+) (map[string]nostr.Event, error) {
 	// pubkey to kind 0 event map
-	pubkeyToKind0 := make(map[string]types.Event)
+	pubkeyToKind0 := make(map[string]nostr.Event)
 
 	var mu sync.Mutex
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
@@ -118,18 +122,50 @@ func FetchProfiles(
 	// Process events
 	for ev := range eventMap {
 		mu.Lock()
-		pubkeyToKind0[ev.PubKey] = types.Event{
+		pubkeyToKind0[ev.PubKey] = nostr.Event{
 			ID:        ev.ID,
 			PubKey:    ev.PubKey,
-			CreatedAt: int64(ev.CreatedAt),
+			CreatedAt: nostr.Timestamp(ev.CreatedAt),
 			Kind:      ev.Kind,
 			Content:   ev.Content,
 			Sig:       ev.Sig,
-			Tags:      helpers.ConvertTags(ev.Tags),
+			Tags:      ev.Tags,
 		}
 
 		mu.Unlock()
 	}
 
 	return pubkeyToKind0, nil
+}
+
+// ExtractArticleMetadata extracts metadata from event tags
+func ExtractArticleMetadata(tags nostr.Tags) types.ArticleMetadata {
+	var metadata types.ArticleMetadata
+	for _, tag := range tags {
+		if len(tag) < 2 {
+			continue
+		}
+
+		switch tag[0] {
+		case "title":
+			metadata.Title = tag[1]
+		case "summary":
+			metadata.Summary = tag[1]
+		case "image":
+			metadata.Image = tag[1]
+		case "t":
+			metadata.Tags = append(metadata.Tags, tag[1])
+		}
+	}
+	return metadata
+}
+
+func ParseProfile(event nostr.Event) (*types.ParsedProfile, error) {
+	var profile types.ParsedProfile
+
+	if err := json.Unmarshal([]byte(event.Content), &profile); err != nil {
+		return nil, err
+	}
+
+	return &profile, nil
 }

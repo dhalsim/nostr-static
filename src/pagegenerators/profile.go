@@ -11,7 +11,9 @@ import (
 
 	. "github.com/julvo/htmlgo"
 	a "github.com/julvo/htmlgo/attributes"
+	"github.com/nbd-wtf/go-nostr"
 
+	"nostr-static/src/helpers"
 	"nostr-static/src/pagegenerators/components"
 	"nostr-static/src/types"
 	"nostr-static/src/utils"
@@ -41,15 +43,15 @@ type ProfileArticleData struct {
 	Summary   string
 	Image     string
 	Tags      []string
-	CreatedAt int64
+	CreatedAt nostr.Timestamp
 }
 
 type GenerateProfilePagesParams struct {
 	BaseFolder       string
 	NostrLinks       string
 	BlogURL          string
-	Profiles         map[string]types.Event
-	Events           []types.Event
+	Profiles         map[string]nostr.Event
+	Events           []nostr.Event
 	OutputDir        string
 	Layout           types.Layout
 	PubkeyToNProfile map[string]string
@@ -172,7 +174,7 @@ func GenerateProfilePages(params GenerateProfilePagesParams) error {
 	}
 
 	// Create a map to track articles by author
-	authorArticles := make(map[string][]types.Event)
+	authorArticles := make(map[string][]nostr.Event)
 	for _, event := range params.Events {
 		authorArticles[event.PubKey] = append(authorArticles[event.PubKey], event)
 	}
@@ -180,7 +182,7 @@ func GenerateProfilePages(params GenerateProfilePagesParams) error {
 	// Generate a page for each profile
 	for pubkey, profileEvent := range params.Profiles {
 		// Parse profile metadata
-		parsedProfile, err := parseProfile(profileEvent)
+		parsedProfile, err := helpers.ParseProfile(profileEvent)
 		if err != nil {
 			return err
 		}
@@ -233,7 +235,7 @@ func GenerateProfilePages(params GenerateProfilePagesParams) error {
 		articles := make([]ProfileArticleData, len(articleEvents))
 
 		for i, event := range articleEvents {
-			metadata := ExtractArticleMetadata(event.Tags)
+			metadata := helpers.ExtractArticleMetadata(event.Tags)
 
 			articles[i] = ProfileArticleData{
 				Naddr:     params.EventIDToNaddr[event.ID],
@@ -411,13 +413,3 @@ body.dark .author-website:hover {
 		}
 }
 `
-
-func parseProfile(event types.Event) (*ParsedProfile, error) {
-	var profile ParsedProfile
-
-	if err := json.Unmarshal([]byte(event.Content), &profile); err != nil {
-		return nil, err
-	}
-
-	return &profile, nil
-}

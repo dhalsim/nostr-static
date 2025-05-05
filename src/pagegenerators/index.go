@@ -4,11 +4,13 @@ import (
 	"os"
 	"path/filepath"
 
+	"nostr-static/src/helpers"
 	"nostr-static/src/pagegenerators/components"
 	"nostr-static/src/types"
 
 	. "github.com/julvo/htmlgo"
 	a "github.com/julvo/htmlgo/attributes"
+	"github.com/nbd-wtf/go-nostr"
 )
 
 type IndexArticleData struct {
@@ -20,7 +22,7 @@ type IndexArticleData struct {
 	AuthorName    string
 	AuthorPicture string
 	Nprofile      string
-	CreatedAt     int64
+	CreatedAt     nostr.Timestamp
 }
 
 type IndexData struct {
@@ -34,8 +36,8 @@ type IndexData struct {
 type GenerateIndexParams struct {
 	BaseFolder       string
 	BlogURL          string
-	Events           []types.Event
-	Profiles         map[string]types.Event
+	Events           []nostr.Event
+	Profiles         map[string]nostr.Event
 	OutputDir        string
 	Layout           types.Layout
 	EventIDToNaddr   map[string]string
@@ -96,7 +98,7 @@ func GenerateIndexHTML(params GenerateIndexParams) error {
 	indexData.Articles = make([]IndexArticleData, 0, len(params.Events))
 
 	for _, event := range params.Events {
-		parsedProfile, err := parseProfile(params.Profiles[event.PubKey])
+		parsedProfile, err := helpers.ParseProfile(params.Profiles[event.PubKey])
 		if err != nil {
 			return err
 		}

@@ -285,6 +285,143 @@
       	margin-bottom: 1em;
       }
       
+      .recommended-articles-title {
+          font-size: 1.5em;
+          font-weight: 600;
+      		margin-top: 1em;
+          margin-bottom: 1em;
+          color: #c99;
+      }
+      
+      .tag-discovery-items {
+          display: flex;
+          overflow-x: auto;
+          gap: 2em;
+          scroll-behavior: smooth;
+          -webkit-overflow-scrolling: touch;
+          scrollbar-width: thin;
+          scrollbar-color: #666 #f0f0f0;
+      }
+      
+      .tag-discovery-items::-webkit-scrollbar {
+          height: 8px;
+      }
+      
+      .tag-discovery-items::-webkit-scrollbar-track {
+          background: #f0f0f0;
+          border-radius: 4px;
+      }
+      
+      .tag-discovery-items::-webkit-scrollbar-thumb {
+          background: #666;
+          border-radius: 4px;
+      }
+      
+      .tag-discovery-items::-webkit-scrollbar-thumb:hover {
+          background: #888;
+      }
+      
+      .tag-discovery-item {
+          flex: 0 0 300px;
+          display: flex;
+          flex-direction: column;
+          gap: 0.5em;
+      }
+      
+      .tag-image-link {
+          display: block;
+          text-decoration: none;
+          width: 100%;
+          height: 200px;
+          overflow: hidden;
+          border-radius: 4px;
+      }
+      
+      .tag-image {
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+      }
+      
+      .tag-image-placeholder {
+          width: 100%;
+          height: 100%;
+          background-color: #f0f0f0;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          color: #999;
+          font-size: 0.9em;
+      }
+      
+      .tag-author-section {
+          display: flex;
+          align-items: center;
+          gap: 0.5em;
+      }
+      
+      .tag-author-picture {
+          width: 24px;
+          height: 24px;
+          border-radius: 50%;
+          object-fit: cover;
+      }
+      
+      .tag-author {
+          font-size: 0.85em;
+          color: #666;
+          text-decoration: none;
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
+      }
+      
+      .tag-author:hover {
+          color: #333;
+      }
+      
+      .tag-title {
+          font-size: 1.2em;
+          font-weight: 600;
+          color: #333;
+          text-decoration: none;
+          display: block;
+          line-height: 1.3;
+      }
+      
+      .tag-title:hover {
+          color: #666;
+      }
+      
+      .tag-summary {
+          font-size: 0.9em;
+          color: #666;
+          display: -webkit-box;
+          -webkit-line-clamp: 3;
+          -webkit-box-orient: vertical;
+          overflow: hidden;
+          line-height: 1.4;
+      }
+      
+      @media (max-width: 768px) {
+          .tag-discovery-item {
+              flex: 0 0 260px;
+          }
+          
+          .tag-image-link {
+              height: 180px;
+          }
+          
+          .tag-author-picture {
+              width: 20px;
+              height: 20px;
+          }
+          
+          .tag-author {
+              font-size: 0.8em;
+          }
+      }
+      
           @media (max-width: 768px) {
               body {
                   font-size: 18px;
@@ -758,6 +895,153 @@
         		relays="wss://relay.damus.io,wss://nostr.wine,wss://relay.nostr.band,wss://nos.lol,wss://relay.primal.net"
         		urls="naddr:njump.me/,npub:njump.me/,nprofile:njump.me/,nevent:njump.me/,note:njump.me/,tag:snort.social/t/"
         		disable="replyAnonymously" />
+      </div>
+    </div>
+    <div class="tag-discovery-section">
+      <div class="recommended-articles-title">Recommended Articles
+      </div>
+      <div class="tag-discovery-items">
+        <div class="tag-discovery-item">
+          <a class="tag-image-link" href="https://njump.me/naddr1qqxnzdenxqeryvpjxuenvvf5qyg8wumn8ghj7mn0wd68ytnhd9hx2q3qzuuajd7u3sx8xu92yav9jwxpr839cs0kc3q6t56vd5u9q033xmhsxpqqqp65wprczwt" target="_blank">
+            <img class="tag-image" src="https://image.nostr.build/072c1cd417001e1ea1cee0044cb79cbba82f279d9d23707681dc2cc9564671f1.jpg">
+          </a>
+          <div class="tag-author-section">
+            <img class="tag-author-picture" src="https://m.primal.net/HIVN.jpg">
+            <a class="tag-author" href="https://njump.me/nprofile1qqspwwwexlwgcrrnwz4zwkze8rq3ncjug8mvgsd96dxx6wzs8ccndmcpzemhxue69uhhyetvv9ujuurjd9kkzmpwdejhgt2xpyc" target="_blank">JeffG
+            </a>
+          </div>
+          <a class="tag-title" href="https://njump.me/naddr1qqxnzdenxqeryvpjxuenvvf5qyg8wumn8ghj7mn0wd68ytnhd9hx2q3qzuuajd7u3sx8xu92yav9jwxpr839cs0kc3q6t56vd5u9q033xmhsxpqqqp65wprczwt" target="_blank">MLS over Nostr - Oct 29 2024
+          </a>
+          <div class="tag-summary">A major milestone! Now, back to work. 
+          </div>
+        </div>
+        <div class="tag-discovery-item">
+          <a class="tag-image-link" href="https://njump.me/naddr1qqx8qatzd35hx6r9vskkzaqpp4mhxue69uhkummn9ekx7mqzypl62m6ad932k83u6sjwwkxrqq4cve0hkrvdem5la83g34m4rtqegqcyqqq823c0fy0z4" target="_blank">
+            <img class="tag-image" src="https://uploads-ssl.webflow.com/63c880de767a987f902e30db/644b7931ae427d2259b834ba_art-deco-cat.png">
+          </a>
+          <div class="tag-author-section">
+            <img class="tag-author-picture" src="https://npub107jk7htfv243u0x5ynn43scq9wrxtaasmrwwa8lfu2ydwag6cx2quqncxg.blossom.band/3d84787d7284c879429eb0c8e6dcae0bf94cc50456d4046adf33cf040f8f5504.jpg">
+            <a class="tag-author" href="https://njump.me/nprofile1qqs8lft0t45k92c78n2zfe6ccvqzhpn977cd3h8wnl579zxhw5dvr9qpp4mhxue69uhkummn9ekx7mqc04vf5" target="_blank">verbiricha
+            </a>
+          </div>
+          <a class="tag-title" href="https://njump.me/naddr1qqx8qatzd35hx6r9vskkzaqpp4mhxue69uhkummn9ekx7mqzypl62m6ad932k83u6sjwwkxrqq4cve0hkrvdem5la83g34m4rtqegqcyqqq823c0fy0z4" target="_blank">Migrating content to nostr
+          </a>
+          <div class="tag-summary">Habla allows setting published dates
+          </div>
+        </div>
+        <div class="tag-discovery-item">
+          <a class="tag-image-link" href="https://njump.me/naddr1qq3yy6t5vdhkjm3df9h8vetnw3kk2mn594tk2ett9489jsedwvuhyem5vuq3vamnwvaz7tmjv4kxz7fwwpexjmtpdshxuet5qgst32wlsgvqsnjfpkygxs4f6jyt0nc0kg935xdevwlv668dd26uh0grqsqqqa28ftlysn" target="_blank">
+            <img class="tag-image" src="https://blossom.primal.net/1d6f4625321924c831eedc226c7d6c96828a5ce694cae7e02d36cfd09c3397e1.jpg">
+          </a>
+          <div class="tag-author-section">
+            <img class="tag-author-picture" src="https://m.primal.net/Jblw.jpg">
+            <a class="tag-author" href="https://njump.me/nprofile1qqst32wlsgvqsnjfpkygxs4f6jyt0nc0kg935xdevwlv668dd26uh0gpp4mhxue69uhkummn9ekx7mqfhdfh8" target="_blank">Tanja
+            </a>
+          </div>
+          <a class="tag-title" href="https://njump.me/naddr1qq3yy6t5vdhkjm3df9h8vetnw3kk2mn594tk2ett9489jsedwvuhyem5vuq3vamnwvaz7tmjv4kxz7fwwpexjmtpdshxuet5qgst32wlsgvqsnjfpkygxs4f6jyt0nc0kg935xdevwlv668dd26uh0grqsqqqa28ftlysn" target="_blank">Bitcoin Investment Week NYC
+          </a>
+          <div class="tag-summary">Where were the plebs?
+          </div>
+        </div>
+        <div class="tag-discovery-item">
+          <a class="tag-image-link" href="https://njump.me/naddr1qqyxueth94ehqetrqyt8wumn8ghj7un9d3shjtnwdaehgu3wvfskueqzyp4n0q8099eww0fhpwz28eg70256ud9lgy5n3h8mm8zlvwezzstvsqcyqqq823cmmu02p" target="_blank">
+            <img class="tag-image" src="https://image.nostr.build/43e9f24814f6b45627dab80c311ccbcfeb0a4993207936f4ba099f892b1461ca.jpg">
+          </a>
+          <div class="tag-author-section">
+            <img class="tag-author-picture" src="https://dvmcp.fun/favicon.png">
+            <a class="tag-author" href="https://njump.me/nprofile1qqsxkduqau5h9eeaxu9cfgl9rea2nt35haqjjwxul0vuta3myg2pdjqpp4mhxue69uhkummn9ekx7mqpzemhxue69uhhyetvv9ujumn0wd68ytnzv9hxgnfmxn2" target="_blank">DVMCP
+            </a>
+          </div>
+          <a class="tag-title" href="https://njump.me/naddr1qqyxueth94ehqetrqyt8wumn8ghj7un9d3shjtnwdaehgu3wvfskueqzyp4n0q8099eww0fhpwz28eg70256ud9lgy5n3h8mm8zlvwezzstvsqcyqqq823cmmu02p" target="_blank">New spec is here
+          </a>
+          <div class="tag-summary">We are excited to announce the finalization of our DVMCP specification update, which integrates the latest Model Context Protocol (MCP) version `2025-03-26` and other improvements. This article highlights the key points of this update, and the differences between our initial vision and the final specification, providing insights into how our ideas evolved during the drafting process.
+          </div>
+        </div>
+        <div class="tag-discovery-item">
+          <a class="tag-image-link" href="https://njump.me/naddr1qq5y6nzn94hhvetj948x7um5wgknyvnwvsk5vetzwf6kzune95erqv3494kkvdtgxfssz9nhwden5te0wfjkccte9ec8y6tdv9kzumn9wspzq9eemymaerqvwdc25f6ctyuvzx0zt3qld3zp5hf5cmfc2qlrzdh0qvzqqqr4gu784npy" target="_blank">
+            <img class="tag-image" src="https://blossom.primal.net/1efddac044f3e438372259d49beabc713de5a68e0d89958df8c8fb03d370220d.png">
+          </a>
+          <div class="tag-author-section">
+            <img class="tag-author-picture" src="https://m.primal.net/HIVN.jpg">
+            <a class="tag-author" href="https://njump.me/nprofile1qqspwwwexlwgcrrnwz4zwkze8rq3ncjug8mvgsd96dxx6wzs8ccndmcpzemhxue69uhhyetvv9ujuurjd9kkzmpwdejhgt2xpyc" target="_blank">JeffG
+            </a>
+          </div>
+          <a class="tag-title" href="https://njump.me/naddr1qq5y6nzn94hhvetj948x7um5wgknyvnwvsk5vetzwf6kzune95erqv3494kkvdtgxfssz9nhwden5te0wfjkccte9ec8y6tdv9kzumn9wspzq9eemymaerqvwdc25f6ctyuvzx0zt3qld3zp5hf5cmfc2qlrzdh0qvzqqqr4gu784npy" target="_blank">MLS over Nostr - 22nd February 2025
+          </a>
+          <div class="tag-summary">Oh hello. Long time no see!
+          </div>
+        </div>
+        <div class="tag-discovery-item">
+          <a class="tag-image-link" href="https://njump.me/naddr1qqyrge3svfskvenyqyg8wumn8ghj7mn0wd68ytnhd9hx2q3qr0d8u8mnj6769500nypnm28a9hpk9qg8jr0ehe30tygr3wuhcnvsxpqqqp65wtk0der" target="_blank">
+            <img class="tag-image" src="https://m.primal.net/NObR.png">
+          </a>
+          <div class="tag-author-section">
+            <img class="tag-author-picture" src="https://image.nostr.build/0019acae0c6a5588e97c29d99e81851c2010669a9353ede435a5c4c85ea7dbad.png">
+            <a class="tag-author" href="https://njump.me/nprofile1qqsphkn7raeed0dz68hejqea4r7jmsmzsyrephumuch4jypchwtufkgpzemhxue69uhhyetvv9ujuurjd9kkzmpwdejhgqjh3ly" target="_blank">rodbishop
+            </a>
+          </div>
+          <a class="tag-title" href="https://njump.me/naddr1qqyrge3svfskvenyqyg8wumn8ghj7mn0wd68ytnhd9hx2q3qr0d8u8mnj6769500nypnm28a9hpk9qg8jr0ehe30tygr3wuhcnvsxpqqqp65wtk0der" target="_blank">Workflow Automation for Nostr
+          </a>
+          <div class="tag-summary">How to use workflow automation with Nostr, using n8n and Nostrobots, to delegate account access, set up push notifications, and more.
+          </div>
+        </div>
+        <div class="tag-discovery-item">
+          <a class="tag-image-link" href="https://njump.me/naddr1qqxnzde5xccryve3xuurxv3eqyt8wumn8ghj7un9d3shjtnswf5k6ctv9ehx2aqzyqtnnkfhmjxqcums4gn4skfccyv7yhzp7mzyrfwnf3kns5p7xymw7qcyqqq823c77xapg" target="_blank">
+            <img class="tag-image" src="https://image.nostr.build/171e3b961fd0ac14a00ad3c2cc6ce12f08cbb37bd2146644b0e093f7528ed7a3.png">
+          </a>
+          <div class="tag-author-section">
+            <img class="tag-author-picture" src="https://m.primal.net/HIVN.jpg">
+            <a class="tag-author" href="https://njump.me/nprofile1qqspwwwexlwgcrrnwz4zwkze8rq3ncjug8mvgsd96dxx6wzs8ccndmcpzemhxue69uhhyetvv9ujuurjd9kkzmpwdejhgt2xpyc" target="_blank">JeffG
+            </a>
+          </div>
+          <a class="tag-title" href="https://njump.me/naddr1qqxnzde5xccryve3xuurxv3eqyt8wumn8ghj7un9d3shjtnswf5k6ctv9ehx2aqzyqtnnkfhmjxqcums4gn4skfccyv7yhzp7mzyrfwnf3kns5p7xymw7qcyqqq823c77xapg" target="_blank">MLS over Nostr - 30 April 2025
+          </a>
+          <div class="tag-summary">A springtime update on MLS messaging and the White Noise project. 
+          </div>
+        </div>
+        <div class="tag-discovery-item">
+          <a class="tag-image-link" href="https://njump.me/naddr1qqxnzdenxgenzve4xyurgvfkqyg8wumn8ghj7mn0wd68ytnhd9hx2q3qjlrs53pkdfjnts29kveljul2sm0actt6n8dxrrzqcersttvcuv3qxpqqqp65wav0usv" target="_blank">
+            <img class="tag-image" src="https://image.nostr.build/c627d8da39158bac9e1ac4c4e163028f5cd4249f1622c78398d738937e49a093.jpg">
+          </a>
+          <div class="tag-author-section">
+            <img class="tag-author-picture" src="https://i.nostr.build/AZ0L.jpg">
+            <a class="tag-author" href="https://njump.me/nprofile1qqsf03c2gsmx5ef4c9zmxvlew04gdh7u94afnknp33qvv3c94kvwxgspzemhxue69uhhyetvv9ujuurjd9kkzmpwdejhg4g3ves" target="_blank"> hodlbod
+            </a>
+          </div>
+          <a class="tag-title" href="https://njump.me/naddr1qqxnzdenxgenzve4xyurgvfkqyg8wumn8ghj7mn0wd68ytnhd9hx2q3qjlrs53pkdfjnts29kveljul2sm0actt6n8dxrrzqcersttvcuv3qxpqqqp65wav0usv" target="_blank">Why not NIP 29?
+          </a>
+          <div class="tag-summary">Why I didn't use NIP 29 to build Flotilla... and why I still might.
+          </div>
+        </div>
+        <div class="tag-discovery-item">
+          <a class="tag-image-link" href="https://njump.me/naddr1qqgxymr4v4ekk7fdweej6mn0wd68yqgkwaehxw309aex2mrp0yh8qunfd4skctnwv46qygqyv87tanzvxd6y8xfj66u0zynfendhejtn44a9pt3k9kcntfr5m5psgqqqw4rsqx5hux" target="_blank">
+            <div class="tag-image-placeholder">No image
+            </div>
+          </a>
+          <div class="tag-author-section">
+            <img class="tag-author-picture" src="https://media.ditto.pub/3fd58d3db4fdcf40091d69e881242678c8010acc446c3f0d8e95cc9505b12e7a.jpeg">
+            <a class="tag-author" href="https://njump.me/nprofile1qqsqgc0uhmxycvm5gwvn944c7yfxnnxm0nyh8tt62zhrvtd3xkj8fhgpp4mhxue69uhkummn9ekx7mq4ntggt" target="_blank">Alex Gleason
+            </a>
+          </div>
+          <a class="tag-title" href="https://njump.me/naddr1qqgxymr4v4ekk7fdweej6mn0wd68yqgkwaehxw309aex2mrp0yh8qunfd4skctnwv46qygqyv87tanzvxd6y8xfj66u0zynfendhejtn44a9pt3k9kcntfr5m5psgqqqw4rsqx5hux" target="_blank">Bluesky vs Nostr
+          </a>
+          <div class="tag-summary">Let's compare Bluesky and Nostr to see how they stack up.
+          </div>
+        </div>
+        <div class="tag-discovery-item">
+          <a class="tag-image-link" href="https://njump.me/naddr1qq2457fdx9j97cfkgyu5umpd94xkk5e3vcexxqgkwaehxw309aex2mrp0yh8qunfd4skctnwv46qygye39gqgylmw4kcgdu39npjhcrnpklphlrtt5hw7av7z3tvyw0eq5psgqqqw4rs5pamj5" target="_blank">
+            <img class="tag-image" src="https://image.nostr.build/4531359d1275f15e6c22d6751741ee835c2e5d11341da19fbfa549279f274d28.png">
+          </a>
+          <div class="tag-author-section">
+            <img class="tag-author-picture" src="https://i.nostr.build/W6ygZnklUfXNf6pv.png">
+            <a class="tag-author" href="https://njump.me/nprofile1qqsfnz2sqsflkatdssmeztxr90s8xrd7r07xkhfwaa6eu9zkcguljpgpp4mhxue69uhkummn9ekx7mqutf44j" target="_blank">nostr.build
+            </a>
+          </div>
+          <a class="tag-title" href="https://njump.me/naddr1qq2457fdx9j97cfkgyu5umpd94xkk5e3vcexxqgkwaehxw309aex2mrp0yh8qunfd4skctnwv46qygye39gqgylmw4kcgdu39npjhcrnpklphlrtt5hw7av7z3tvyw0eq5psgqqqw4rs5pamj5" target="_blank">A Nostr Blogging Contest
+          </a>
+          <div class="tag-summary">
+          </div>
+        </div>
       </div>
     </div>
     <div class="footer">

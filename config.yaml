@@ -15,6 +15,13 @@ relays:
 features:
   comments: true
   nostr_links: njump.me
+  tag_discovery: true
+
+# todo: implement settings
+settings:
+  tag_discovery:
+    fetch_count_per_tag: 100      # fetch this many events per tag
+    popular_articles_count: 10    # max number of articles to display in tag discovery
 
 articles:
   - naddr1qvzqqqr4gupzqmnyhq7p7e60kq997xvpds5hkeq5hanlq9vffczd6nr9062pqthgqq25x6r2d90hzaj529f9gur2x9h4yt2gfy69qm05rzu

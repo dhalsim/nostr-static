@@ -2,32 +2,39 @@ package pagegenerators
 
 import (
 	"html/template"
+	"log"
+	"nostr-static/src/discovery"
 	"nostr-static/src/types"
 	"os"
 	"path/filepath"
 	"strings"
 
+	"nostr-static/src/helpers"
 	"nostr-static/src/pagegenerators/components"
 
 	. "github.com/julvo/htmlgo"
 	a "github.com/julvo/htmlgo/attributes"
+	"github.com/nbd-wtf/go-nostr"
 )
 
 // ArticleData represents all data needed for article templates
 type ArticleData struct {
 	Title          string
-	CreatedAt      int64
+	CreatedAt      nostr.Timestamp
 	Content        template.HTML
 	Color          string
 	Summary        string
 	Tags           []string
 	Logo           string
 	Image          string
+	EventID        string
 	Naddr          string
 	AuthorName     string
 	AuthorNProfile string
 	AuthorPicture  string
 	Comments       bool
+	TagDiscovery   bool
+	DiscoveryData  []discovery.PopularItem
 	Relays         string
 	BaseFolder     string
 }
@@ -35,12 +42,14 @@ type ArticleData struct {
 type GenerateArticleParams struct {
 	BaseFolder string
 	NostrLinks string
-	Event      types.Event
+	Settings   types.Settings
+	Event      nostr.Event
 	OutputDir  string
+	IndexDir   string
 	Layout     types.Layout
 	Features   types.Features
 	Naddr      string
-	Profile    types.Event
+	Profile    nostr.Event
 	Nprofile   string
 	Relays     []string
 }
@@ -65,6 +74,53 @@ func renderArticleHeader(
 		renderSummaryHTML(data.Summary),
 		renderTagsHTML(data.Tags, data.BaseFolder),
 		renderImageHTML(data.Image, data.Title, data.Naddr, data.BaseFolder),
+	)
+}
+
+func renderTagDiscoveryHTML(data ArticleData, nostrLinks string) HTML {
+	if !data.TagDiscovery {
+		return Text("")
+	}
+
+	if len(data.DiscoveryData) == 0 {
+		return Text("")
+	}
+
+	// Filter out the current article
+	filteredEvents := []discovery.PopularItem{}
+	for _, event := range data.DiscoveryData {
+		if event.EventID != data.EventID {
+			filteredEvents = append(filteredEvents, event)
+		}
+	}
+
+	tagDiscoveryItems := []HTML{}
+	for _, popularEvent := range filteredEvents {
+		tagDiscoveryItems = append(tagDiscoveryItems, renderTagDiscoveryItemHTML(popularEvent, nostrLinks))
+	}
+
+	return Div(Attr(a.Class("tag-discovery-section")),
+		Div(Attr(a.Class("recommended-articles-title")), Text_("Recommended Articles")),
+		Div(Attr(a.Class("tag-discovery-items")), tagDiscoveryItems...),
+	)
+}
+
+func renderTagDiscoveryItemHTML(data discovery.PopularItem, nostrLinks string) HTML {
+	imageContent := HTML(Img(Attr(a.Class("tag-image"), a.Src(data.Image))))
+	if data.Image == "" {
+		imageContent = Div(Attr(a.Class("tag-image-placeholder")), Text_("No image"))
+	}
+
+	return Div(Attr(a.Class("tag-discovery-item")),
+		A(Attr(a.Class("tag-image-link"), a.Href(`https://`+nostrLinks+`/`+data.Naddr), a.Target("_blank")),
+			imageContent,
+		),
+		Div(Attr(a.Class("tag-author-section")),
+			Img(Attr(a.Class("tag-author-picture"), a.Src(data.AuthorPicture))),
+			A(Attr(a.Class("tag-author"), a.Href(`https://`+nostrLinks+`/`+data.Nprofile), a.Target("_blank")), Text_(data.AuthorName)),
+		),
+		A(Attr(a.Class("tag-title"), a.Href(`https://`+nostrLinks+`/`+data.Naddr), a.Target("_blank")), Text_(data.Title)),
+		Div(Attr(a.Class("tag-summary")), Text_(data.Summary)),
 	)
 }
 
@@ -105,6 +161,8 @@ func GenerateArticleHTML(params GenerateArticleParams) error {
 	nprofile := params.Nprofile
 	naddr := params.Naddr
 	outputDir := params.OutputDir
+	indexDir := params.IndexDir
+	settings := params.Settings
 	layout := params.Layout
 	features := params.Features
 	relays := params.Relays
@@ -115,12 +173,12 @@ func GenerateArticleHTML(params GenerateArticleParams) error {
 		return err
 	}
 
-	metadata := ExtractArticleMetadata(event.Tags)
+	metadata := helpers.ExtractArticleMetadata(event.Tags)
 	if metadata.Title == "" {
 		metadata.Title = "Untitled Article"
 	}
 
-	profileData, err := parseProfile(profile)
+	profileData, err := helpers.ParseProfile(profile)
 	if err != nil {
 		return err
 	}
@@ -135,6 +193,24 @@ func GenerateArticleHTML(params GenerateArticleParams) error {
 	}
 	authorPicture = profileData.Picture
 
+	discoveryData := []discovery.PopularItem{}
+
+	if features.TagDiscovery {
+		discoveryData, err = discovery.GetMostPopularEvents(discovery.GetMostPopularEventsParams{
+			IndexDir:    indexDir,
+			Tags:        metadata.Tags,
+			Limit:       settings.TagDiscovery.PopularArticlesCount,
+			KeepEachTag: true,
+		})
+		if err != nil {
+			if os.IsNotExist(err) {
+				log.Println("Tag discovery index not found, skipping tag discovery section")
+			} else {
+				return err
+			}
+		}
+	}
+
 	data := ArticleData{
 		Title:          metadata.Title,
 		CreatedAt:      event.CreatedAt,
@@ -144,11 +220,14 @@ func GenerateArticleHTML(params GenerateArticleParams) error {
 		Tags:           metadata.Tags,
 		Logo:           layout.Logo,
 		Image:          metadata.Image,
+		EventID:        event.ID,
 		Naddr:          naddr,
 		AuthorName:     authorName,
 		AuthorNProfile: nprofile,
 		AuthorPicture:  authorPicture,
 		Comments:       features.Comments,
+		TagDiscovery:   features.TagDiscovery,
+		DiscoveryData:  discoveryData,
 		Relays:         strings.Join(relays, ","),
 		BaseFolder:     params.BaseFolder,
 	}
@@ -186,6 +265,7 @@ func GenerateArticleHTML(params GenerateArticleParams) error {
 					renderCommentsHTML(data),
 				),
 			),
+			renderTagDiscoveryHTML(data, nostrLinks),
 			renderFooter(),
 			renderTimeAgoScript(),
 			renderCommentsScript(data),
@@ -318,5 +398,142 @@ article p {
 	justify-content: space-between;
 	align-items: center;
 	margin-bottom: 1em;
+}
+
+.recommended-articles-title {
+    font-size: 1.5em;
+    font-weight: 600;
+		margin-top: 1em;
+    margin-bottom: 1em;
+    color: #c99;
+}
+
+.tag-discovery-items {
+    display: flex;
+    overflow-x: auto;
+    gap: 2em;
+    scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: thin;
+    scrollbar-color: #666 #f0f0f0;
+}
+
+.tag-discovery-items::-webkit-scrollbar {
+    height: 8px;
+}
+
+.tag-discovery-items::-webkit-scrollbar-track {
+    background: #f0f0f0;
+    border-radius: 4px;
+}
+
+.tag-discovery-items::-webkit-scrollbar-thumb {
+    background: #666;
+    border-radius: 4px;
+}
+
+.tag-discovery-items::-webkit-scrollbar-thumb:hover {
+    background: #888;
+}
+
+.tag-discovery-item {
+    flex: 0 0 300px;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5em;
+}
+
+.tag-image-link {
+    display: block;
+    text-decoration: none;
+    width: 100%;
+    height: 200px;
+    overflow: hidden;
+    border-radius: 4px;
+}
+
+.tag-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.tag-image-placeholder {
+    width: 100%;
+    height: 100%;
+    background-color: #f0f0f0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #999;
+    font-size: 0.9em;
+}
+
+.tag-author-section {
+    display: flex;
+    align-items: center;
+    gap: 0.5em;
+}
+
+.tag-author-picture {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.tag-author {
+    font-size: 0.85em;
+    color: #666;
+    text-decoration: none;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.tag-author:hover {
+    color: #333;
+}
+
+.tag-title {
+    font-size: 1.2em;
+    font-weight: 600;
+    color: #333;
+    text-decoration: none;
+    display: block;
+    line-height: 1.3;
+}
+
+.tag-title:hover {
+    color: #666;
+}
+
+.tag-summary {
+    font-size: 0.9em;
+    color: #666;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    line-height: 1.4;
+}
+
+@media (max-width: 768px) {
+    .tag-discovery-item {
+        flex: 0 0 260px;
+    }
+    
+    .tag-image-link {
+        height: 180px;
+    }
+    
+    .tag-author-picture {
+        width: 20px;
+        height: 20px;
+    }
+    
+    .tag-author {
+        font-size: 0.8em;
+    }
 }
 `

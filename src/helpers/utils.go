@@ -1,12 +1,27 @@
 package helpers
 
-import "github.com/nbd-wtf/go-nostr"
+import "nostr-static/src/types"
 
-// ConvertTags converts nostr.Tags to [][]string
-func ConvertTags(tags nostr.Tags) [][]string {
-	result := make([][]string, len(tags))
-	for i, tag := range tags {
-		result[i] = []string(tag)
+func NameOrDisplayName(parsedProfile *types.ParsedProfile) string {
+	if parsedProfile == nil {
+		return ""
 	}
-	return result
+
+	if parsedProfile.Name != "" {
+		return parsedProfile.Name
+	}
+
+	return parsedProfile.DisplayName
+}
+
+func PictureOrFallback(parsedProfile *types.ParsedProfile, pubkey string) string {
+	if parsedProfile == nil {
+		return ""
+	}
+
+	if parsedProfile.Picture != "" {
+		return parsedProfile.Picture
+	}
+
+	return "https://robohash.org/" + pubkey
 }

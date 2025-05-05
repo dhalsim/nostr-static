@@ -16,6 +16,7 @@ linters:
         - 'nostr-static\/src\/pagegenerators\..*'
         - 'nostr-static\/src\/types\..*'
         - 'nostr-static\/src\/helpers\..*'
+        - 'nostr-static\/src\/discovery\..*'
         - 'nostr-static\/src\/main\..*'
     staticcheck:
       dot-import-whitelist:

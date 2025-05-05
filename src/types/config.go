@@ -7,8 +7,18 @@ type Layout struct {
 }
 
 type Features struct {
-	Comments   bool   `yaml:"comments"`
-	NostrLinks string `yaml:"nostr_links"`
+	Comments     bool   `yaml:"comments"`
+	NostrLinks   string `yaml:"nostr_links"`
+	TagDiscovery bool   `yaml:"tag_discovery"`
+}
+
+type TagDiscoverySettings struct {
+	FetchCountPerTag     int `yaml:"fetch_count_per_tag"`
+	PopularArticlesCount int `yaml:"popular_articles_count"`
+}
+
+type Settings struct {
+	TagDiscovery TagDiscoverySettings `yaml:"tag_discovery"`
 }
 
 type Config struct {
@@ -18,4 +28,5 @@ type Config struct {
 	BlogURL  string   `yaml:"blog_url"`
 	Layout   Layout   `yaml:"layout"`
 	Features Features `yaml:"features"`
+	Settings Settings `yaml:"settings"`
 }

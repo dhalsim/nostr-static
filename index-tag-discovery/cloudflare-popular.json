@@ -1,0 +1,110 @@
+{
+  "tag": "cloudflare",
+  "top_10": [
+    {
+      "EventID": "ded8a90caf258acbeb8825518190c754419d2399bd166678e241ba5a03e957a6",
+      "Naddr": "naddr1qq8xxmr0w4jxvmrpwfjj6atxwuqs6amnwvaz7tmwdaejumr0dspzqprpljlvcnpnw3pejvkkhrc3y6wvmd7vjuad0fg2ud3dky66gaxaqvzqqqr4guhmelpw",
+      "Nprofile": "nprofile1qqsqgc0uhmxycvm5gwvn944c7yfxnnxm0nyh8tt62zhrvtd3xkj8fhgpzemhxue69uhhyetvv9ujuurjd9kkzmpwdejhg3gxms3",
+      "AuthorName": "Alex Gleason",
+      "AuthorPicture": "https://media.ditto.pub/3fd58d3db4fdcf40091d69e881242678c8010acc446c3f0d8e95cc9505b12e7a.jpeg",
+      "Tag": "cloudflare",
+      "Title": "Secure Cloudflare with UFW",
+      "Summary": "",
+      "Image": "",
+      "Score": 334.00033,
+      "Stats": {
+        "event_id": "ded8a90caf258acbeb8825518190c754419d2399bd166678e241ba5a03e957a6",
+        "reaction_count": 1,
+        "reaction_pubkey_count": 1,
+        "repost_count": 0,
+        "repost_pubkey_count": 0,
+        "reply_count": 0,
+        "reply_pubkey_count": 0,
+        "report_count": 0,
+        "report_pubkey_count": 0,
+        "zaps": {
+          "count": 2,
+          "zapper_count": 2,
+          "target_event_count": 1,
+          "target_pubkey_count": 1,
+          "provider_count": 1,
+          "msats": 1100000,
+          "min_msats": 100000,
+          "max_msats": 1000000,
+          "avg_msats": 550000,
+          "median_msats": 1000000
+        }
+      }
+    },
+    {
+      "EventID": "ad7b75958b4a5e62cad6a31deff6c23d678b31272af6db6a6d025632e68a99ea",
+      "Naddr": "naddr1qqwxxatnw3hk6tt4wfkz6cm4wd6x7erfv9kz6er0d4skjmnnqyxhwumn8ghj7mn0wvhxcmmvqgsvt7mwejrkupzcu0k2nyvwxuxte5mkjqw9s3s9ztl9x7jxukxr3wcrqsqqqa28q0uh9h",
+      "Nprofile": "nprofile1qqsvt7mwejrkupzcu0k2nyvwxuxte5mkjqw9s3s9ztl9x7jxukxr3wcpzemhxue69uhhyetvv9ujuurjd9kkzmpwdejhg3h8r34",
+      "AuthorName": "Jack",
+      "AuthorPicture": "https://m.primal.net/PPQI.jpg",
+      "Tag": "cloudflare",
+      "Title": "How to use your own domain with ln.tips (and any other custodial wallet) on Cloudflare",
+      "Summary": "In this guide, I will go over setting up LN Address redirection to the ln.tips wallet. These steps also apply to any other custodial wallet too.",
+      "Image": "https://www.newsbtc.com/wp-content/uploads/2022/01/lightning_network-1-678x381-1.jpg",
+      "Score": 3,
+      "Stats": {
+        "event_id": "ad7b75958b4a5e62cad6a31deff6c23d678b31272af6db6a6d025632e68a99ea",
+        "reaction_count": 3,
+        "reaction_pubkey_count": 3,
+        "repost_count": 0,
+        "repost_pubkey_count": 0,
+        "reply_count": 0,
+        "reply_pubkey_count": 0,
+        "report_count": 0,
+        "report_pubkey_count": 0,
+        "zaps": {
+          "count": 0,
+          "zapper_count": 0,
+          "target_event_count": 0,
+          "target_pubkey_count": 0,
+          "provider_count": 0,
+          "msats": 0,
+          "min_msats": 0,
+          "max_msats": 0,
+          "avg_msats": 0,
+          "median_msats": 0
+        }
+      }
+    },
+    {
+      "EventID": "e053bd17c3e36ea81d69ae382aefedf0f53188fc4f95e67b21ce35a38dc9a1e2",
+      "Naddr": "naddr1qq2j6ezsgu69j7n92cmxxmfsgyeyyvjtxfuk7qgkwaehxw309aex2mrp0yh8qunfd4skctnwv46qygrwvjurc8m8f7cq5hces9kzj7myzjlk0uq4398qfh2vv4lfgypwaqpsgqqqw4rsklwcek",
+      "Nprofile": "nprofile1qqsxue9c8s0kwnaspf03nqtv99akg99lvlcptz2wqnw5cet7jsgza6qpzemhxue69uhhyetvv9ujuurjd9kkzmpwdejhghu4xkp",
+      "AuthorName": "dhalsim",
+      "AuthorPicture": "https://dhalsim.github.io/assets/dhalsim_logo_sq.png",
+      "Tag": "cloudflare",
+      "Title": "How to Run Your Own Nostr Relay on Android with Cloudflare Domain",
+      "Summary": "Step-by-step guide to running a personal Nostr relay on Android using Citrine and Cloudflare Tunnels. Learn how to set up secure WebSocket connections, manage relay lists, and maintain a reliable private relay with your custom domain.",
+      "Image": "https://image.nostr.build/f708db07b85c002b20b3159b48447d51cbcb0bae0f5717ce6dbc060580c8b35d.jpg",
+      "Score": 0,
+      "Stats": {
+        "event_id": "e053bd17c3e36ea81d69ae382aefedf0f53188fc4f95e67b21ce35a38dc9a1e2",
+        "reaction_count": 0,
+        "reaction_pubkey_count": 0,
+        "repost_count": 0,
+        "repost_pubkey_count": 0,
+        "reply_count": 0,
+        "reply_pubkey_count": 0,
+        "report_count": 0,
+        "report_pubkey_count": 0,
+        "zaps": {
+          "count": 0,
+          "zapper_count": 0,
+          "target_event_count": 0,
+          "target_pubkey_count": 0,
+          "provider_count": 0,
+          "msats": 0,
+          "min_msats": 0,
+          "max_msats": 0,
+          "avg_msats": 0,
+          "median_msats": 0
+        }
+      }
+    }
+  ]
+}
