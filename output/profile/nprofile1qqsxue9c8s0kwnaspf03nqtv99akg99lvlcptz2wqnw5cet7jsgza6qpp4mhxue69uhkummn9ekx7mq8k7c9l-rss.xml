@@ -4,10 +4,10 @@
     <link>https://blog.nostrize.me</link>
     <description>Nostr Articles Feed</description>
     <managingEditor> (Nostr Static)</managingEditor>
-    <pubDate>Mon, 05 May 2025 19:58:50 +0300</pubDate>
+    <pubDate>Tue, 06 May 2025 09:34:48 +0300</pubDate>
     <item>
       <title>Nostr-Static v0.7: Introducing RSS Feeds and Smart Content Discovery</title>
-      <link>https://blog.nostrize.me/naddr1qq2k2vph23v9y7rcvf8n27292avhv6rrve54sqgkwaehxw309aex2mrp0yh8qunfd4skctnwv46qz9nhwden5te0wfjkccte9ehx7um5wghxyctwvsq3camnwvaz7tmwdaehgu3wvf5hgcm0d9hx2u3wwdhkx6tpdsq3gamnwvaz7tmjv4kxz7fwv3sk6atn9e5k7qg0waehxw309ahx7um5wghx6mmdqgsxue9c8s0kwnaspf03nqtv99akg99lvlcptz2wqnw5cet7jsgza6qrqsqqqa28d4u2lk.html</link>
+      <link>https://blog.nostrize.me/naddr1qq2k2vph23v9y7rcvf8n27292avhv6rrve54sqgkwaehxw309aex2mrp0yhxummnw3ezucnpdejqz8rhwden5te0dehhxarj9e3xjarrda5kuetj9eek7cmfv9kqzrmhwden5te0dehhxarj9ekk7mgzyphxfwpuran5lvq2tuvczmpf0djpf0m87q2cjnsym4xx2l55zqhwsqcyqqq823cwq3384.html</link>
       <description>Nostr-static, a static site generator for Nostr, now offers RSS/Atom feeds and smart content discovery. The new version automatically generates recommended relevant articles from the Nostr network, helping your readers discover more engaging content.</description>
       <content:encoded><![CDATA[<p><a href="https://github.com/dhalsim/nostr-static">Nostr-static</a> is a powerful static site generator that transforms long-form Nostr content into beautiful, standalone websites. It makes your content accessible to everyone, even those not using Nostr clients. For more information check out my previous blog post <a href="https://njump.me/naddr1qvzqqqr4gupzqmnyhq7p7e60kq997xvpds5hkeq5hanlq9vffczd6nr9062pqthgqq25x6r2d90hzaj529f9gur2x9h4yt2gfy69qm05rzu">How to Create a Blog Out of Nostr Long-Form Articles</a></p>
 <h2 id="whats-new-in-version-07">What's New in Version 0.7?</h2>
