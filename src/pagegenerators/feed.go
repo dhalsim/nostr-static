@@ -24,13 +24,12 @@ type GenerateFeedParams struct {
 
 func GenerateFeeds(params GenerateFeedParams) error {
 	// Create feed
-	now := time.Now()
 	feed := &feeds.Feed{
 		Title:       params.Layout.Title,
 		Link:        &feeds.Link{Href: params.BlogURL},
 		Description: "Nostr Articles Feed",
 		Author:      &feeds.Author{Name: "Nostr Static"},
-		Created:     now,
+		Created:     time.Unix(int64(params.Events[0].CreatedAt), 0),
 	}
 
 	// Add items to feed

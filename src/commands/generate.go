@@ -47,6 +47,7 @@ func Generate(params GenerateCommandParams) error {
 	for _, event := range events {
 		if err := pagegenerators.GenerateArticleHTML(pagegenerators.GenerateArticleParams{
 			BaseFolder: "",
+			BlogURL:    config.BlogURL,
 			Event:      event,
 			OutputDir:  outputDir,
 			IndexDir:   indexDir,

@@ -19,6 +19,7 @@ import (
 
 // ArticleData represents all data needed for article templates
 type ArticleData struct {
+	BlogURL        string
 	Title          string
 	CreatedAt      nostr.Timestamp
 	Content        template.HTML
@@ -41,6 +42,7 @@ type ArticleData struct {
 
 type GenerateArticleParams struct {
 	BaseFolder string
+	BlogURL    string
 	NostrLinks string
 	Settings   types.Settings
 	Event      nostr.Event
@@ -155,6 +157,16 @@ func renderCommentsScript(data ArticleData) HTML {
 	`)
 }
 
+func attrProperty(data interface{}, templs ...string) a.Attribute {
+	attr := a.Attribute{Data: data, Name: "Property"}
+	if len(templs) == 0 {
+		attr.Templ = `{{define "Property"}}property="{{.}}"{{end}}`
+	} else {
+		attr.Templ = `{{define "Property"}}property="` + strings.Join(templs, " ") + `"{{end}}`
+	}
+	return attr
+}
+
 func GenerateArticleHTML(params GenerateArticleParams) error {
 	event := params.Event
 	profile := params.Profile
@@ -167,6 +179,7 @@ func GenerateArticleHTML(params GenerateArticleParams) error {
 	features := params.Features
 	relays := params.Relays
 	nostrLinks := params.NostrLinks
+	blogURL := params.BlogURL
 
 	htmlContent, err := convertMarkdownToHTML(event.Content, true)
 	if err != nil {
@@ -212,6 +225,7 @@ func GenerateArticleHTML(params GenerateArticleParams) error {
 	}
 
 	data := ArticleData{
+		BlogURL:        blogURL,
 		Title:          metadata.Title,
 		CreatedAt:      event.CreatedAt,
 		Content:        template.HTML(htmlContent),
@@ -239,6 +253,22 @@ func GenerateArticleHTML(params GenerateArticleParams) error {
 			Meta(Attr(
 				a.Name("viewport"),
 				a.Content("width=device-width, initial-scale=1.0"),
+			)),
+			Meta(Attr(
+				attrProperty("og:title"),
+				a.Content(data.Title),
+			)),
+			Meta(Attr(
+				attrProperty("og:description"),
+				a.Content(data.Summary),
+			)),
+			Meta(Attr(
+				attrProperty("og:url"),
+				a.Content(blogURL+`/`+data.Naddr),
+			)),
+			Meta(Attr(
+				attrProperty("og:image"),
+				a.Content(data.Image),
 			)),
 			Title_(Text(data.Title)),
 			Style_(Text_(CommonCSS+
