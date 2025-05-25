@@ -24,6 +24,7 @@ type ProfileData struct {
 	BaseFolder    string
 	Color         string
 	Logo          string
+	FaviconDir    string
 	Nprofile      string
 	PubKey        string
 	Name          string
@@ -251,6 +252,7 @@ func GenerateProfilePages(params GenerateProfilePagesParams) error {
 			BaseFolder:    params.BaseFolder,
 			Color:         params.Layout.Color,
 			Logo:          params.Layout.Logo,
+			FaviconDir:    params.Layout.FaviconDir,
 			Nprofile:      params.PubkeyToNProfile[pubkey],
 			PubKey:        pubkey,
 			Name:          parsedProfile.Name,
@@ -267,23 +269,27 @@ func GenerateProfilePages(params GenerateProfilePagesParams) error {
 		// Generate the HTML using htmlgo
 		html := Html5_(
 			Head_(
-				Meta(Attr(a.Charset("UTF-8"))),
-				Meta(Attr(
-					a.Name("viewport"),
-					a.Content("width=device-width, initial-scale=1.0"),
-				)),
-				Title_(Text("Profile: "+data.Name)),
-				Style_(Text_(CommonCSS+
-					CommonResponsiveStyles+
-					components.DotMenuCSS+
-					components.LogoCSS+
-					components.FeedLinksCSS+
-					components.ArticleCardCSS+
-					components.TagsCSS+
-					components.ImageCSS)),
-				Style_(Text_(ProfileStyles)),
-				components.RenderFeedLinks(data.Nprofile),
-				components.RenderAtomFeedLink(data.Nprofile),
+				append(
+					components.RenderFaviconLinks("../"+data.FaviconDir),
+					Meta(Attr(a.Charset("UTF-8"))),
+					Meta(Attr(
+						a.Name("viewport"),
+						a.Content("width=device-width, initial-scale=1.0"),
+					)),
+					Title_(Text("Profile: "+data.Name)),
+					Style_(Text_(CommonCSS+
+						CommonResponsiveStyles+
+						components.DotMenuCSS+
+						components.LogoCSS+
+						components.FeedLinksCSS+
+						components.FooterCSS+
+						components.ArticleCardCSS+
+						components.TagsCSS+
+						components.ImageCSS)),
+					Style_(Text_(ProfileStyles)),
+					components.RenderFeedLinks(data.Nprofile),
+					components.RenderAtomFeedLink(data.Nprofile),
+				)...,
 			),
 			Body(Attr(a.Class(data.Color+" profile")),
 				Div(Attr(a.Class("page-container")),

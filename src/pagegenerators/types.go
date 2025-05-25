@@ -8,6 +8,7 @@ type TagData struct {
 	Tag        string
 	Color      string
 	Logo       string
+	FaviconDir string
 	Articles   []TagArticleData
 }
 

@@ -99,6 +99,7 @@ layout:
   color: dark  # Options: light, dark
   logo: logo.png  # Logo image file name
   title: "Nostr Articles"  # Site title
+  faviconDir: favicon
 
 blog_url: https://blog.nostrize.me
 
@@ -147,8 +148,9 @@ profiles:
 3. Modify the `config.yaml` file with your desired configuration
 4. Add Nostr naddr to the `articles` list that you want to serve
 5. Place a `logo.png` file (or another file name, but don't forget to update logo in the `config.yaml` file) into the project folder
-6. Build and run the command: `go build -o nostr-static ./src && ./nostr-static`
-7. Commit and push your changes:
+6. Replace the files with your own in [favicon](https://github.com/dhalsim/nostr-static/tree/main/favicon) folder
+7. Build and run the command: `go build -o nostr-static ./src && ./nostr-static`
+8. Commit and push your changes:
    ```bash
    git add .
    git commit -m "Added my events, changed logo, title, and light theme"

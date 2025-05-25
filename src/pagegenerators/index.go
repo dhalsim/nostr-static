@@ -29,6 +29,7 @@ type IndexData struct {
 	BaseFolder string
 	Color      string
 	Logo       string
+	FaviconDir string
 	Title      string
 	Articles   []IndexArticleData
 }
@@ -93,6 +94,7 @@ func GenerateIndexHTML(params GenerateIndexParams) error {
 
 	indexData.Color = params.Layout.Color
 	indexData.Logo = params.Layout.Logo
+	indexData.FaviconDir = params.Layout.FaviconDir
 	indexData.Title = params.Layout.Title
 
 	indexData.Articles = make([]IndexArticleData, 0, len(params.Events))
@@ -161,24 +163,27 @@ func GenerateIndexHTML(params GenerateIndexParams) error {
 	// Generate the HTML using htmlgo
 	html := Html5_(
 		Head_(
-			Meta(Attr(a.Charset("UTF-8"))),
-			Meta(Attr(
-				a.Name("viewport"),
-				a.Content("width=device-width, initial-scale=1.0"),
-			)),
-			Title_(Text(indexData.Title)),
-			Style_(Text_(CommonCSS+
-				CommonResponsiveStyles+
-				components.LogoCSS+
-				components.CompactProfileCSS+
-				components.FeedLinksCSS+
-				components.ArticleCardCSS+
-				components.TagsCSS+
-				components.ImageCSS+
-				components.FooterCSS+
-				indexCSS)),
-			components.RenderFeedLinks("index"),
-			components.RenderAtomFeedLink("index"),
+			append(
+				components.RenderFaviconLinks(indexData.FaviconDir),
+				Meta(Attr(a.Charset("UTF-8"))),
+				Meta(Attr(
+					a.Name("viewport"),
+					a.Content("width=device-width, initial-scale=1.0"),
+				)),
+				Title_(Text(indexData.Title)),
+				Style_(Text_(CommonCSS+
+					CommonResponsiveStyles+
+					components.LogoCSS+
+					components.CompactProfileCSS+
+					components.FeedLinksCSS+
+					components.ArticleCardCSS+
+					components.TagsCSS+
+					components.ImageCSS+
+					components.FooterCSS+
+					indexCSS)),
+				components.RenderFeedLinks("index"),
+				components.RenderAtomFeedLink("index"),
+			)...,
 		),
 		Body(Attr(a.Class(indexData.Color+" index")),
 			Div(Attr(a.Class("page-container")),

@@ -41,6 +41,15 @@ func Generate(params GenerateCommandParams) error {
 		}
 	}
 
+	// Copy favicon dir if specified
+	if config.Layout.FaviconDir != "" {
+		faviconPath := filepath.Join(filepath.Dir(configPath), config.Layout.FaviconDir)
+		outputFaviconPath := filepath.Join(outputDir, config.Layout.FaviconDir)
+		if err := helpers.CopyDir(faviconPath, outputFaviconPath); err != nil {
+			log.Printf("Warning: Failed to copy favicon folder: %v", err)
+		}
+	}
+
 	log.Println("generating article pages")
 
 	// Article pages

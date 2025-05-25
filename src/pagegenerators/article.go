@@ -26,6 +26,7 @@ type ArticleData struct {
 	Color          string
 	Summary        string
 	Tags           []string
+	FaviconDir     string
 	Logo           string
 	Image          string
 	EventID        string
@@ -233,6 +234,7 @@ func GenerateArticleHTML(params GenerateArticleParams) error {
 		Summary:        metadata.Summary,
 		Tags:           metadata.Tags,
 		Logo:           layout.Logo,
+		FaviconDir:     layout.FaviconDir,
 		Image:          metadata.Image,
 		EventID:        event.ID,
 		Naddr:          naddr,
@@ -249,38 +251,41 @@ func GenerateArticleHTML(params GenerateArticleParams) error {
 	// Generate the HTML using htmlgo
 	html := Html5_(
 		Head_(
-			Meta(Attr(a.Charset("UTF-8"))),
-			Meta(Attr(
-				a.Name("viewport"),
-				a.Content("width=device-width, initial-scale=1.0"),
-			)),
-			Meta(Attr(
-				attrProperty("og:title"),
-				a.Content(data.Title),
-			)),
-			Meta(Attr(
-				attrProperty("og:description"),
-				a.Content(data.Summary),
-			)),
-			Meta(Attr(
-				attrProperty("og:url"),
-				a.Content(blogURL+`/`+data.Naddr),
-			)),
-			Meta(Attr(
-				attrProperty("og:image"),
-				a.Content(data.Image),
-			)),
-			Title_(Text(data.Title)),
-			Style_(Text_(CommonCSS+
-				ArticleStyles+
-				CommonResponsiveStyles+
-				components.DotMenuCSS+
-				components.LogoCSS+
-				components.CompactProfileCSS+
-				components.FeedLinksCSS+
-				components.TagsCSS+
-				components.FooterCSS+
-				components.ImageCSS)),
+			append(
+				components.RenderFaviconLinks(data.FaviconDir),
+				Meta(Attr(a.Charset("UTF-8"))),
+				Meta(Attr(
+					a.Name("viewport"),
+					a.Content("width=device-width, initial-scale=1.0"),
+				)),
+				Meta(Attr(
+					attrProperty("og:title"),
+					a.Content(data.Title),
+				)),
+				Meta(Attr(
+					attrProperty("og:description"),
+					a.Content(data.Summary),
+				)),
+				Meta(Attr(
+					attrProperty("og:url"),
+					a.Content(blogURL+`/`+data.Naddr),
+				)),
+				Meta(Attr(
+					attrProperty("og:image"),
+					a.Content(data.Image),
+				)),
+				Title_(Text(data.Title)),
+				Style_(Text_(CommonCSS+
+					ArticleStyles+
+					CommonResponsiveStyles+
+					components.DotMenuCSS+
+					components.LogoCSS+
+					components.CompactProfileCSS+
+					components.FeedLinksCSS+
+					components.TagsCSS+
+					components.FooterCSS+
+					components.ImageCSS)),
+			)...,
 		),
 		Body(Attr(a.Class(data.Color+" article")),
 			Div(Attr(a.Class("page-container")),

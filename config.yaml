@@ -1,6 +1,7 @@
 layout:
   color: dark  # Options: light, dark
   logo: logo.png  # Logo image file name
+  favicondir: favicon
   title: "Nostr Articles"  # Site title
 
 blog_url: https://blog.nostrize.me
