@@ -16,7 +16,7 @@ const (
 type Layout struct {
 	Color      string `yaml:"color"`
 	Logo       string `yaml:"logo"`
-	FaviconDir string `yaml:favicondir`
+	FaviconDir string `yaml:"favicondir"`
 	Title      string `yaml:"title"`
 }
 
